@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+:root {
+  --bg: #000000;
+  --fg: #e6ebf2;
+  --muted: #9aa4b2;
+  --accent-a: #4f46e5; /* indigo-600 */
+  --accent-b: #22d3ee; /* cyan-400 */
+}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  color: var(--fg);
+  background: var(--bg);
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.app { position: relative; min-height: 100%; overflow: clip; z-index: 1; }
+
+/* Header with pill menu */
+.site-header {
+  position: relative;
+  z-index: 3; /* above focus frame */
+  padding: 18px 22px;
+}
+.header-inner { width: min(1100px, 92vw); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; align-items: center; }
+.header-left { display: inline-flex; align-items: center; gap: 10px; justify-self: start; }
+.header-right { justify-self: end; }
+.page-title { font-weight: 700; letter-spacing: 0.02em; font-size: 0.98rem; }
+
+/* Crop the IFS logo to hide text and show only the icon */
+.logo-crop {
+  display: inline-block;
+  width: 28px;              /* visible crop width */
+  height: 28px;             /* visible crop height */
+  border-radius: 6px;       /* subtle rounding similar to icon */
+  overflow: hidden;         /* hide text area */
+  background: transparent;
+}
+.logo-crop img {
+  display: block;
+  height: 100%;
+  width: auto;              /* maintain aspect ratio */
+  object-fit: cover;        /* fill crop */
+  object-position: left center; /* keep left purple icon, hide right text */
+  filter: brightness(1.05) contrast(1.05);
+}
+.menu-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); /* fluid glass */
+  border: 1px solid rgba(255, 255, 255, 0.205);
+  border-radius: 999px;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+.menu-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120px 60px at var(--x, 20%) var(--y, 50%), rgba(255,255,255,0.18), transparent 60%);
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: .3;
+  transition: opacity .2s ease;
+}
+.menu-pill:hover::after { opacity: .45; }
+.pill-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition: background-color .2s ease, transform .15s ease;
+}
+.pill-item .dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: .6; display: inline-block; }
+.pill-item:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+.pill-item.is-active { background: rgba(255,255,255,0.16); }
+.pill-item.is-active .dot { opacity: 1; background: var(--accent-b); }
+
+/* Hero centered focus area */
+.hero {
+  position: relative;
+  z-index: 2; /* above focus frame */
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.hero-inner { width: min(1100px, 92vw); margin: 0 auto; display: grid; }
+.hero-copy { text-align: left; margin-inline: auto; justify-self: center; }
+.hero-centered { max-width: 1100px; }
+/* Large ShinyText title centered in the middle section */
+.title-wrap .shiny-text,
+.shiny-text.custom-class {
+  display: inline-block;
+  font-size: clamp(3.25rem, 11vw, 7rem);
+  font-weight: 800;
+  letter-spacing: 0.015em;
+  line-height: 0.95;
+  text-align: center;
+}
+.tag { margin-top: 0.75rem; color: var(--muted); font-size: clamp(0.95rem, 1.4vw, 1.1rem); max-width: 65ch; }
+.hero-row {
+  margin-top: 10rem;
+  display: grid;
+  grid-template-columns: 1fr min(560px, 45%);
+  align-items: stretch;
+  gap: clamp(28px, 6vw, 120px);
+}
+.tag-left {
+  margin: 0;
+  align-self: center;
+  text-align: left;
+}
+.hero-row .glitch-box {
+  margin: 0; /* use grid sizing */
+  width: 160%;
+  height: 280px;
+}
+
+/* Keep aurora inside a middle focus by masking near page edges */
+.aurora-container {
+  mask-image: radial-gradient(1200px 700px at 50% 25%, black 0%, black 55%, transparent 100%);
+  -webkit-mask-image: radial-gradient(1200px 700px at 50% 25%, black 0%, black 55%, transparent 100%);
+}
+
+.glitch-box {
+  margin: 1.25rem auto 0;
+  width: min(560px, 92vw);
+  height: 260px;
+  border-radius: 16px;
+  overflow: hidden; /* clip glitch effect to box */
+  position: relative;
+  z-index: 3; /* above focus overlay */
+  border: 1px solid rgba(255,255,255,0.15);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  backdrop-filter: blur(6px);
+}
+.glitch-box canvas, .glitch-box > * {
+  position: absolute;
+  inset: 0;
+}
+
+
+/* cleaned: no decorative tiles */
+
+/* SplitText animation (inspired by reactbits split text) */
+.split-text { white-space: pre-wrap; }
+.split-text .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 10px, 0) rotate(0.0001deg);
+  animation: rise 650ms cubic-bezier(.2,.65,.3,1) forwards;
+}
+@keyframes rise {
+  60% { opacity: 1; transform: translate3d(0, -1px, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .char { animation: none !important; opacity: 1; transform: none; }
+}
+
+/* (replaced previous circular nav with pill menu styles above) */
+
+/* Focus frame: blur/darken edges to keep middle attention */
+.focus-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 1; /* above aurora (z:0) and below content (header z:2, hero z:1 but positioned) */
+  pointer-events: none;
+  /* Vignette to darken edges */
+  background: radial-gradient(
+    1200px 700px at 50% 25%,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) 52%,
+    rgba(0,0,0,0.18) 72%,
+    rgba(0,0,0,0.6) 100%
+  );
+}
+
+/* Backdrop blur only on the edges via mask (keeps center crisp) */
+.focus-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  /* Mask: transparent center, opaque edges */
+  -webkit-mask-image: radial-gradient(900px 520px at 50% 25%, transparent 58%, black 78%);
+  mask-image: radial-gradient(900px 520px at 50% 25%, transparent 58%, black 78%);
+}
+
+/* Extra subtle edge blurring on top using a pseudo-element */
+.focus-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Simulate edge blur: concentric transparent-to-black gradient softened by blur */
+  background: radial-gradient(
+    1100px 580px at 25% 25%,
+    rgba(0,0,0,0) 58%,
+    rgba(0,0,0,0.28) 82%,
+    rgba(0,0,0,0.52) 100%
+  );
+  filter: blur(5px);
+  opacity: 0.85;
+}
+
+/* layering ensured above */
