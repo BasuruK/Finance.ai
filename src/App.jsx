@@ -57,11 +57,11 @@ export default function App() {
         <div className="hero-inner">
           <div className="hero-copy hero-centered">
             <div className="title-wrap" style={{ textAlign: 'center' }}>
-              <ShinyText text="Finance.ai" disabled={false} speed={3} className='custom-class' />
+              <ShinyText text="Finance.ai" disabled={false} speed={5} className='custom-class' />
             </div>
             
             <div className="hero-row">
-              <p className="tag tag-left">
+              <p className="tag">
                 Modern AI enabled services to make your Development Journey smoother.
               </p>
               <div className="glitch-box" aria-hidden>

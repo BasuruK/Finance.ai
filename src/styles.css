@@ -104,34 +104,31 @@ body {
 .shiny-text.custom-class {
   display: inline-block;
   font-size: clamp(3.25rem, 11vw, 7rem);
-  font-weight: 800;
-  letter-spacing: 0.015em;
-  line-height: 0.95;
+  font-weight: 100;
+  letter-spacing: 0.2em;
+  line-height: 1.6;
   text-align: center;
 }
-.tag { margin-top: 0.75rem; color: var(--muted); font-size: clamp(0.95rem, 1.4vw, 1.1rem); max-width: 65ch; }
+.tag { margin-top: 5rem; color: var(--muted); font-size: clamp(0.95rem, 1.4vw, 1.5rem); max-width: 100ch; }
+
 .hero-row {
-  margin-top: 10rem;
+  margin-top: 5rem;
   display: grid;
   grid-template-columns: 1fr min(560px, 45%);
   align-items: stretch;
   gap: clamp(28px, 6vw, 120px);
 }
-.tag-left {
-  margin: 0;
-  align-self: center;
-  text-align: left;
-}
+
 .hero-row .glitch-box {
   margin: 0; /* use grid sizing */
-  width: 160%;
-  height: 280px;
+  width: 100%;
+  height: 250px;
 }
 
 /* Keep aurora inside a middle focus by masking near page edges */
 .aurora-container {
   mask-image: radial-gradient(1200px 700px at 50% 25%, black 0%, black 55%, transparent 100%);
-  -webkit-mask-image: radial-gradient(1200px 700px at 50% 25%, black 0%, black 55%, transparent 100%);
+  -webkit-mask-image: radial-gradient(1200 700px at 50% 25%, black 0%, black 55%, transparent 100%);
 }
 
 .glitch-box {
