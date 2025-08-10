@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import LetterGlitch from './Backgrounds/LetterGlitch/LetterGlitch';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import MagicBento from './Components/MagicBento/MagicBento';
@@ -25,10 +25,40 @@ function SplitText({ text, className = '' }) {
 
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState('home');
+  const toolsRef = useRef(null);
+  const navRef = useRef(null);
+
+  // Always start at the top on reload/initial load
+  useEffect(() => {
+    try {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+    } catch {}
+    // Scroll to top after mount; delay to override browser restore
+    const t1 = setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), 0);
+    const t2 = setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), 100);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
+
+  const handleHome = (e) => {
+    e.preventDefault();
+    setActiveTab('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  navRef.current?.focus({ preventScroll: true });
+  };
+
+  const handleTools = (e) => {
+    e.preventDefault();
+    setActiveTab('tools');
+    // Smooth scroll and programmatic focus for accessibility
+    toolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  navRef.current?.focus({ preventScroll: true });
+  };
   return (
     <main className="app">
-      {/* Edge-blur + vignette overlay to keep focus centered */}
-      <div className="focus-frame" aria-hidden />
+  {/* focus-frame overlay removed */}
       {/* Header with logo and pill menu */}
   <header className="site-header" role="banner">
         <div className="header-inner">
@@ -43,10 +73,14 @@ export default function App() {
             </span>
             <span className="page-title">Finance.ai</span>
           </div>
-          <nav aria-label="Primary" className="header-right">
+          <nav aria-label="Primary" className="header-right" ref={navRef} tabIndex={-1}>
             <div className="menu-pill" role="navigation">
-              <a href="#" className="pill-item is-active"><span className="dot" /> Home</a>
-              <a href="#" className="pill-item">Tools</a>
+              <a onClick={handleHome} className={`pill-item ${activeTab === 'home' ? 'is-active' : ''}`} aria-current={activeTab === 'home' ? 'page' : undefined}>
+                {activeTab === 'home' && <span className="dot" />} Home
+              </a>
+              <a onClick={handleTools} className={`pill-item ${activeTab === 'tools' ? 'is-active' : ''}`} aria-current={activeTab === 'tools' ? 'page' : undefined}>
+                {activeTab === 'tools' && <span className="dot" />} Tools
+              </a>
             </div>
           </nav>
         </div>
@@ -83,7 +117,7 @@ export default function App() {
         </div>  
 
         {/* Magic Bento section */}
-        <section className="magic-bento" role="region">
+  <section className="magic-bento" role="region" id="tools" ref={toolsRef}>
           <MagicBento textAutoHide={true} enableStars={true} enableSpotlight={true} enableBorderGlow={true}
                       enableTilt={true} enableMagnetism={true} clickEffect={true} spotlightRadius={300} particleCount={12}
                       glowColor="132, 0, 255" />
