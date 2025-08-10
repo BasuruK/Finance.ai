@@ -126,23 +126,6 @@ a, button { cursor: pointer; }
 .title-area { position: relative; width: 100%; height: clamp(100px, 20vw, 200px); }
 .title-area .title-foreground { position: relative; z-index: 1; display: grid; place-items: center; height: 100%; }
 
-/* Threads: fixed, full-viewport background layer (behind content) */
-.hero-threads {
-  position: fixed !important; /* override inline */
-  inset: 0 !important;       /* cover entire viewport */
-  width: 100vw !important;
-  height: 100svh !important; /* safe viewport units */
-  margin: 0 !important;      /* cancel full-bleed margins */
-  z-index: 0;                /* behind focus-frame (1) and content (2/3) */
-  pointer-events: none;      /* purely decorative */
-}
-/* Ensure the Threads canvas fills this layer */
-.hero-threads > * {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
 .tag { margin-top: 5rem; color: var(--muted); font-size: clamp(0.95rem, 1.4vw, 1.5rem); max-width: 100ch; }
 
 .hero-row {
@@ -239,4 +222,24 @@ a, button { cursor: pointer; }
   place-items: center;
   padding: clamp(16px, 3vw, 32px) 0 clamp(56px, 8vh, 120px);
   margin-top: clamp(24px, 6vw, 64px);
+}
+
+.hero-threads, .hero-thread {
+  /* In-flow container so it scrolls with the page */
+  position: absolute;
+  z-index: 0;                /* behind hero content */
+  width: 100%;
+  height: clamp(260px, 38vw, 420px); /* taller so waves aren't clipped */
+  margin: 0;
+  pointer-events: none;      /* decorative */
+  overflow: visible;         /* allow expanded canvas to show */
+}
+/* Oversize and center the canvas so corners aren't cut */
+.hero-threads > *, .hero-thread > * {
+  position: relative;
+  top: 70%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  width: 109.8%;  /* wider than viewport to cover edges */
+  height: 1500%;   /* a bit taller to cover top/bottom */
 }

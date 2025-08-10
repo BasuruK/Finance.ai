@@ -44,7 +44,6 @@ export default function App() {
             <span className="page-title">Finance.ai</span>
           </div>
           <nav aria-label="Primary" className="header-right">
-            
             <div className="menu-pill" role="navigation">
               <a href="#" className="pill-item is-active"><span className="dot" /> Home</a>
               <a href="#" className="pill-item">Tools</a>
@@ -65,12 +64,10 @@ export default function App() {
             </div>
           </div>
         </div>
-
-        {/* Full-bleed Threads band below the title; scrolls with page */}
+        {/* Threads band below title */}
         <div className="hero-threads" aria-hidden="true">
           <Threads amplitude={1} distance={0} enableMouseInteraction={true} />
         </div>
-
         {/* Copy + glitch row */}
         <div className="hero-inner">
           <div className="hero-copy hero-centered">
@@ -83,7 +80,7 @@ export default function App() {
               </div>
             </div>
           </div>
-        </div>
+        </div>  
 
         {/* Magic Bento section */}
         <section className="magic-bento" role="region">
