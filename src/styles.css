@@ -124,10 +124,10 @@ a, button { cursor: pointer; }
 }
 
 /* Title area with background Threads behind text */
-.title-area { position: relative; width: 100%; height: clamp(100px, 20vw, 200px); }
-.title-area .title-foreground { position: relative; z-index: 1; display: grid; place-items: center; height: 100%; }
+.title-area { position: relative; width: 100%; height: clamp(100px, 20vw, 200px); will-change: transform; }
+.title-area .title-foreground { position: relative; z-index: 1; display: grid; place-items: center; height: 100%; will-change: transform; }
 
-.tag { margin-top: 5rem; color: var(--muted); font-size: clamp(0.95rem, 1.4vw, 1.5rem); max-width: 100ch; }
+.tag { margin-top: 5rem; color: var(--muted); font-size: clamp(0.95rem, 1.4vw, 1.5rem); max-width: 100ch; will-change: transform; }
 
 .hero-row {
   margin-top: 1rem;
@@ -187,6 +187,7 @@ a, button { cursor: pointer; }
   margin: 0;
   pointer-events: none;      /* decorative */
   overflow: visible;         /* allow expanded canvas to show */
+  will-change: transform;    /* optimize for parallax */
 }
 /* Oversize and center the canvas so corners aren't cut */
 .hero-threads > *, .hero-thread > * {
@@ -196,6 +197,7 @@ a, button { cursor: pointer; }
   transform: translate(-50%, -50%);
   width: 109.8%;  /* wider than viewport to cover edges */
   height: 1500%;   /* a bit taller to cover top/bottom */
+  will-change: transform;    /* optimize for parallax */
 }
 
 @media (prefers-reduced-motion: reduce) {

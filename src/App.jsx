@@ -76,6 +76,48 @@ export default function App() {
   const toolsRef = useRef(null);
   const navRef = useRef(null);
 
+  // Parallax effect for threads and content
+  useEffect(() => {
+    const handleParallax = () => {
+      const scrolled = window.pageYOffset;
+      const parallaxSpeed = 0.6; // Background moves much slower
+      const contentSpeed = 0.1;  // Content moves slightly slower
+      
+      // Apply parallax to threads background
+      const threadsElements = document.querySelectorAll('.hero-threads');
+      threadsElements.forEach(el => {
+        el.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+      });
+      
+      // Apply subtle parallax to content layers
+      const titleArea = document.querySelector('.title-area');
+      if (titleArea) {
+        titleArea.style.transform = `translateY(${scrolled * -contentSpeed}px)`;
+      }
+      
+      const tagElement = document.querySelector('.tag');
+      if (tagElement) {
+        tagElement.style.transform = `translateY(${scrolled * -contentSpeed * 0.8}px)`;
+      }
+    };
+
+    const throttledParallax = (() => {
+      let ticking = false;
+      return () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            handleParallax();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+    })();
+
+    window.addEventListener('scroll', throttledParallax);
+    return () => window.removeEventListener('scroll', throttledParallax);
+  }, []);
+
   // Always start at the top on reload/initial load
   useEffect(() => {
     try {
