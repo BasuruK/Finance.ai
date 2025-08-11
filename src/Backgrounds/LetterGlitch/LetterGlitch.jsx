@@ -5,7 +5,7 @@
 import { useRef, useEffect } from 'react';
 
 const LetterGlitch = ({
-  glitchColors = ['rgba(131, 69, 201, 1)', 'rgba(116, 162, 214, 1)', 'rgba(223, 223, 223, 1)'],
+  glitchColors = ['rgba(131, 69, 201, 1)', 'rgba(71, 4, 126, 1)', 'rgba(48, 29, 71, 1)'],
   className = '',
   glitchSpeed = 50,
   centerVignette = true,
@@ -209,7 +209,7 @@ const LetterGlitch = ({
     position: 'relative',
     width: '100%',
     height: '100%',
-    backgroundColor: '#000000',
+  backgroundColor: 'transparent',
     overflow: 'hidden',
   };
 
@@ -217,6 +217,7 @@ const LetterGlitch = ({
     display: 'block',
     width: '100%',
     height: '100%',
+    backgroundColor: 'transparent'
   };
 
   const outerVignetteStyle = {

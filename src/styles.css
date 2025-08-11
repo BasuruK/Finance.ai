@@ -1,13 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Rubik:wght@300;400;500;700&display=swap');
 :root {
   --bg: #000000;
   --fg: #e6ebf2;
   --muted: #9aa4b2;
-  --accent-a: #4f46e5; /* indigo-600 */
   --accent-b: #22d3ee; /* cyan-400 */
 }
 * { box-sizing: border-box; }
-html, body, #root { height: 100%; }
+html, body, #root { height: 100%; min-height: 100svh; }
 body {
   margin: 0;
   color: var(--fg);
@@ -16,18 +15,32 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.app { position: relative; min-height: 100%; overflow: clip; z-index: 1; }
+.app { position: relative; min-height: 100svh; overflow: visible; z-index: 1; }
+
+/* Disable text selection and I‑beam cursor globally */
+html, body, #root, .app {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+/* Keep pointer where appropriate */
+a, button { cursor: pointer; }
+/* (selection overrides removed — no editable fields in current app) */
+/* Reduce tap highlight on mobile */
+* { -webkit-tap-highlight-color: transparent; }
 
 /* Header with pill menu */
 .site-header {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 3; /* above focus frame */
   padding: 18px 22px;
 }
-.header-inner { width: min(1100px, 92vw); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; align-items: center; }
+.header-inner { width: min(1100px, 92vw); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; align-items: center; position: relative; min-height: 56px; }
 .header-left { display: inline-flex; align-items: center; gap: 10px; justify-self: start; }
 .header-right { justify-self: end; }
-.page-title { font-weight: 700; letter-spacing: 0.02em; font-size: 0.98rem; }
 
 /* Crop the IFS logo to hide text and show only the icon */
 .logo-crop {
@@ -88,8 +101,8 @@ body {
 /* Hero centered focus area */
 .hero {
   position: relative;
-  z-index: 2; /* above focus frame */
-  min-height: 100svh;
+  z-index: 2;/* above focus frame */
+  min-height: 100svh; /* full viewport height across devices */
   display: grid;
   grid-template-rows: auto 1fr;
   align-items: start;
@@ -103,16 +116,21 @@ body {
 .title-wrap .shiny-text,
 .shiny-text.custom-class {
   display: inline-block;
-  font-size: clamp(3.25rem, 11vw, 7rem);
-  font-weight: 100;
-  letter-spacing: 0.2em;
-  line-height: 1.6;
+  font-family: 'Rubik', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-size: clamp(3.25rem, 11vw, 8rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-align: center;
 }
+
+/* Title area with background Threads behind text */
+.title-area { position: relative; width: 100%; height: clamp(100px, 20vw, 200px); }
+.title-area .title-foreground { position: relative; z-index: 1; display: grid; place-items: center; height: 100%; }
+
 .tag { margin-top: 5rem; color: var(--muted); font-size: clamp(0.95rem, 1.4vw, 1.5rem); max-width: 100ch; }
 
 .hero-row {
-  margin-top: 5rem;
+  margin-top: 1rem;
   display: grid;
   grid-template-columns: 1fr min(560px, 45%);
   align-items: stretch;
@@ -125,11 +143,6 @@ body {
   height: 250px;
 }
 
-/* Keep aurora inside a middle focus by masking near page edges */
-.aurora-container {
-  mask-image: radial-gradient(1200px 700px at 50% 25%, black 0%, black 55%, transparent 100%);
-  -webkit-mask-image: radial-gradient(1200 700px at 50% 25%, black 0%, black 55%, transparent 100%);
-}
 
 .glitch-box {
   margin: 1.25rem auto 0;
@@ -139,80 +152,48 @@ body {
   overflow: hidden; /* clip glitch effect to box */
   position: relative;
   z-index: 3; /* above focus overlay */
-  border: 1px solid rgba(255,255,255,0.15);
-  background: radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-  backdrop-filter: blur(6px);
+  border: none; /* make border invisible */
+  /* Remove glow: use solid black or transparent */
+  background: var(--bg); /* black page bg */
+  /* backdrop-filter removed to eliminate glow */
+  /* Fade out sides (opacity out) */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 88%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 75%, transparent 100%);
 }
 .glitch-box canvas, .glitch-box > * {
   position: absolute;
   inset: 0;
 }
 
-
-/* cleaned: no decorative tiles */
-
-/* SplitText animation (inspired by reactbits split text) */
-.split-text { white-space: pre-wrap; }
-.split-text .char {
-  display: inline-block;
-  opacity: 0;
-  transform: translate3d(0, 10px, 0) rotate(0.0001deg);
-  animation: rise 650ms cubic-bezier(.2,.65,.3,1) forwards;
-}
-@keyframes rise {
-  60% { opacity: 1; transform: translate3d(0, -1px, 0); }
-  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+/* Magic Bento section centered below hero */
+.magic-bento {
+  position: relative;
+  z-index: 2; /* above focus-frame */
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 3vw, 32px) 0 clamp(56px, 8vh, 120px);
+  margin-top: clamp(24px, 6vw, 64px);
+  opacity: 0.98; /* subtle transparency */
+  /* Leave space under sticky header when using scrollIntoView */
+  scroll-margin-top: 40px;
 }
 
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  .char { animation: none !important; opacity: 1; transform: none; }
-}
-
-/* (replaced previous circular nav with pill menu styles above) */
-
-/* Focus frame: blur/darken edges to keep middle attention */
-.focus-frame {
-  position: fixed;
-  inset: 0;
-  z-index: 1; /* above aurora (z:0) and below content (header z:2, hero z:1 but positioned) */
-  pointer-events: none;
-  /* Vignette to darken edges */
-  background: radial-gradient(
-    1200px 700px at 50% 25%,
-    rgba(0,0,0,0) 0%,
-    rgba(0,0,0,0) 52%,
-    rgba(0,0,0,0.18) 72%,
-    rgba(0,0,0,0.6) 100%
-  );
-}
-
-/* Backdrop blur only on the edges via mask (keeps center crisp) */
-.focus-frame::before {
-  content: "";
+.hero-threads, .hero-thread {
+  /* In-flow container so it scrolls with the page */
   position: absolute;
-  inset: 0;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  /* Mask: transparent center, opaque edges */
-  -webkit-mask-image: radial-gradient(900px 520px at 50% 25%, transparent 58%, black 78%);
-  mask-image: radial-gradient(900px 520px at 50% 25%, transparent 58%, black 78%);
+  z-index: 0;                /* behind hero content */
+  width: 100%;
+  height: clamp(260px, 38vw, 420px); /* taller so waves aren't clipped */
+  margin: 0;
+  pointer-events: none;      /* decorative */
+  overflow: visible;         /* allow expanded canvas to show */
 }
-
-/* Extra subtle edge blurring on top using a pseudo-element */
-.focus-frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* Simulate edge blur: concentric transparent-to-black gradient softened by blur */
-  background: radial-gradient(
-    1100px 580px at 25% 25%,
-    rgba(0,0,0,0) 58%,
-    rgba(0,0,0,0.28) 82%,
-    rgba(0,0,0,0.52) 100%
-  );
-  filter: blur(5px);
-  opacity: 0.85;
+/* Oversize and center the canvas so corners aren't cut */
+.hero-threads > *, .hero-thread > * {
+  position: relative;
+  top: 70%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  width: 109.8%;  /* wider than viewport to cover edges */
+  height: 1500%;   /* a bit taller to cover top/bottom */
 }
-
-/* layering ensured above */
