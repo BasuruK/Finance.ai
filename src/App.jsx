@@ -1,27 +1,74 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, lazy, Suspense, useCallback, memo } from 'react'
 import LetterGlitch from './Backgrounds/LetterGlitch/LetterGlitch';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
-import MagicBento from './Components/MagicBento/MagicBento';
 import Threads from './Backgrounds/Threads/Threads';
 
-  
+// Lazy-load the heavy MagicBento component
+const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
 
-function SplitText({ text, className = '' }) {
-  const chars = useMemo(() => Array.from(text), [text])
+// Simple loading skeleton
+const BentoSkeleton = memo(() => (
+  <div style={{ 
+    minHeight: 500, 
+    width: '100%', 
+    maxWidth: '54em',
+    display: 'grid',
+    gap: '0.5em',
+    padding: '0.75em',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    opacity: 0.2
+  }}>
+    {Array.from({length: 6}).map((_, i) => (
+      <div key={i} style={{
+        aspectRatio: '4/3',
+        minHeight: 200,
+        borderRadius: '20px',
+        background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.05)',
+        gridColumn: i === 2 ? 'span 2' : 'span 1',
+        gridRow: i === 2 ? 'span 2' : 'span 1'
+      }} />
+    ))}
+  </div>
+));
+
+// MagicBento component that loads seamlessly on page load
+const LazyMagicBento = memo(({ toolsRef }) => {
+  const [bentoLoaded, setBentoLoaded] = useState(false);
+
+  // Start loading MagicBento after page loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setBentoLoaded(true);
+    }, 300); // 300ms delay for smooth page load
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <span className={`split-text ${className}`} aria-label={text}>
-      {chars.map((ch, i) => (
-        <span
-          key={i}
-          className="char"
-          style={{ animationDelay: `${i * 60}ms` }}
-        >
-          {ch === ' ' ? '\u00A0' : ch}
-        </span>
-      ))}
-    </span>
-  )
-}
+    <section className="magic-bento" role="region" id="tools" ref={toolsRef}>
+      <Suspense fallback={<BentoSkeleton />}>
+        <div style={{ 
+          opacity: bentoLoaded ? 1 : 0,
+          transform: bentoLoaded ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+        }}>
+          <MagicBento 
+            textAutoHide={true} 
+            enableStars={true} 
+            enableSpotlight={true} 
+            enableBorderGlow={true}
+            enableTilt={true} 
+            enableMagnetism={true} 
+            clickEffect={true} 
+            spotlightRadius={300} 
+            particleCount={12}
+            glowColor="132, 0, 255" 
+          />
+        </div>
+      </Suspense>
+    </section>
+  );
+});
 
 
 export default function App() {
@@ -42,20 +89,20 @@ export default function App() {
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
-  const handleHome = (e) => {
+  const handleHome = useCallback((e) => {
     e.preventDefault();
     setActiveTab('home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  navRef.current?.focus({ preventScroll: true });
-  };
+    navRef.current?.focus({ preventScroll: true });
+  }, []);
 
-  const handleTools = (e) => {
+  const handleTools = useCallback((e) => {
     e.preventDefault();
     setActiveTab('tools');
     // Smooth scroll and programmatic focus for accessibility
     toolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  navRef.current?.focus({ preventScroll: true });
-  };
+    navRef.current?.focus({ preventScroll: true });
+  }, []);
   return (
     <main className="app">
   {/* focus-frame overlay removed */}
@@ -100,7 +147,7 @@ export default function App() {
         </div>
         {/* Threads band below title */}
         <div className="hero-threads" aria-hidden="true">
-          <Threads amplitude={1} distance={0} enableMouseInteraction={true} />
+          <Threads amplitude={1} distance={0} enableMouseInteraction={false} />
         </div>
         {/* Copy + glitch row */}
         <div className="hero-inner">
@@ -117,11 +164,7 @@ export default function App() {
         </div>  
 
         {/* Magic Bento section */}
-  <section className="magic-bento" role="region" id="tools" ref={toolsRef}>
-          <MagicBento textAutoHide={true} enableStars={true} enableSpotlight={true} enableBorderGlow={true}
-                      enableTilt={true} enableMagnetism={true} clickEffect={true} spotlightRadius={300} particleCount={12}
-                      glowColor="132, 0, 255" />
-        </section>
+        <LazyMagicBento toolsRef={toolsRef} />
   </section>
     </main>
     

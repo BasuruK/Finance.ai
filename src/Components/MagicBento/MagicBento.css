@@ -206,5 +206,5 @@
 
 .bento-section {
   position: relative;
-  user-select: none;
+  user-select: text;
 }
