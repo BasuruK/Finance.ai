@@ -57,6 +57,14 @@ a,
 button {
   cursor: pointer;
 }
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  outline: none;
+}
 /* (selection overrides removed — no editable fields in current app) */
 /* Reduce tap highlight on mobile */
 * {
@@ -110,17 +118,13 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.02)
-  ); /* fluid glass */
-  border: 1px solid rgba(255, 255, 255, 0.205);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
   padding: 8px;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(8px);
   position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
 }
 .menu-pill::after {
   content: '';
@@ -128,16 +132,16 @@ button {
   inset: 0;
   background: radial-gradient(
     120px 60px at var(--x, 20%) var(--y, 50%),
-    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.08),
     transparent 60%
   );
   pointer-events: none;
-  mix-blend-mode: overlay;
-  opacity: 0.3;
+  opacity: 0;
+  border-radius: 999px;
   transition: opacity 0.2s ease;
 }
 .menu-pill:hover::after {
-  opacity: 0.45;
+  opacity: 0.6;
 }
 .pill-item {
   display: inline-flex;
@@ -145,27 +149,28 @@ button {
   gap: 8px;
   color: var(--fg);
   text-decoration: none;
-  font-size: 0.9rem;
-  padding: 8px 14px;
+  font-size: 1.0rem;
+  padding: 9px 15px;
   border-radius: 999px;
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease;
+  transition: all 0.2s ease;
+  position: relative;
 }
 .pill-item .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #fff;
-  opacity: 0.6;
+  background: #5c5c5c;
+  opacity: 0.1;
   display: inline-block;
+  transition: all 0.2s ease;
 }
 .pill-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
 }
 .pill-item.is-active {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--fg);
 }
 .pill-item.is-active .dot {
   opacity: 1;
