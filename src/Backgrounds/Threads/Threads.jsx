@@ -2,10 +2,10 @@
 	Installed from https://reactbits.dev/default/
 */
 
-import { useEffect, useRef } from "react";
-import { Renderer, Program, Mesh, Triangle, Color } from "ogl";
+import { useEffect, useRef } from 'react';
+import { Renderer, Program, Mesh, Triangle, Color } from 'ogl';
 
-import "./Threads.css";
+import './Threads.css';
 
 const vertexShader = `
 attribute vec2 position;
@@ -174,7 +174,7 @@ const Threads = ({
       program.uniforms.iResolution.value.g = clientHeight;
       program.uniforms.iResolution.value.b = clientWidth / clientHeight;
     }
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
     resize();
 
     let currentMouse = [0.5, 0.5];
@@ -190,8 +190,8 @@ const Threads = ({
       targetMouse = [0.5, 0.5];
     }
     if (enableMouseInteraction) {
-      container.addEventListener("mousemove", handleMouseMove);
-      container.addEventListener("mouseleave", handleMouseLeave);
+      container.addEventListener('mousemove', handleMouseMove);
+      container.addEventListener('mouseleave', handleMouseLeave);
     }
 
     function update(t) {
@@ -215,14 +215,14 @@ const Threads = ({
     return () => {
       if (animationFrameId.current)
         cancelAnimationFrame(animationFrameId.current);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener('resize', resize);
 
       if (enableMouseInteraction) {
-        container.removeEventListener("mousemove", handleMouseMove);
-        container.removeEventListener("mouseleave", handleMouseLeave);
+        container.removeEventListener('mousemove', handleMouseMove);
+        container.removeEventListener('mouseleave', handleMouseLeave);
       }
       if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [color, amplitude, distance, enableMouseInteraction]);
 

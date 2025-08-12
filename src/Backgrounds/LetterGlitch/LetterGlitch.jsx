@@ -5,7 +5,11 @@
 import { useRef, useEffect } from 'react';
 
 const LetterGlitch = ({
-  glitchColors = ['rgba(131, 69, 201, 1)', 'rgba(71, 4, 126, 1)', 'rgba(48, 29, 71, 1)'],
+  glitchColors = [
+    'rgba(131, 69, 201, 1)',
+    'rgba(71, 4, 126, 1)',
+    'rgba(48, 29, 71, 1)',
+  ],
   className = '',
   glitchSpeed = 50,
   centerVignette = true,
@@ -24,15 +28,70 @@ const LetterGlitch = ({
   const charHeight = 20;
 
   const lettersAndSymbols = [
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    '!', '@', '#', '$', '&', '*', '(', ')', '-', '_', '+', '=', '/',
-    '[', ']', '{', '}', ';', ':', '<', '>', ',', '0', '1', '2', '3',
-    '4', '5', '6', '7', '8', '9'
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    '!',
+    '@',
+    '#',
+    '$',
+    '&',
+    '*',
+    '(',
+    ')',
+    '-',
+    '_',
+    '+',
+    '=',
+    '/',
+    '[',
+    ']',
+    '{',
+    '}',
+    ';',
+    ':',
+    '<',
+    '>',
+    ',',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
   ];
 
   const getRandomChar = () => {
-    return lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)];
+    return lettersAndSymbols[
+      Math.floor(Math.random() * lettersAndSymbols.length)
+    ];
   };
 
   const getRandomColor = () => {
@@ -46,11 +105,13 @@ const LetterGlitch = ({
     });
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
   };
 
   const interpolateColor = (start, end, factor) => {
@@ -151,7 +212,11 @@ const LetterGlitch = ({
         const startRgb = hexToRgb(letter.color);
         const endRgb = hexToRgb(letter.targetColor);
         if (startRgb && endRgb) {
-          letter.color = interpolateColor(startRgb, endRgb, letter.colorProgress);
+          letter.color = interpolateColor(
+            startRgb,
+            endRgb,
+            letter.colorProgress
+          );
           needsRedraw = true;
         }
       }
@@ -209,7 +274,7 @@ const LetterGlitch = ({
     position: 'relative',
     width: '100%',
     height: '100%',
-  backgroundColor: 'transparent',
+    backgroundColor: 'transparent',
     overflow: 'hidden',
   };
 
@@ -217,7 +282,7 @@ const LetterGlitch = ({
     display: 'block',
     width: '100%',
     height: '100%',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   };
 
   const outerVignetteStyle = {
@@ -227,7 +292,8 @@ const LetterGlitch = ({
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
-    background: 'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 100%)',
+    background:
+      'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 100%)',
   };
 
   const centerVignetteStyle = {
@@ -237,7 +303,8 @@ const LetterGlitch = ({
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
-    background: 'radial-gradient(circle, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%)',
+    background:
+      'radial-gradient(circle, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%)',
   };
 
   return (

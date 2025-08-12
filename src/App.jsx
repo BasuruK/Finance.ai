@@ -1,4 +1,12 @@
-import React, { useEffect, useRef, useState, lazy, Suspense, useCallback, memo } from 'react'
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+  useCallback,
+  memo,
+} from 'react';
 import LetterGlitch from './Backgrounds/LetterGlitch/LetterGlitch';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import Threads from './Backgrounds/Threads/Threads';
@@ -8,26 +16,31 @@ const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
 
 // Simple loading skeleton
 const BentoSkeleton = memo(() => (
-  <div style={{ 
-    minHeight: 500, 
-    width: '100%', 
-    maxWidth: '54em',
-    display: 'grid',
-    gap: '0.5em',
-    padding: '0.75em',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    opacity: 0.2
-  }}>
-    {Array.from({length: 6}).map((_, i) => (
-      <div key={i} style={{
-        aspectRatio: '4/3',
-        minHeight: 200,
-        borderRadius: '20px',
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.05)',
-        gridColumn: i === 2 ? 'span 2' : 'span 1',
-        gridRow: i === 2 ? 'span 2' : 'span 1'
-      }} />
+  <div
+    style={{
+      minHeight: 500,
+      width: '100%',
+      maxWidth: '54em',
+      display: 'grid',
+      gap: '0.5em',
+      padding: '0.75em',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+      opacity: 0.2,
+    }}
+  >
+    {Array.from({ length: 6 }).map((_, i) => (
+      <div
+        key={i}
+        style={{
+          aspectRatio: '4/3',
+          minHeight: 200,
+          borderRadius: '20px',
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.05)',
+          gridColumn: i === 2 ? 'span 2' : 'span 1',
+          gridRow: i === 2 ? 'span 2' : 'span 1',
+        }}
+      />
     ))}
   </div>
 ));
@@ -47,29 +60,30 @@ const LazyMagicBento = memo(({ toolsRef }) => {
   return (
     <section className="magic-bento" role="region" id="tools" ref={toolsRef}>
       <Suspense fallback={<BentoSkeleton />}>
-        <div style={{ 
-          opacity: bentoLoaded ? 1 : 0,
-          transform: bentoLoaded ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
-        }}>
-          <MagicBento 
-            textAutoHide={true} 
-            enableStars={true} 
-            enableSpotlight={true} 
+        <div
+          style={{
+            opacity: bentoLoaded ? 1 : 0,
+            transform: bentoLoaded ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
+          }}
+        >
+          <MagicBento
+            textAutoHide={true}
+            enableStars={true}
+            enableSpotlight={true}
             enableBorderGlow={true}
-            enableTilt={true} 
-            enableMagnetism={true} 
-            clickEffect={true} 
-            spotlightRadius={300} 
+            enableTilt={true}
+            enableMagnetism={true}
+            clickEffect={true}
+            spotlightRadius={300}
             particleCount={12}
-            glowColor="132, 0, 255" 
+            glowColor="132, 0, 255"
           />
         </div>
       </Suspense>
     </section>
   );
 });
-
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -81,20 +95,20 @@ export default function App() {
     const handleParallax = () => {
       const scrolled = window.pageYOffset;
       const parallaxSpeed = 0.6; // Background moves much slower
-      const contentSpeed = 0.1;  // Content moves slightly slower
-      
+      const contentSpeed = 0.1; // Content moves slightly slower
+
       // Apply parallax to threads background
       const threadsElements = document.querySelectorAll('.hero-threads');
-      threadsElements.forEach(el => {
+      threadsElements.forEach((el) => {
         el.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
       });
-      
+
       // Apply subtle parallax to content layers
       const titleArea = document.querySelector('.title-area');
       if (titleArea) {
         titleArea.style.transform = `translateY(${scrolled * -contentSpeed}px)`;
       }
-      
+
       const tagElement = document.querySelector('.tag');
       if (tagElement) {
         tagElement.style.transform = `translateY(${scrolled * -contentSpeed * 0.8}px)`;
@@ -124,11 +138,22 @@ export default function App() {
       if ('scrollRestoration' in window.history) {
         window.history.scrollRestoration = 'manual';
       }
-    } catch {}
+    } catch {
+      // Silently handle scroll errors
+    }
     // Scroll to top after mount; delay to override browser restore
-    const t1 = setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), 0);
-    const t2 = setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), 100);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t1 = setTimeout(
+      () => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }),
+      0
+    );
+    const t2 = setTimeout(
+      () => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }),
+      100
+    );
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, []);
 
   const handleHome = useCallback((e) => {
@@ -147,9 +172,9 @@ export default function App() {
   }, []);
   return (
     <main className="app">
-  {/* focus-frame overlay removed */}
+      {/* focus-frame overlay removed */}
       {/* Header with logo and pill menu */}
-  <header className="site-header" role="banner">
+      <header className="site-header" role="banner">
         <div className="header-inner">
           <div className="header-left">
             <span className="logo-crop" aria-hidden="true">
@@ -162,14 +187,22 @@ export default function App() {
             </span>
             <span className="page-title">Finance.ai</span>
           </div>
-          <nav aria-label="Primary" className="header-right" ref={navRef} tabIndex={-1}>
-            <div className="menu-pill" role="navigation">
-              <a onClick={handleHome} className={`pill-item ${activeTab === 'home' ? 'is-active' : ''}`} aria-current={activeTab === 'home' ? 'page' : undefined}>
+          <nav aria-label="Primary" className="header-right" ref={navRef}>
+            <div className="menu-pill">
+              <button
+                onClick={handleHome}
+                className={`pill-item ${activeTab === 'home' ? 'is-active' : ''}`}
+                aria-current={activeTab === 'home' ? 'page' : undefined}
+              >
                 {activeTab === 'home' && <span className="dot" />} Home
-              </a>
-              <a onClick={handleTools} className={`pill-item ${activeTab === 'tools' ? 'is-active' : ''}`} aria-current={activeTab === 'tools' ? 'page' : undefined}>
+              </button>
+              <button
+                onClick={handleTools}
+                className={`pill-item ${activeTab === 'tools' ? 'is-active' : ''}`}
+                aria-current={activeTab === 'tools' ? 'page' : undefined}
+              >
                 {activeTab === 'tools' && <span className="dot" />} Tools
-              </a>
+              </button>
             </div>
           </nav>
         </div>
@@ -181,7 +214,12 @@ export default function App() {
             <div className="title-wrap" style={{ textAlign: 'center' }}>
               <div className="title-area">
                 <div className="title-foreground">
-                  <ShinyText text="Finance.ai" disabled={false} speed={5} className='custom-class' />
+                  <ShinyText
+                    text="Finance.ai"
+                    disabled={false}
+                    speed={5}
+                    className="custom-class"
+                  />
                 </div>
               </div>
             </div>
@@ -196,19 +234,24 @@ export default function App() {
           <div className="hero-copy hero-centered">
             <div className="hero-row">
               <p className="tag">
-                Modern AI enabled services to make your Development Journey smoother.
+                Modern AI enabled services to make your Development Journey
+                smoother.
               </p>
               <div className="glitch-box" aria-hidden>
-                <LetterGlitch glitchSpeed={50} centerVignette={false} outerVignette={false} smooth={true} />
+                <LetterGlitch
+                  glitchSpeed={50}
+                  centerVignette={false}
+                  outerVignette={false}
+                  smooth={true}
+                />
               </div>
             </div>
           </div>
-        </div>  
+        </div>
 
         {/* Magic Bento section */}
         <LazyMagicBento toolsRef={toolsRef} />
-  </section>
+      </section>
     </main>
-    
-  )
+  );
 }
