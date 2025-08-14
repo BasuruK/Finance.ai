@@ -180,7 +180,7 @@ export const memoryManager = {
       }
     });
     
-    console.log('Memory cleanup performed');
+    // Memory cleanup performed - silent operation
   }
 };
 

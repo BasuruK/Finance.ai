@@ -114,8 +114,3 @@
     transform: none !important;
   }
 }
-
-/* Remove old hero-darkveil styles that are no longer needed */
-.hero-darkveil {
-  display: none;
-}

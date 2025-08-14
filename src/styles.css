@@ -257,36 +257,7 @@ button {
   scroll-margin-top: 40px;
 }
 
-.hero-threads,
-.hero-thread {
-  /* In-flow container so it scrolls with the page */
-  position: absolute;
-  z-index: 0; /* behind hero content */
-  width: 100%;
-  height: clamp(260px, 38vw, 420px); /* taller so waves aren't clipped */
-  margin: 0;
-  pointer-events: none; /* decorative */
-  overflow: visible; /* allow expanded canvas to show */
-  will-change: transform; /* optimize for parallax */
-}
-/* Oversize and center the canvas so corners aren't cut */
-.hero-threads > *,
-.hero-thread > * {
-  position: relative;
-  top: 70%;
-  left: 45%;
-  transform: translate(-50%, -50%);
-  width: 109.8%; /* wider than viewport to cover edges */
-  height: 1500%; /* a bit taller to cover top/bottom */
-  will-change: transform; /* optimize for parallax */
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .char {
-    animation: none !important;
-    opacity: 1;
-    transform: none;
-  }
   .menu-pill {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;

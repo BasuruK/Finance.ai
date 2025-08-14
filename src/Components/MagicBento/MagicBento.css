@@ -3,8 +3,6 @@
 */
 
 :root {
-  --hue: 27;
-  --sat: 69%;
   --white: hsl(0, 0%, 100%);
   --purple-primary: rgb(106, 0, 206);
   --purple-glow: rgba(132, 0, 255, 0.2);

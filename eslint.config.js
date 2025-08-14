@@ -24,6 +24,10 @@ export default [
         requestAnimationFrame: 'readonly',
         cancelAnimationFrame: 'readonly',
         fetch: 'readonly',
+        performance: 'readonly',
+        navigator: 'readonly',
+        IntersectionObserver: 'readonly',
+        caches: 'readonly',
       },
       parserOptions: {
         ecmaFeatures: {
