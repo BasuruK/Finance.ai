@@ -7,9 +7,8 @@ import React, {
   useCallback,
   memo,
 } from 'react';
-import LetterGlitch from './Backgrounds/LetterGlitch/LetterGlitch';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
-import Threads from './Backgrounds/Threads/Threads';
+import DarkVeil from './Backgrounds/DarkVeil/DarkVeil';
 import PerformanceMonitor from './Components/PerformanceMonitor/PerformanceMonitor';
 
 // Lazy-load the heavy MagicBento component
@@ -91,48 +90,6 @@ export default function App() {
   const toolsRef = useRef(null);
   const navRef = useRef(null);
 
-  // Parallax effect for threads and content
-  useEffect(() => {
-    const handleParallax = () => {
-      const scrolled = window.pageYOffset;
-      const parallaxSpeed = 0.6; // Background moves much slower
-      const contentSpeed = 0.1; // Content moves slightly slower
-
-      // Apply parallax to threads background
-      const threadsElements = document.querySelectorAll('.hero-threads');
-      threadsElements.forEach((el) => {
-        el.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
-      });
-
-      // Apply subtle parallax to content layers
-      const titleArea = document.querySelector('.title-area');
-      if (titleArea) {
-        titleArea.style.transform = `translateY(${scrolled * -contentSpeed}px)`;
-      }
-
-      const tagElement = document.querySelector('.tag');
-      if (tagElement) {
-        tagElement.style.transform = `translateY(${scrolled * -contentSpeed * 0.8}px)`;
-      }
-    };
-
-    const throttledParallax = (() => {
-      let ticking = false;
-      return () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            handleParallax();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      };
-    })();
-
-    window.addEventListener('scroll', throttledParallax);
-    return () => window.removeEventListener('scroll', throttledParallax);
-  }, []);
-
   // Always start at the top on reload/initial load
   useEffect(() => {
     try {
@@ -173,9 +130,22 @@ export default function App() {
   }, []);
   return (
     <main className="app">
-      {/* focus-frame overlay removed */}
+      {/* DarkVeil Background - Full Coverage */}
+      <div className="background-darkveil">
+        <DarkVeil 
+          hueShift={0}
+          noiseIntensity={0.03}
+          scanlineIntensity={0}
+          speed={0.8}
+          scanlineFrequency={0}
+          warpAmount={2}
+          resolutionScale={1.7}
+        />
+      </div>
+
       {/* Header with logo and pill menu */}
       <header className="site-header" role="banner">
+        
         <div className="header-inner">
           <div className="header-left">
             <span className="logo-crop" aria-hidden="true">
@@ -208,8 +178,9 @@ export default function App() {
           </nav>
         </div>
       </header>
+
       <section className="hero" role="region">
-        {/* Title row */}
+        {/* Title and tagline centered */}
         <div className="hero-inner">
           <div className="hero-copy hero-centered">
             <div className="title-wrap" style={{ textAlign: 'center' }}>
@@ -223,29 +194,18 @@ export default function App() {
                   />
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        {/* Threads band below title */}
-        <div className="hero-threads" aria-hidden="true">
-          <Threads amplitude={1} distance={0} enableMouseInteraction={false} />
-        </div>
-        {/* Copy + glitch row */}
-        <div className="hero-inner">
-          <div className="hero-copy hero-centered">
-            <div className="hero-row">
-              <p className="tag">
+              
+              {/* Centered tagline */}
+              <p className="tag" style={{ 
+                textAlign: 'center', 
+                marginTop: '2rem', 
+                maxWidth: '600px', 
+                marginLeft: 'auto', 
+                marginRight: 'auto' 
+              }}>
                 Modern AI enabled services to make your Development Journey
                 smoother.
               </p>
-              <div className="glitch-box" aria-hidden>
-                <LetterGlitch
-                  glitchSpeed={50}
-                  centerVignette={false}
-                  outerVignette={false}
-                  smooth={true}
-                />
-              </div>
             </div>
           </div>
         </div>
