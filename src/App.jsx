@@ -10,6 +10,7 @@ import React, {
 import LetterGlitch from './Backgrounds/LetterGlitch/LetterGlitch';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import Threads from './Backgrounds/Threads/Threads';
+import PerformanceMonitor from './Components/PerformanceMonitor/PerformanceMonitor';
 
 // Lazy-load the heavy MagicBento component
 const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
@@ -252,6 +253,9 @@ export default function App() {
         {/* Magic Bento section */}
         <LazyMagicBento toolsRef={toolsRef} />
       </section>
+
+      {/* Performance Monitor - floating corner component */}
+      <PerformanceMonitor />
     </main>
   );
 }
