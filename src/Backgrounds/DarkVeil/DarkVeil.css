@@ -60,7 +60,6 @@
 }
 
 /* Ensure all main content elements are above the background */
-.app > .site-header,
 .app > .hero,
 .app > section {
   position: relative;
@@ -68,23 +67,11 @@
   background: transparent;
 }
 
-/* Header transparency adjustments */
-.site-header {
-  background: rgba(0, 0, 0, 0.1); /* Subtle background for readability */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
 /* Multi-resolution support */
 @media screen and (max-width: 480px) {
   .background-darkveil .darkveil-canvas {
     /* Lower quality on small screens for better performance */
     image-rendering: pixelated;
-  }
-  
-  .site-header {
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
   }
 }
 

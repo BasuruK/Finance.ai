@@ -180,7 +180,6 @@ export const memoryManager = {
       }
     });
     
-    // Memory cleanup performed - silent operation
   }
 };
 

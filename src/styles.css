@@ -73,10 +73,8 @@ button {
 
 /* Header with pill menu */
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 3; /* above focus frame */
-  padding: 18px 22px;
+  position: static;
+  padding: 20px 22px;
 }
 .header-inner {
   width: min(1100px, 92vw);

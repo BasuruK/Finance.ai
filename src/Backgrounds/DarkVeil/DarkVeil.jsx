@@ -232,6 +232,7 @@ export default function DarkVeil({
     }
 
     const canvas = ref.current;
+    const parent = canvas.parentElement || document.body;
 
     // Adjust DPR based on performance settings and screen size
     const screenWidth = window.screen.width;
@@ -276,7 +277,7 @@ export default function DarkVeil({
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
-      // Always use viewport dimensions for full coverage - fixed positioning
+      // Use viewport dimensions for full coverage
       const w = window.innerWidth;
       const h = window.innerHeight;
       
@@ -294,32 +295,19 @@ export default function DarkVeil({
         effectiveScale = 0.8;
       }
       
-      // Set renderer size
       renderer.setSize(w * effectiveScale, h * effectiveScale);
       program.uniforms.uResolution.value.set(w, h);
       
-      // Ensure canvas covers full viewport with fixed positioning
-      canvas.style.position = 'fixed';
-      canvas.style.top = '0';
-      canvas.style.left = '0';
+      // Ensure canvas covers full viewport
       canvas.style.width = w + 'px';
       canvas.style.height = h + 'px';
-      canvas.style.zIndex = '-10';
-      canvas.style.pointerEvents = 'none';
     };
 
-    // Listen for resize events to maintain coverage
-    const handleResize = () => {
-      // Use requestAnimationFrame to debounce resize calls
-      if (window.resizeTimeout) {
-        cancelAnimationFrame(window.resizeTimeout);
-      }
-      window.resizeTimeout = requestAnimationFrame(resize);
-    };
-
-    window.addEventListener('resize', handleResize, { passive: true });
-    window.addEventListener('orientationchange', handleResize, { passive: true });
-    resize(); // Initial setup
+    // Use both resize observer and window resize for full coverage
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(document.body);
+    window.addEventListener('resize', resize);
+    resize();
 
     const start = performance.now();
 
@@ -360,12 +348,8 @@ export default function DarkVeil({
         cancelAnimationFrame(animationFrameId.current);
       }
       
-      if (window.resizeTimeout) {
-        cancelAnimationFrame(window.resizeTimeout);
-      }
-      
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', resize);
       
       // Clean up WebGL resources
       if (program) {
