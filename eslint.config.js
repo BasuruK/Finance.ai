@@ -27,6 +27,7 @@ export default [
         performance: 'readonly',
         navigator: 'readonly',
         IntersectionObserver: 'readonly',
+        ResizeObserver: 'readonly',
         caches: 'readonly',
       },
       parserOptions: {

@@ -17,36 +17,48 @@ const cardData = [
     title: 'ATW Logs Monitor',
     description: 'Track ATW logs',
     label: 'Logs',
+    href: '/logs',
+    external: false,
   },
   {
     color: '#060010',
     title: 'Dashboard',
     description: 'View TAR/SAR data',
     label: 'TAR/SAR',
+    href: '/dashboard',
+    external: false,
   },
   {
     color: '#060010',
     title: 'Unit Test Generation',
     description: 'Generate PLSQL Unit Tests',
     label: 'Unit Test',
+    href: '/unit-tests',
+    external: false,
   },
   {
     color: '#060010',
-    title: 'Coming Soon',
-    description: '...',
-    label: '...',
+    title: 'Documentation',
+    description: 'API Documentation & Guides',
+    label: 'Docs',
+    href: '/docs',
+    external: false,
   },
   {
     color: '#060010',
-    title: 'Coming Soon',
-    description: '...',
-    label: '...',
+    title: 'Settings',
+    description: 'Configure your preferences',
+    label: 'Settings',
+    href: '/settings',
+    external: false,
   },
   {
     color: '#060010',
-    title: 'Coming Soon',
-    description: '...',
-    label: '...',
+    title: 'Support',
+    description: 'Get help and contact support',
+    label: 'Support',
+    href: 'mailto:support@finance-ai.com',
+    external: true,
   },
 ];
 
@@ -84,6 +96,32 @@ const updateCardGlowProperties = (card, mouseX, mouseY, glow, radius) => {
   card.style.setProperty('--glow-radius', `${radius}px`);
 };
 
+const handleCardNavigation = (card) => {
+  if (!card.href) return;
+  
+  if (card.external) {
+    // Handle external links (email, phone, external websites)
+    if (card.href.startsWith('mailto:') || card.href.startsWith('tel:')) {
+      window.location.href = card.href;
+    } else {
+      window.open(card.href, '_blank', 'noopener,noreferrer');
+    }
+  } else {
+    // Handle internal navigation
+    // For now, just log the navigation intent - you can replace this with your router
+    // eslint-disable-next-line no-console
+    console.log(`Navigating to: ${card.href}`);
+    
+    // Example navigation approaches you can use:
+    // 1. React Router: navigate(card.href);
+    // 2. Next.js: router.push(card.href);
+    // 3. Browser history: window.history.pushState({}, '', card.href);
+    
+    // Temporary demo - you can remove this
+    window.alert(`Would navigate to: ${card.href}\n\nReplace this with your preferred routing solution.`);
+  }
+};
+
 const ParticleCard = ({
   children,
   className = '',
@@ -94,6 +132,12 @@ const ParticleCard = ({
   enableTilt = true,
   clickEffect = false,
   enableMagnetism = false,
+  onClick,
+  onKeyDown,
+  role,
+  tabIndex,
+  'aria-label': ariaLabel,
+  ...restProps
 }) => {
   const cardRef = useRef(null);
   const particlesRef = useRef([]);
@@ -331,6 +375,12 @@ const ParticleCard = ({
       ref={cardRef}
       className={`${className} particle-container`}
       style={{ ...style, position: 'relative', overflow: 'hidden' }}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      role={role}
+      tabIndex={tabIndex}
+      aria-label={ariaLabel}
+      {...restProps}
     >
       {children}
     </div>
@@ -555,6 +605,20 @@ const MagicBento = ({
                 enableTilt={enableTilt}
                 clickEffect={clickEffect}
                 enableMagnetism={enableMagnetism}
+                style={{
+                  ...cardProps.style,
+                  cursor: card.href ? 'pointer' : 'default',
+                }}
+                onClick={() => handleCardNavigation(card)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCardNavigation(card);
+                  }
+                }}
+                aria-label={`${card.title} - ${card.description}`}
               >
                 <div className="card__header">
                   <div className="card__label">{card.label}</div>
@@ -571,6 +635,19 @@ const MagicBento = ({
             <div
               key={index}
               {...cardProps}
+              style={{
+                ...cardProps.style,
+                cursor: card.href ? 'pointer' : 'default',
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`${card.title} - ${card.description}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleCardNavigation(card);
+                }
+              }}
               ref={(el) => {
                 if (!el) return;
 
@@ -630,6 +707,9 @@ const MagicBento = ({
                 };
 
                 const handleClick = (e) => {
+                  // Handle navigation first
+                  handleCardNavigation(card);
+                  
                   if (!clickEffect || shouldDisableAnimations) return;
 
                   const rect = el.getBoundingClientRect();

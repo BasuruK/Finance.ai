@@ -232,7 +232,6 @@ export default function DarkVeil({
     }
 
     const canvas = ref.current;
-    const parent = canvas.parentElement || document.body;
 
     // Adjust DPR based on performance settings and screen size
     const screenWidth = window.screen.width;

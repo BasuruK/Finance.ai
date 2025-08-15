@@ -48,6 +48,39 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+.card[role="button"] {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card[role="button"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(132, 0, 255, 0.2);
+  border-color: rgba(132, 0, 255, 0.4);
+}
+
+.card[role="button"]:focus {
+  outline: none;
+  border-color: rgba(132, 0, 255, 0.8);
+  box-shadow: 
+    0 0 0 2px rgba(132, 0, 255, 0.3),
+    0 12px 30px rgba(132, 0, 255, 0.2);
+}
+
+.card[role="button"]:active {
+  transform: translateY(-1px);
+}
+
+.particle-container[role="button"] {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.particle-container[role="button"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(132, 0, 255, 0.5);
+}
+
 .card__header,
 .card__content {
   display: flex;
