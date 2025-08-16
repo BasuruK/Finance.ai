@@ -1,0 +1,103 @@
+/*
+	Installed from https://reactbits.dev/default/
+	Optimized for performance with adaptive quality settings and full background coverage
+*/
+
+.darkveil-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  
+  /* Performance optimizations */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  
+  /* Ensure proper scaling across resolutions */
+  image-rendering: optimizeSpeed;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-crisp-edges;
+  image-rendering: optimize-contrast;
+}
+
+/* Full background coverage styles - Fixed positioning to prevent scroll issues */
+.background-darkveil {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10; /* Lower z-index to ensure content stays on top */
+  overflow: hidden;
+  pointer-events: none; /* Prevent interaction with background */
+}
+
+.background-darkveil .darkveil-canvas,
+.background-darkveil .darkveil-disabled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; /* Ensure proper coverage */
+}
+
+/* Fallback for when animations are disabled on low-end devices */
+.darkveil-disabled {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Ensure main app content is positioned correctly */
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background: transparent; /* Ensure transparency to show background */
+}
+
+/* Ensure all main content elements are above the background */
+.app > .hero,
+.app > section {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+/* Multi-resolution support */
+@media screen and (max-width: 480px) {
+  .background-darkveil .darkveil-canvas {
+    /* Lower quality on small screens for better performance */
+    image-rendering: pixelated;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .background-darkveil .darkveil-canvas {
+    /* High quality on large screens */
+    image-rendering: auto;
+  }
+}
+
+/* High DPI display support */
+@media screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi) {
+  .darkveil-canvas {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .darkveil-canvas {
+    animation: none !important;
+  }
+  
+  .background-darkveil {
+    transform: none !important;
+  }
+}

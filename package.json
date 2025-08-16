@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "build:watch": "vite build --watch",
-    "preview": "vite preview --port 5173"
+    "preview": "vite preview --port 5173",
+    "lint": "eslint src/ --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext js,jsx --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "analyze": "npm run build && npx vite-bundle-analyzer"
   },
   "dependencies": {
     "@react-three/drei": "^10.6.1",
@@ -20,7 +25,18 @@
     "three": "^0.167.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
     "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.6.2",
+    "terser": "^5.43.1",
     "vite": "^7.1.1"
   }
 }

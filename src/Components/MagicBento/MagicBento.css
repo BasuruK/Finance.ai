@@ -3,8 +3,6 @@
 */
 
 :root {
-  --hue: 27;
-  --sat: 69%;
   --white: hsl(0, 0%, 100%);
   --purple-primary: rgb(106, 0, 206);
   --purple-glow: rgba(132, 0, 255, 0.2);
@@ -48,6 +46,39 @@
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card[role="button"] {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card[role="button"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(132, 0, 255, 0.2);
+  border-color: rgba(132, 0, 255, 0.4);
+}
+
+.card[role="button"]:focus {
+  outline: none;
+  border-color: rgba(132, 0, 255, 0.8);
+  box-shadow: 
+    0 0 0 2px rgba(132, 0, 255, 0.3),
+    0 12px 30px rgba(132, 0, 255, 0.2);
+}
+
+.card[role="button"]:active {
+  transform: translateY(-1px);
+}
+
+.particle-container[role="button"] {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.particle-container[role="button"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(132, 0, 255, 0.5);
 }
 
 .card__header,
@@ -137,8 +168,8 @@
   }
 
   .card:nth-child(4) {
-    grid-column: 1/span 2;
-    grid-row: 2/span 2;
+    grid-column: 1 / span 2;
+    grid-row: 2 / span 2;
   }
 
   .card:nth-child(6) {
@@ -153,14 +184,20 @@
   position: absolute;
   inset: 0;
   padding: 6px;
-  background: radial-gradient(var(--glow-radius) circle at var(--glow-x) var(--glow-y),
-      rgba(132, 0, 255, calc(var(--glow-intensity) * 0.8)) 0%,
-      rgba(132, 0, 255, calc(var(--glow-intensity) * 0.4)) 30%,
-      transparent 60%);
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(132, 0, 255, calc(var(--glow-intensity) * 0.8)) 0%,
+    rgba(132, 0, 255, calc(var(--glow-intensity) * 0.4)) 30%,
+    transparent 60%
+  );
   border-radius: inherit;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   mask-composite: subtract;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -172,7 +209,9 @@
 }
 
 .card--border-glow:hover {
-  box-shadow: 0 4px 20px rgba(46, 24, 78, 0.4), 0 0 30px var(--purple-glow);
+  box-shadow:
+    0 4px 20px rgba(46, 24, 78, 0.4),
+    0 0 30px var(--purple-glow);
 }
 
 .particle-container {
@@ -193,7 +232,9 @@
 }
 
 .particle-container:hover {
-  box-shadow: 0 4px 20px rgba(46, 24, 78, 0.2), 0 0 30px var(--purple-glow);
+  box-shadow:
+    0 4px 20px rgba(46, 24, 78, 0.2),
+    0 0 30px var(--purple-glow);
 }
 
 /* Global spotlight styles */
@@ -206,5 +247,5 @@
 
 .bento-section {
   position: relative;
-  user-select: none;
+  user-select: text;
 }

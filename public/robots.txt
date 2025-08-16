@@ -1,2 +1,10 @@
 User-agent: *
 Allow: /
+
+# Performance optimized pages
+Allow: *.js
+Allow: *.css
+Allow: *.json
+
+# SEO sitemap location
+Sitemap: https://finance-ai.com/sitemap.xml
