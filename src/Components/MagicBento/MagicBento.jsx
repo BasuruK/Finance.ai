@@ -62,6 +62,19 @@ const cardData = [
   },
 ];
 
+// Helper to detect the Unit Test card (so we can open a modal instead of navigating)
+const isUnitTestCard = (card) => {
+  if (!card) return false;
+  const title = (card.title || '').toLowerCase();
+  const label = (card.label || '').toLowerCase();
+  const href = (card.href || '').toLowerCase();
+  return (
+    title.includes('unit test') ||
+    label.includes('unit test') ||
+    href === '/unit-tests'
+  );
+};
+
 const createParticleElement = (x, y, color = DEFAULT_GLOW_COLOR) => {
   const el = document.createElement('div');
   el.className = 'particle';
@@ -568,8 +581,44 @@ const MagicBento = ({
   enableMagnetism = true,
 }) => {
   const gridRef = useRef(null);
+  const modalRef = useRef(null);
+  const closeBtnRef = useRef(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
+  const [isUnitTestOpen, setIsUnitTestOpen] = useState(false);
+
+  // Focus and keyboard handling when modal is open
+  useEffect(() => {
+    if (!isUnitTestOpen) return;
+    // Focus the close button for immediate keyboard interaction
+    const t = setTimeout(() => closeBtnRef.current?.focus(), 0);
+
+    // Ensure the bento section is in view behind the dialog
+    try {
+      gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch {}
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') setIsUnitTestOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isUnitTestOpen]);
+
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (isUnitTestOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+    return undefined;
+  }, [isUnitTestOpen]);
 
   return (
     <>
@@ -609,13 +658,23 @@ const MagicBento = ({
                   ...cardProps.style,
                   cursor: card.href ? 'pointer' : 'default',
                 }}
-                onClick={() => handleCardNavigation(card)}
+                onClick={() => {
+                  if (isUnitTestCard(card)) {
+                    setIsUnitTestOpen(true);
+                  } else {
+                    handleCardNavigation(card);
+                  }
+                }}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    handleCardNavigation(card);
+                    if (isUnitTestCard(card)) {
+                      setIsUnitTestOpen(true);
+                    } else {
+                      handleCardNavigation(card);
+                    }
                   }
                 }}
                 aria-label={`${card.title} - ${card.description}`}
@@ -645,7 +704,11 @@ const MagicBento = ({
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  handleCardNavigation(card);
+                  if (isUnitTestCard(card)) {
+                    setIsUnitTestOpen(true);
+                  } else {
+                    handleCardNavigation(card);
+                  }
                 }
               }}
               ref={(el) => {
@@ -707,8 +770,12 @@ const MagicBento = ({
                 };
 
                 const handleClick = (e) => {
-                  // Handle navigation first
-                  handleCardNavigation(card);
+                  // Handle Unit Test modal or navigation first
+                  if (isUnitTestCard(card)) {
+                    setIsUnitTestOpen(true);
+                  } else {
+                    handleCardNavigation(card);
+                  }
                   
                   if (!clickEffect || shouldDisableAnimations) return;
 
@@ -770,6 +837,69 @@ const MagicBento = ({
           );
         })}
       </BentoCardGrid>
+
+      {/* Unit Test Generation Modal */}
+      <div
+        className={`unit-test-backdrop ${isUnitTestOpen ? 'open' : ''}`}
+        aria-hidden={!isUnitTestOpen}
+        role="button"
+        tabIndex={isUnitTestOpen ? 0 : -1}
+        onClick={() => setIsUnitTestOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsUnitTestOpen(false);
+          }
+        }}
+      />
+      <div
+        ref={modalRef}
+        className={`unit-test-modal ${isUnitTestOpen ? 'open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="unit-test-modal-title"
+      >
+        <button
+          type="button"
+          className="unit-test-close"
+          aria-label="Close"
+          onClick={() => setIsUnitTestOpen(false)}
+          ref={closeBtnRef}
+        >
+          ×
+        </button>
+        <h3 id="unit-test-modal-title" className="unit-test-title">Unit Test Generation</h3>
+        <div className="unit-test-body">
+          <p>Set up your unit test generation here. This window is dynamic and stays on the page.</p>
+          {/* Chat-like input bubble */}
+          <div className="chat-input-row">
+            <textarea
+              className="chat-input"
+              placeholder="Type a message…"
+              aria-label="Chat message"
+              rows={2}
+            />
+            <button type="button" className="chat-send" aria-label="Send message">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M22 2L11 13" />
+                <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

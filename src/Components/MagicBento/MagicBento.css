@@ -249,3 +249,181 @@
   position: relative;
   user-select: text;
 }
+
+/* Unit Test Modal */
+.unit-test-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+  z-index: 2900;
+}
+
+.unit-test-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.unit-test-modal {
+  position: fixed;
+  top: 40%; /* moved 10% up */
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 10px)) scale(0.98);
+  opacity: 0;
+  width: 80.5vw; /* 70vw * 1.15 */
+  height: 80.5vh; /* 70vh * 1.15 */
+  max-width: 1400px;
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 16px;
+  background: #060010; /* match Magic Bento card color */
+  border: 1px solid var(--border-color); /* match card border */
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.55), /* depth */
+    0 0 50px rgba(30, 136, 229, 0.35), /* dark blue glow */
+    0 0 30px rgba(132, 0, 255, 0.15); /* subtle purple offset */
+  padding: 20px 20px 24px 20px;
+  transition:
+    opacity 280ms ease,
+    transform 280ms ease;
+  z-index: 3000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.unit-test-modal.open {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+/* Mobile fallback */
+@media (max-width: 768px) {
+  .unit-test-modal {
+    width: calc(100% - 2rem);
+    height: auto;
+    max-height: 80vh;
+  }
+  .chat-input-row {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .chat-input-row {
+    width: 60%;
+  }
+}
+
+.unit-test-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(30, 136, 229, 0.6);
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+  padding: 0;
+  transition: background 160ms ease, transform 120ms ease, border-color 160ms ease;
+}
+
+.unit-test-close:hover {
+  background: rgba(30, 136, 229, 0.18);
+  border-color: rgba(30, 136, 229, 0.75);
+}
+
+.unit-test-close:active {
+  transform: scale(0.96);
+}
+
+.unit-test-title {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.unit-test-body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Chat-like input bubble */
+.chat-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto; /* push to bottom */
+  width: 54%; /* ~20% larger than 45% */
+  margin-left: auto;
+  margin-right: auto; /* center horizontally */
+}
+
+.chat-input {
+  width: 100%;
+  border: 1px solid rgba(30, 136, 229, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  padding: 18px 20px; /* taller */
+  font-size: 17px; /* larger */
+  border-radius: 18px; /* rounded corners bubble-like */
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  resize: vertical; /* allow manual grow */
+  min-height: 54px; /* baseline height */
+  max-height: 40vh; /* cap height within modal */
+  overflow: auto; /* scroll if exceeding */
+  line-height: 1.4;
+  white-space: pre-wrap; /* preserve wrapping */
+  word-wrap: break-word;
+}
+
+.chat-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.chat-input:focus {
+  border-color: rgba(30, 136, 229, 0.75);
+  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.chat-send {
+  height: 50px;
+  width: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(30, 136, 229, 0.6);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+
+.chat-send:hover {
+  background: rgba(30, 136, 229, 0.18);
+  border-color: rgba(30, 136, 229, 0.75);
+}
+
+.chat-send:active {
+  transform: scale(0.96);
+}
