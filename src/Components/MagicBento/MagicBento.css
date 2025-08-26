@@ -255,16 +255,21 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  /* Blur applied when open (see .open) */
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 250ms ease;
+  transition: opacity 250ms ease, -webkit-backdrop-filter 250ms ease, backdrop-filter 250ms ease;
   z-index: 2900;
 }
 
 .unit-test-backdrop.open {
   opacity: 1;
   pointer-events: auto;
+  /* Slight Gaussian blur behind the modal */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .unit-test-modal {

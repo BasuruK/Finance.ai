@@ -72,11 +72,11 @@ const LazyMagicBento = memo(({ toolsRef }) => {
             enableStars={true}
             enableSpotlight={true}
             enableBorderGlow={true}
-            enableTilt={true}
+            enableTilt={false}
             enableMagnetism={true}
             clickEffect={true}
             spotlightRadius={300}
-            particleCount={10}
+            particleCount={5}
             glowColor="132, 0, 255"
           />
         </div>

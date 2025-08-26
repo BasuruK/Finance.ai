@@ -870,12 +870,10 @@ const MagicBento = ({
         </button>
         <h3 id="unit-test-modal-title" className="unit-test-title">Unit Test Generation</h3>
         <div className="unit-test-body">
-          <p>Set up your unit test generation here. This window is dynamic and stays on the page.</p>
           {/* Chat-like input bubble */}
           <div className="chat-input-row">
             <textarea
               className="chat-input"
-              placeholder="Type a message…"
               aria-label="Chat message"
               rows={2}
             />
