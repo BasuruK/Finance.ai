@@ -46,9 +46,9 @@ const cardData = [
   },
   {
     color: '#060010',
-    title: 'Settings',
-    description: 'Configure your preferences',
-    label: 'Settings',
+    title: 'Background Tracer',
+    description: 'Tracing Application to PLSQL',
+    label: 'Background Tracer',
     href: '/settings',
     external: false,
   },
