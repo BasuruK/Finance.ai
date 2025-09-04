@@ -39,6 +39,13 @@ body {
   min-height: 100svh;
   overflow: visible;
   z-index: 1;
+  /* Add transition for blur effect */
+  transition: filter 250ms ease;
+}
+
+/* Apply blur to entire app when modals are open */
+.app.modal-blur {
+  filter: blur(8px);
 }
 
 /* Disable text selection and I‑beam cursor globally */
