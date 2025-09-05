@@ -213,7 +213,6 @@ export default function App() {
         {/* Magic Bento section */}
         <LazyMagicBento toolsRef={toolsRef} />
       </section>
-
       {/* Performance Monitor - floating corner component */}
       <PerformanceMonitor />
     </main>

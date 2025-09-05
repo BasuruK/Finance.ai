@@ -473,7 +473,7 @@
   width: 600px;
   max-width: 90vw;
   max-height: 80vh;
-  overflow: auto;
+  overflow: visible;
   border-radius: 16px;
   background: #060010;
   border: 1px solid var(--border-color);
@@ -561,12 +561,6 @@
   min-height: 120px;
 }
 
-.model-option:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(30, 136, 229, 0.4);
-  transform: translateY(-2px);
-}
-
 .model-option:active {
   transform: scale(0.98);
 }
@@ -600,29 +594,23 @@
   flex-direction: column;
 }
 
-.tooltip {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100%);
-  background: rgba(6, 0, 16, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.model-descriptions {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(6, 0, 16, 0.5);
   border-radius: 8px;
-  padding: 12px 16px;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  z-index: 1000;
-  min-width: 250px;
-  max-width: 300px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.model-option-wrapper:hover .tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(-110%);
+.model-descriptions p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--white);
+}
+
+.model-descriptions p:last-child {
+  margin-bottom: 0;
 }
 
 .eco-indicator {
