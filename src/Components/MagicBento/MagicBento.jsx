@@ -628,16 +628,9 @@ const MagicBento = ({
   const [isUnitTestOpen, setIsUnitTestOpen] = useState(false);
   const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
 
-  // Focus and keyboard handling when modal is open
+  // Keyboard handling when modal is open
   useEffect(() => {
     if (!isUnitTestOpen && !isModelSelectorOpen) return;
-    // Focus the close button for immediate keyboard interaction
-    const t = setTimeout(() => closeBtnRef.current?.focus(), 0);
-
-    // Ensure the bento section is in view behind the dialog
-    try {
-      gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } catch {}
 
     const onKey = (e) => {
       if (e.key === 'Escape') {
@@ -647,7 +640,6 @@ const MagicBento = ({
     };
     document.addEventListener('keydown', onKey);
     return () => {
-      clearTimeout(t);
       document.removeEventListener('keydown', onKey);
     };
   }, [isUnitTestOpen, isModelSelectorOpen]);
@@ -937,18 +929,22 @@ const MagicBento = ({
             </button>
             <h3 id="model-selector-modal-title" className="model-selector-title">Choose Model</h3>
             <div className="model-selector-body">
-              <button
-                className="model-option openai-option"
-                onClick={() => {
-                  setIsModelSelectorOpen(false);
-                  window.location.href = '/openai-model'; // Placeholder link
-                }}
-              >
-                <div className="model-option-content">
-                  <h4>Use OpenAI Finetuned Model</h4>
-                  <p>Fast Responses</p>
+              <div className="model-option-wrapper">
+                <button
+                  className="model-option openai-option"
+                  onClick={() => {
+                    setIsModelSelectorOpen(false);
+                    window.location.href = '/openai-model'; // Placeholder link
+                  }}
+                >
+                  <div className="model-option-content">
+                    <h4>Use OpenAI Finetuned Model</h4>
+                    <p>Fast Responses</p>
+                  </div>
+                </button>
+                <div className="tooltip">
                 </div>
-              </button>
+              </div>
               <button
                 className="model-option qwen-option"
                 onClick={() => {

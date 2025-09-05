@@ -455,7 +455,7 @@
   background: rgba(0, 0, 0, 0.6);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 250ms ease;
+  transition: opacity 800ms ease-in-out;
   z-index: 2900;
 }
 
@@ -468,9 +468,9 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, calc(-50% + 10px)) scale(0.98);
+  transform: translate(-50%, -50%) scale(0.9);
   opacity: 0;
-  width: 400px;
+  width: 600px;
   max-width: 90vw;
   max-height: 80vh;
   overflow: auto;
@@ -482,7 +482,7 @@
     0 0 50px rgba(30, 136, 229, 0.35),
     0 0 30px rgba(132, 0, 255, 0.15);
   padding: 20px;
-  transition: opacity 280ms ease, transform 280ms ease;
+  transition: all 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 3000;
   pointer-events: none;
   /* Ensure modal is not affected by parent blur */
@@ -535,13 +535,18 @@
 
 .model-selector-body {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .model-option {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   padding: 16px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -550,6 +555,10 @@
   cursor: pointer;
   transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
   text-align: left;
+  flex: 1;
+  min-width: 200px;
+  max-width: 280px;
+  min-height: 120px;
 }
 
 .model-option:hover {
@@ -562,16 +571,58 @@
   transform: scale(0.98);
 }
 
+.model-option-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+}
+
 .model-option-content h4 {
-  margin: 0 0 4px 0;
+  margin: 0 0 8px 0;
   font-size: 16px;
   font-weight: 500;
+  text-align: left;
 }
 
 .model-option-content p {
   margin: 0 0 8px 0;
   font-size: 14px;
   opacity: 0.8;
+  text-align: left;
+}
+
+.model-option-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.tooltip {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  background: rgba(6, 0, 16, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  min-width: 250px;
+  max-width: 300px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.model-option-wrapper:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-110%);
 }
 
 .eco-indicator {
