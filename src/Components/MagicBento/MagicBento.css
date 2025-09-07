@@ -594,25 +594,6 @@
   flex-direction: column;
 }
 
-.model-descriptions {
-  margin-bottom: 20px;
-  padding: 15px;
-  background: rgba(6, 0, 16, 0.5);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.model-descriptions p {
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--white);
-}
-
-.model-descriptions p:last-child {
-  margin-bottom: 0;
-}
-
 .eco-indicator {
   display: flex;
   align-items: center;

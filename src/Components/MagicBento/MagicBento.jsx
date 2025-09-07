@@ -929,10 +929,6 @@ const MagicBento = ({
             </button>
             <h3 id="model-selector-modal-title" className="model-selector-title">Choose Model</h3>
             <div className="model-selector-body">
-              <div className="model-descriptions">
-                <p><strong>OpenAI Model:</strong> Uses OpenAI GPT 4.1-mini model finetuned on IFS specific Unit Tests. Fast Responses.</p>
-                <p><strong>Qwen3 Model:</strong> Uses Inhouse Qwen3 model finetuned on IFS specific Unit Tests with CO2 savings. Slow but thinking model.</p>
-              </div>
               <div className="model-option-wrapper">
                 <button
                   className="model-option openai-option"

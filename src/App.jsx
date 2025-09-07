@@ -4,7 +4,6 @@ import {
   useState,
   lazy,
   Suspense,
-  useCallback,
   memo,
 } from 'react';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
@@ -86,9 +85,7 @@ const LazyMagicBento = memo(({ toolsRef }) => {
 });
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
   const toolsRef = useRef(null);
-  const navRef = useRef(null);
 
   // Always start at the top on reload/initial load
   useEffect(() => {
@@ -114,20 +111,6 @@ export default function App() {
     };
   }, []);
 
-  const handleHome = useCallback((e) => {
-    e.preventDefault();
-    setActiveTab('home');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    navRef.current?.focus({ preventScroll: true });
-  }, []);
-
-  const handleTools = useCallback((e) => {
-    e.preventDefault();
-    setActiveTab('tools');
-    // Smooth scroll and programmatic focus for accessibility
-    toolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    navRef.current?.focus({ preventScroll: true });
-  }, []);
   return (
     <main className="app">
       {/* DarkVeil Background - Full Coverage */}
@@ -158,24 +141,6 @@ export default function App() {
             </span>
             <span className="page-title">Finance.ai</span>
           </div>
-          <nav aria-label="Primary" className="header-right" ref={navRef}>
-            <div className="menu-pill">
-              <button
-                onClick={handleHome}
-                className={`pill-item ${activeTab === 'home' ? 'is-active' : ''}`}
-                aria-current={activeTab === 'home' ? 'page' : undefined}
-              >
-                {activeTab === 'home' && <span className="dot" />} Home
-              </button>
-              <button
-                onClick={handleTools}
-                className={`pill-item ${activeTab === 'tools' ? 'is-active' : ''}`}
-                aria-current={activeTab === 'tools' ? 'page' : undefined}
-              >
-                {activeTab === 'tools' && <span className="dot" />} Tools
-              </button>
-            </div>
-          </nav>
         </div>
       </header>
 
