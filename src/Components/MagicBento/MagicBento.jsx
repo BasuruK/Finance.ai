@@ -627,6 +627,40 @@ const MagicBento = ({
   const shouldDisableAnimations = disableAnimations || isMobile;
   const [isUnitTestOpen, setIsUnitTestOpen] = useState(false);
   const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
+  const [currentToken, setCurrentToken] = useState(null);
+  const [isInQueue, setIsInQueue] = useState(false);
+  const [message, setMessage] = useState('');
+
+  // Generate a unique token for the request
+  const generateToken = () => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8);
+    return `UT-${timestamp}-${random}`.toUpperCase();
+  };
+
+  // Reset queue state when modal closes
+  const handleCloseModal = () => {
+    setIsUnitTestOpen(false);
+    setIsInQueue(false);
+    setCurrentToken(null);
+    setMessage('');
+  };
+
+  // Handle sending message to queue
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    
+    const token = generateToken();
+    setCurrentToken(token);
+    setIsInQueue(true);
+    
+    // Here you would typically send the message to your backend
+    // For now, we'll just simulate queuing
+    // console.log(`Message queued with token: ${token}`, { message, token });
+    
+    // Clear the message
+    setMessage('');
+  };
 
   // Keyboard handling when modal is open
   useEffect(() => {
@@ -634,7 +668,7 @@ const MagicBento = ({
 
     const onKey = (e) => {
       if (e.key === 'Escape') {
-        if (isUnitTestOpen) setIsUnitTestOpen(false);
+        if (isUnitTestOpen) handleCloseModal();
         if (isModelSelectorOpen) setIsModelSelectorOpen(false);
       }
     };
@@ -986,11 +1020,11 @@ const MagicBento = ({
             aria-hidden={!isUnitTestOpen}
             role="button"
             tabIndex={isUnitTestOpen ? 0 : -1}
-            onClick={() => setIsUnitTestOpen(false)}
+            onClick={handleCloseModal}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                setIsUnitTestOpen(false);
+                handleCloseModal();
               }
             }}
           />
@@ -1005,39 +1039,98 @@ const MagicBento = ({
               type="button"
               className="unit-test-close"
               aria-label="Close"
-              onClick={() => setIsUnitTestOpen(false)}
+              onClick={handleCloseModal}
               ref={closeBtnRef}
             >
               ×
             </button>
             <h3 id="unit-test-modal-title" className="unit-test-title">Unit Test Generation</h3>
             <div className="unit-test-body">
-              {/* Chat-like input bubble */}
-              <div className="chat-input-row">
-                <textarea
-                  className="chat-input"
-                  aria-label="Chat message"
-                  rows={2}
-                />
-                <button type="button" className="chat-send" aria-label="Send message">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    <path d="M22 2L11 13" />
-                    <path d="M22 2l-7 20-4-9-9-4 20-7z" />
-                  </svg>
-                </button>
-              </div>
+              {isInQueue ? (
+                <div className="queue-system">
+                  <div className="queue-info">
+                    <h4>Your request has been queued!</h4>
+                    <p><strong>Token:</strong> {currentToken}</p>
+                    <p>Use this token to check your results later.</p>
+                    <p>The model runs on CPU, so responses may take time.</p>
+                  </div>
+                  <div className="waiting-person">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="80"
+                      height="80"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="person-icon"
+                    >
+                      <circle cx="12" cy="8" r="3" />
+                      <path d="M12 14v7" />
+                      <path d="M9 17h6" />
+                      <path d="M9 21h6" />
+                    </svg>
+                  </div>
+                  <div className="queue-status">
+                    <p>Processing your request...</p>
+                    <div className="loading-dots">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="queue-explanation">
+                  <div className="explanation-content">
+                    <h4>How it works:</h4>
+                    <ul>
+                      <li>Enter your unit test requirements below</li>
+                      <li>Your request will be placed in a queue</li>
+                      <li>You&apos;ll receive a unique token for tracking</li>
+                      <li>The model runs on CPU, so responses are slower but more thoughtful</li>
+                      <li>Use your token to view completed results</li>
+                    </ul>
+                  </div>
+                  {/* Chat-like input bubble */}
+                  <div className="chat-input-row">
+                    <textarea
+                      className="chat-input"
+                      aria-label="Unit test requirements"
+                      placeholder="Describe your unit test requirements..."
+                      rows={3}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <button 
+                      type="button" 
+                      className="chat-send" 
+                      aria-label="Send request"
+                      onClick={handleSendMessage}
+                      disabled={!message.trim()}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </>,
