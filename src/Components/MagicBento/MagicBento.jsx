@@ -627,9 +627,18 @@ const MagicBento = ({
   const shouldDisableAnimations = disableAnimations || isMobile;
   const [isUnitTestOpen, setIsUnitTestOpen] = useState(false);
   const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
+  const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
+  const [isQueueCheckModalOpen, setIsQueueCheckModalOpen] = useState(false);
+  const [queueToken, setQueueToken] = useState('');
   const [currentToken, setCurrentToken] = useState(null);
   const [isInQueue, setIsInQueue] = useState(false);
   const [message, setMessage] = useState('');
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure portals only render on client side to prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Generate a unique token for the request
   const generateToken = () => {
@@ -664,25 +673,27 @@ const MagicBento = ({
 
   // Keyboard handling when modal is open
   useEffect(() => {
-    if (!isUnitTestOpen && !isModelSelectorOpen) return;
+    if (!isUnitTestOpen && !isModelSelectorOpen && !isChoiceModalOpen && !isQueueCheckModalOpen) return;
 
     const onKey = (e) => {
       if (e.key === 'Escape') {
         if (isUnitTestOpen) handleCloseModal();
         if (isModelSelectorOpen) setIsModelSelectorOpen(false);
+        if (isChoiceModalOpen) setIsChoiceModalOpen(false);
+        if (isQueueCheckModalOpen) setIsQueueCheckModalOpen(false);
       }
     };
     document.addEventListener('keydown', onKey);
     return () => {
       document.removeEventListener('keydown', onKey);
     };
-  }, [isUnitTestOpen, isModelSelectorOpen]);
+  }, [isUnitTestOpen, isModelSelectorOpen, isChoiceModalOpen, isQueueCheckModalOpen]);
 
   // Prevent background scroll and add blur when modal is open
   useEffect(() => {
     const appElement = document.querySelector('.app');
     
-    if (isUnitTestOpen || isModelSelectorOpen) {
+    if (isUnitTestOpen || isModelSelectorOpen || isChoiceModalOpen || isQueueCheckModalOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       // Add blur class to entire app
@@ -704,7 +715,7 @@ const MagicBento = ({
       }
     }
     return undefined;
-  }, [isUnitTestOpen, isModelSelectorOpen]);
+  }, [isUnitTestOpen, isModelSelectorOpen, isChoiceModalOpen, isQueueCheckModalOpen]);
 
   return (
     <>
@@ -931,7 +942,7 @@ const MagicBento = ({
       </BentoCardGrid>
 
       {/* Model Selector Modal - Rendered outside app container using Portal */}
-      {(isModelSelectorOpen || isUnitTestOpen) && createPortal(
+      {isClient && (isModelSelectorOpen || isUnitTestOpen) && createPortal(
         <>
           {/* Model Selector Modal */}
           <div
@@ -982,7 +993,7 @@ const MagicBento = ({
                   className="model-option qwen-option"
                   onClick={() => {
                     setIsModelSelectorOpen(false);
-                    setIsUnitTestOpen(true);
+                    setIsChoiceModalOpen(true);
                   }}
                 >
                   <div className="model-option-content">
@@ -1131,6 +1142,127 @@ const MagicBento = ({
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </>,
+        document.body
+      )}
+
+      {/* Additional Modals */}
+      {isClient && createPortal(
+        <>
+          {/* Choice Modal - Check Queue or Generate New Unit Test */}
+          <div
+            className={`choice-backdrop ${isChoiceModalOpen ? 'open' : ''}`}
+            aria-hidden={!isChoiceModalOpen}
+            role="button"
+            tabIndex={isChoiceModalOpen ? 0 : -1}
+            onClick={() => setIsChoiceModalOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsChoiceModalOpen(false);
+              }
+            }}
+          />
+          <div
+            className={`choice-modal ${isChoiceModalOpen ? 'open' : ''}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="choice-modal-title"
+          >
+            <button
+              type="button"
+              className="choice-close"
+              aria-label="Close"
+              onClick={() => setIsChoiceModalOpen(false)}
+            >
+              ×
+            </button>
+            <h3 id="choice-modal-title" className="choice-title">What would you like to do?</h3>
+            <div className="choice-body">
+              <button
+                className="choice-option check-queue-option"
+                onClick={() => {
+                  setIsChoiceModalOpen(false);
+                  setIsQueueCheckModalOpen(true);
+                }}
+              >
+                <div className="choice-option-content">
+                  <h4>Check the Queue</h4>
+                  <p>View status of your previous requests</p>
+                </div>
+              </button>
+              <button
+                className="choice-option generate-new-option"
+                onClick={() => {
+                  setIsChoiceModalOpen(false);
+                  setIsUnitTestOpen(true);
+                }}
+              >
+                <div className="choice-option-content">
+                  <h4>Generate a New Unit Test</h4>
+                  <p>Create a new unit test request</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Queue Check Modal */}
+          <div
+            className={`queue-check-backdrop ${isQueueCheckModalOpen ? 'open' : ''}`}
+            aria-hidden={!isQueueCheckModalOpen}
+            role="button"
+            tabIndex={isQueueCheckModalOpen ? 0 : -1}
+            onClick={() => setIsQueueCheckModalOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsQueueCheckModalOpen(false);
+              }
+            }}
+          />
+          <div
+            className={`queue-check-modal ${isQueueCheckModalOpen ? 'open' : ''}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="queue-check-modal-title"
+          >
+            <button
+              type="button"
+              className="queue-check-close"
+              aria-label="Close"
+              onClick={() => setIsQueueCheckModalOpen(false)}
+            >
+              ×
+            </button>
+            <h3 id="queue-check-modal-title" className="queue-check-title">Check Queue Status</h3>
+            <div className="queue-check-body">
+              <div className="token-input-section">
+                <label htmlFor="token-input">Enter your Token ID:</label>
+                <input
+                  id="token-input"
+                  type="text"
+                  className="token-input"
+                  placeholder="e.g., UT-1234567890-ABC123"
+                  value={queueToken}
+                  onChange={(e) => setQueueToken(e.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                className="check-queue-btn"
+                onClick={() => {
+                  if (queueToken.trim()) {
+                    // Here you would typically check the queue status
+                    // console.log(`Checking status for token: ${queueToken}`);
+                    // For now, we'll just show a placeholder message
+                  }
+                }}
+                disabled={!queueToken.trim()}
+              >
+                Check Queue Status
+              </button>
             </div>
           </div>
         </>,

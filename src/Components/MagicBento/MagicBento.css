@@ -573,6 +573,263 @@
   line-height: 1.4;
 }
 
+/* Choice Modal Styles */
+.choice-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.choice-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.choice-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  width: 400px;
+  height: auto;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow: auto;
+  border-radius: 16px;
+  background: #060010;
+  border: 1px solid var(--border-color);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    0 0 50px rgba(30, 136, 229, 0.35),
+    0 0 30px rgba(132, 0, 255, 0.15);
+  padding: 20px;
+  transition: opacity 280ms ease, transform 280ms ease;
+  z-index: 3000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.choice-modal.open {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+.choice-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1;
+  z-index: 10;
+}
+
+.choice-close:hover {
+  color: rgba(30, 136, 229, 0.8);
+}
+
+.choice-title {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+}
+
+.choice-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.choice-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.choice-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(30, 136, 229, 0.5);
+  transform: translateY(-2px);
+}
+
+.choice-option-content h4 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.choice-option-content p {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Queue Check Modal Styles */
+.queue-check-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.queue-check-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.queue-check-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  width: 350px;
+  height: auto;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow: auto;
+  border-radius: 16px;
+  background: #060010;
+  border: 1px solid var(--border-color);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    0 0 50px rgba(30, 136, 229, 0.35),
+    0 0 30px rgba(132, 0, 255, 0.15);
+  padding: 20px;
+  transition: opacity 280ms ease, transform 280ms ease;
+  z-index: 3000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.queue-check-modal.open {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+.queue-check-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1;
+  z-index: 10;
+}
+
+.queue-check-close:hover {
+  color: rgba(30, 136, 229, 0.8);
+}
+
+.queue-check-title {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+}
+
+.queue-check-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.token-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.token-input-section label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.token-input {
+  padding: 12px 16px;
+  border: 1px solid rgba(30, 136, 229, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.token-input:focus {
+  border-color: rgba(30, 136, 229, 0.75);
+  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.token-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.check-queue-btn {
+  padding: 12px 24px;
+  border: 1px solid rgba(30, 136, 229, 0.6);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
+  align-self: center;
+}
+
+.check-queue-btn:hover:not(:disabled) {
+  background: rgba(30, 136, 229, 0.18);
+  border-color: rgba(30, 136, 229, 0.75);
+}
+
+.check-queue-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.check-queue-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Model Selector Modal */
 .model-selector-backdrop {
   position: fixed;
