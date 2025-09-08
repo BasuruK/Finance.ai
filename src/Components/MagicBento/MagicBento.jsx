@@ -1106,7 +1106,7 @@ const MagicBento = ({
                     </ul>
                   </div>
                   {/* Chat-like input bubble */}
-                  <div className="chat-input-row">
+                  <div className="chat-input-container">
                     <textarea
                       className="chat-input"
                       aria-label="Unit test requirements"
