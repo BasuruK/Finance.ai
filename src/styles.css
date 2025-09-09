@@ -39,6 +39,13 @@ body {
   min-height: 100svh;
   overflow: visible;
   z-index: 1;
+  /* Add transition for blur effect */
+  transition: filter 250ms ease;
+}
+
+/* Apply blur to entire app when modals are open */
+.app.modal-blur {
+  filter: blur(8px);
 }
 
 /* Disable text selection and I‑beam cursor globally */
@@ -85,15 +92,6 @@ button {
   position: relative;
   min-height: 56px;
 }
-.header-left {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  justify-self: start;
-}
-.header-right {
-  justify-self: end;
-}
 
 /* Crop the IFS logo to hide text and show only the icon */
 .logo-crop {
@@ -111,68 +109,6 @@ button {
   object-fit: cover; /* fill crop */
   object-position: left center; /* keep left purple icon, hide right text */
   filter: brightness(1.05) contrast(1.05);
-}
-.menu-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  padding: 8px;
-  backdrop-filter: blur(8px);
-  position: relative;
-  transition: all 0.2s ease;
-}
-.menu-pill::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    120px 60px at var(--x, 20%) var(--y, 50%),
-    rgba(255, 255, 255, 0.08),
-    transparent 60%
-  );
-  pointer-events: none;
-  opacity: 0;
-  border-radius: 999px;
-  transition: opacity 0.2s ease;
-}
-.menu-pill:hover::after {
-  opacity: 0.6;
-}
-.pill-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--fg);
-  text-decoration: none;
-  font-size: 1.0rem;
-  padding: 9px 15px;
-  border-radius: 999px;
-  transition: all 0.2s ease;
-  position: relative;
-}
-.pill-item .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #5c5c5c;
-  opacity: 0.1;
-  display: inline-block;
-  transition: all 0.2s ease;
-}
-.pill-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.9);
-}
-.pill-item.is-active {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--fg);
-}
-.pill-item.is-active .dot {
-  opacity: 1;
-  background: var(--accent-b);
 }
 
 /* Hero centered focus area */
@@ -253,11 +189,4 @@ button {
   opacity: 0.98; /* subtle transparency */
   /* Leave space under sticky header when using scrollIntoView */
   scroll-margin-top: 40px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .menu-pill {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
 }

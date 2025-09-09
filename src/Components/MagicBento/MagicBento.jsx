@@ -3,6 +3,7 @@
 */
 
 import { useRef, useEffect, useCallback, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import './MagicBento.css';
 
@@ -17,16 +18,31 @@ const cardData = [
     title: 'ATW Logs Monitor',
     description: 'Track ATW logs',
     label: 'Logs',
-    href: '/logs',
-    external: false,
+    href: 'http://10.17.98.235:8501/',
+    external: true,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    ),
   },
   {
     color: '#060010',
     title: 'Dashboard',
     description: 'View TAR/SAR data',
     label: 'TAR/SAR',
-    href: '/dashboard',
-    external: false,
+    href: 'http://10.17.98.231:8501',
+    external: true,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <line x1="7" y1="9" x2="17" y2="9"/>
+        <line x1="7" y1="15" x2="17" y2="15"/>
+        <line x1="7" y1="12" x2="17" y2="12"/>
+      </svg>
+    ),
   },
   {
     color: '#060010',
@@ -35,22 +51,39 @@ const cardData = [
     label: 'Unit Test',
     href: '/unit-tests',
     external: false,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+    ),
   },
   {
     color: '#060010',
     title: 'Documentation',
     description: 'API Documentation & Guides',
     label: 'Docs',
-    href: '/docs',
-    external: false,
+    href: 'https://ifsdev.atlassian.net/wiki/spaces/FINANCE/overview',
+    external: true,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+    ),
   },
   {
     color: '#060010',
-    title: 'Settings',
-    description: 'Configure your preferences',
-    label: 'Settings',
+    title: 'Background Tracer',
+    description: 'Tracing Application to PLSQL',
+    label: 'Background Tracer',
     href: '/settings',
     external: false,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
+    ),
   },
   {
     color: '#060010',
@@ -59,8 +92,28 @@ const cardData = [
     label: 'Support',
     href: 'mailto:support@finance-ai.com',
     external: true,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+        <path d="M12 17h.01"/>
+      </svg>
+    ),
   },
 ];
+
+// Helper to detect the Unit Test card (so we can open a modal instead of navigating)
+const isUnitTestCard = (card) => {
+  if (!card) return false;
+  const title = (card.title || '').toLowerCase();
+  const label = (card.label || '').toLowerCase();
+  const href = (card.href || '').toLowerCase();
+  return (
+    title.includes('unit test') ||
+    label.includes('unit test') ||
+    href === '/unit-tests'
+  );
+};
 
 const createParticleElement = (x, y, color = DEFAULT_GLOW_COLOR) => {
   const el = document.createElement('div');
@@ -568,8 +621,101 @@ const MagicBento = ({
   enableMagnetism = true,
 }) => {
   const gridRef = useRef(null);
+  const modalRef = useRef(null);
+  const closeBtnRef = useRef(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
+  const [isUnitTestOpen, setIsUnitTestOpen] = useState(false);
+  const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
+  const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
+  const [isQueueCheckModalOpen, setIsQueueCheckModalOpen] = useState(false);
+  const [queueToken, setQueueToken] = useState('');
+  const [currentToken, setCurrentToken] = useState(null);
+  const [isInQueue, setIsInQueue] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure portals only render on client side to prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Generate a unique token for the request
+  const generateToken = () => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8);
+    return `UT-${timestamp}-${random}`.toUpperCase();
+  };
+
+  // Reset queue state when modal closes
+  const handleCloseModal = () => {
+    setIsUnitTestOpen(false);
+    setIsInQueue(false);
+    setCurrentToken(null);
+    setMessage('');
+  };
+
+  // Handle sending message to queue
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    
+    const token = generateToken();
+    setCurrentToken(token);
+    setIsInQueue(true);
+    
+    // Here you would typically send the message to your backend
+    // For now, we'll just simulate queuing
+    // console.log(`Message queued with token: ${token}`, { message, token });
+    
+    // Clear the message
+    setMessage('');
+  };
+
+  // Keyboard handling when modal is open
+  useEffect(() => {
+    if (!isUnitTestOpen && !isModelSelectorOpen && !isChoiceModalOpen && !isQueueCheckModalOpen) return;
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        if (isUnitTestOpen) handleCloseModal();
+        if (isModelSelectorOpen) setIsModelSelectorOpen(false);
+        if (isChoiceModalOpen) setIsChoiceModalOpen(false);
+        if (isQueueCheckModalOpen) setIsQueueCheckModalOpen(false);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isUnitTestOpen, isModelSelectorOpen, isChoiceModalOpen, isQueueCheckModalOpen]);
+
+  // Prevent background scroll and add blur when modal is open
+  useEffect(() => {
+    const appElement = document.querySelector('.app');
+    
+    if (isUnitTestOpen || isModelSelectorOpen || isChoiceModalOpen || isQueueCheckModalOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      // Add blur class to entire app
+      if (appElement) {
+        appElement.classList.add('modal-blur');
+      }
+      return () => {
+        document.body.style.overflow = prev;
+        // Remove blur class from entire app
+        if (appElement) {
+          appElement.classList.remove('modal-blur');
+        }
+      };
+    } else {
+      // Remove blur class when no modals are open
+      const appElement = document.querySelector('.app');
+      if (appElement) {
+        appElement.classList.remove('modal-blur');
+      }
+    }
+    return undefined;
+  }, [isUnitTestOpen, isModelSelectorOpen, isChoiceModalOpen, isQueueCheckModalOpen]);
 
   return (
     <>
@@ -609,19 +755,32 @@ const MagicBento = ({
                   ...cardProps.style,
                   cursor: card.href ? 'pointer' : 'default',
                 }}
-                onClick={() => handleCardNavigation(card)}
+                onClick={() => {
+                  if (isUnitTestCard(card)) {
+                    setIsModelSelectorOpen(true);
+                  } else {
+                    handleCardNavigation(card);
+                  }
+                }}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    handleCardNavigation(card);
+                    if (isUnitTestCard(card)) {
+                      setIsModelSelectorOpen(true);
+                    } else {
+                      handleCardNavigation(card);
+                    }
                   }
                 }}
                 aria-label={`${card.title} - ${card.description}`}
               >
                 <div className="card__header">
                   <div className="card__label">{card.label}</div>
+                  <div className="card__icon">
+                    {card.icon}
+                  </div>
                 </div>
                 <div className="card__content">
                   <h2 className="card__title">{card.title}</h2>
@@ -645,7 +804,11 @@ const MagicBento = ({
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  handleCardNavigation(card);
+                  if (isUnitTestCard(card)) {
+                    setIsUnitTestOpen(true);
+                  } else {
+                    handleCardNavigation(card);
+                  }
                 }
               }}
               ref={(el) => {
@@ -707,8 +870,12 @@ const MagicBento = ({
                 };
 
                 const handleClick = (e) => {
-                  // Handle navigation first
-                  handleCardNavigation(card);
+                  // Handle Unit Test modal or navigation first
+                  if (isUnitTestCard(card)) {
+                    setIsModelSelectorOpen(true);
+                  } else {
+                    handleCardNavigation(card);
+                  }
                   
                   if (!clickEffect || shouldDisableAnimations) return;
 
@@ -761,6 +928,9 @@ const MagicBento = ({
             >
               <div className="card__header">
                 <div className="card__label">{card.label}</div>
+                <div className="card__icon">
+                  {card.icon}
+                </div>
               </div>
               <div className="card__content">
                 <h2 className="card__title">{card.title}</h2>
@@ -770,6 +940,334 @@ const MagicBento = ({
           );
         })}
       </BentoCardGrid>
+
+      {/* Model Selector Modal - Rendered outside app container using Portal */}
+      {isClient && (isModelSelectorOpen || isUnitTestOpen) && createPortal(
+        <>
+          {/* Model Selector Modal */}
+          <div
+            className={`model-selector-backdrop ${isModelSelectorOpen ? 'open' : ''}`}
+            aria-hidden={!isModelSelectorOpen}
+            role="button"
+            tabIndex={isModelSelectorOpen ? 0 : -1}
+            onClick={() => setIsModelSelectorOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsModelSelectorOpen(false);
+              }
+            }}
+          />
+          <div
+            className={`model-selector-modal ${isModelSelectorOpen ? 'open' : ''}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="model-selector-modal-title"
+          >
+            <button
+              type="button"
+              className="model-selector-close"
+              aria-label="Close"
+              onClick={() => setIsModelSelectorOpen(false)}
+            >
+              ×
+            </button>
+            <h3 id="model-selector-modal-title" className="model-selector-title">Choose Model</h3>
+            <div className="model-selector-body">
+              <div className="model-option-wrapper">
+                <button
+                  className="model-option openai-option"
+                  onClick={() => {
+                    setIsModelSelectorOpen(false);
+                    window.location.href = '/openai-model'; // Placeholder link
+                  }}
+                >
+                  <div className="model-option-content">
+                    <h4>Use OpenAI Finetuned Model</h4>
+                    <p>Fast Responses</p>
+                  </div>
+                </button>
+              </div>
+              <div className="model-option-wrapper">
+                <button
+                  className="model-option qwen-option"
+                  onClick={() => {
+                    setIsModelSelectorOpen(false);
+                    setIsChoiceModalOpen(true);
+                  }}
+                >
+                  <div className="model-option-content">
+                    <h4>Use Inhouse Finetuned Qwen3 Model</h4>
+                    <p>Slow but thinking model</p>
+                    <div className="eco-indicator">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="17"
+                        height="17"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+                        <line x1="16" y1="8" x2="2" y2="22" />
+                        <line x1="17.5" y1="15" x2="9" y2="15" />
+                      </svg>
+                      <span><b>Saves CO₂</b></span>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Unit Test Generation Modal */}
+          <div
+            className={`unit-test-backdrop ${isUnitTestOpen ? 'open' : ''}`}
+            aria-hidden={!isUnitTestOpen}
+            role="button"
+            tabIndex={isUnitTestOpen ? 0 : -1}
+            onClick={handleCloseModal}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleCloseModal();
+              }
+            }}
+          />
+          <div
+            ref={modalRef}
+            className={`unit-test-modal ${isUnitTestOpen ? 'open' : ''}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="unit-test-modal-title"
+          >
+            <button
+              type="button"
+              className="unit-test-close"
+              aria-label="Close"
+              onClick={handleCloseModal}
+              ref={closeBtnRef}
+            >
+              ×
+            </button>
+            <h3 id="unit-test-modal-title" className="unit-test-title">Unit Test Generation</h3>
+            <div className="unit-test-body">
+              {isInQueue ? (
+                <div className="queue-system">
+                  <div className="queue-info">
+                    <h4>Your request has been queued!</h4>
+                    <p><strong>Token:</strong> {currentToken}</p>
+                    <p>Use this token to check your results later.</p>
+                    <p>The model runs on CPU, so responses may take time.</p>
+                  </div>
+                  <div className="waiting-person">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="80"
+                      height="80"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="person-icon"
+                    >
+                      <circle cx="12" cy="8" r="3" />
+                      <path d="M12 14v7" />
+                      <path d="M9 17h6" />
+                      <path d="M9 21h6" />
+                    </svg>
+                  </div>
+                  <div className="queue-status">
+                    <p>Processing your request...</p>
+                    <div className="loading-dots">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="queue-explanation">
+                  <div className="explanation-content">
+                    <h4>How it works:</h4>
+                    <ul>
+                      <li>Enter your unit test requirements below</li>
+                      <li>Your request will be placed in a queue</li>
+                      <li>You&apos;ll receive a unique token for tracking</li>
+                      <li>The model runs on CPU, so responses are slower but more thoughtful</li>
+                      <li>Use your token to view completed results</li>
+                    </ul>
+                  </div>
+                  {/* Chat-like input bubble */}
+                  <div className="chat-input-container">
+                    <textarea
+                      className="chat-input"
+                      aria-label="Unit test requirements"
+                      placeholder="Describe your unit test requirements..."
+                      rows={3}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <button 
+                      type="button" 
+                      className="chat-send" 
+                      aria-label="Send request"
+                      onClick={handleSendMessage}
+                      disabled={!message.trim()}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </>,
+        document.body
+      )}
+
+      {/* Additional Modals */}
+      {isClient && createPortal(
+        <>
+          {/* Choice Modal - Check Queue or Generate New Unit Test */}
+          <div
+            className={`choice-backdrop ${isChoiceModalOpen ? 'open' : ''}`}
+            aria-hidden={!isChoiceModalOpen}
+            role="button"
+            tabIndex={isChoiceModalOpen ? 0 : -1}
+            onClick={() => setIsChoiceModalOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsChoiceModalOpen(false);
+              }
+            }}
+          />
+          <div
+            className={`choice-modal ${isChoiceModalOpen ? 'open' : ''}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="choice-modal-title"
+          >
+            <button
+              type="button"
+              className="choice-close"
+              aria-label="Close"
+              onClick={() => setIsChoiceModalOpen(false)}
+            >
+              ×
+            </button>
+            <h3 id="choice-modal-title" className="choice-title">What would you like to do?</h3>
+            <div className="choice-body">
+              <button
+                className="choice-option check-queue-option"
+                onClick={() => {
+                  setIsChoiceModalOpen(false);
+                  setIsQueueCheckModalOpen(true);
+                }}
+              >
+                <div className="choice-option-content">
+                  <h4>Check the Queue</h4>
+                  <p>View status of your previous requests</p>
+                </div>
+              </button>
+              <button
+                className="choice-option generate-new-option"
+                onClick={() => {
+                  setIsChoiceModalOpen(false);
+                  setIsUnitTestOpen(true);
+                }}
+              >
+                <div className="choice-option-content">
+                  <h4>Generate a New Unit Test</h4>
+                  <p>Create a new unit test request</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Queue Check Modal */}
+          <div
+            className={`queue-check-backdrop ${isQueueCheckModalOpen ? 'open' : ''}`}
+            aria-hidden={!isQueueCheckModalOpen}
+            role="button"
+            tabIndex={isQueueCheckModalOpen ? 0 : -1}
+            onClick={() => setIsQueueCheckModalOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsQueueCheckModalOpen(false);
+              }
+            }}
+          />
+          <div
+            className={`queue-check-modal ${isQueueCheckModalOpen ? 'open' : ''}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="queue-check-modal-title"
+          >
+            <button
+              type="button"
+              className="queue-check-close"
+              aria-label="Close"
+              onClick={() => setIsQueueCheckModalOpen(false)}
+            >
+              ×
+            </button>
+            <h3 id="queue-check-modal-title" className="queue-check-title">Check Queue Status</h3>
+            <div className="queue-check-body">
+              <div className="token-input-section">
+                <label htmlFor="token-input">Enter your Token ID:</label>
+                <input
+                  id="token-input"
+                  type="text"
+                  className="token-input"
+                  placeholder="e.g., UT-1234567890-ABC123"
+                  value={queueToken}
+                  onChange={(e) => setQueueToken(e.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                className="check-queue-btn"
+                onClick={() => {
+                  if (queueToken.trim()) {
+                    // Here you would typically check the queue status
+                    // console.log(`Checking status for token: ${queueToken}`);
+                    // For now, we'll just show a placeholder message
+                  }
+                }}
+                disabled={!queueToken.trim()}
+              >
+                Check Queue Status
+              </button>
+            </div>
+          </div>
+        </>,
+        document.body
+      )}
     </>
   );
 };

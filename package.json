@@ -7,31 +7,40 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src/ app/ --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint . --ext js,jsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "next": "^15.1.0",
     "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.3.0",
     "gsap": "^3.13.0",
     "maath": "^0.10.8",
+    "motion": "^12.23.12",
+    "next": "^15.5.2",
     "ogl": "^1.0.11",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "three": "^0.167.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@typescript-eslint/eslint-plugin": "^8.39.1",
-    "eslint": "^9.33.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "^7.37.5",
-  "eslint-plugin-react-hooks": "^5.2.0",
-  "terser": "^5.43.1"
+    "terser": "^5.43.1"
+  },
+  "overrides": {
+    "color-convert": "2.0.1",
+    "color-name": "1.1.4",
+    "debug": "4.3.4",
+    "is-arrayish": "0.3.2",
+    "color": "4.2.3",
+    "color-string": "1.9.1",
+    "simple-swizzle": "0.2.2"
+  },
+  "resolutions": {
+    "color-convert": "2.0.1",
+    "color-name": "1.1.4",
+    "debug": "4.3.4",
+    "is-arrayish": "0.3.2",
+    "color": "4.2.3",
+    "color-string": "1.9.1",
+    "simple-swizzle": "0.2.2"
   }
 }
