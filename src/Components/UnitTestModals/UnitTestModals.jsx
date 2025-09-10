@@ -16,6 +16,7 @@ const UnitTestModals = ({ isOpen, onClose }) => {
   const [isInQueue, setIsInQueue] = useState(false);
   const [message, setMessage] = useState('');
   const [isClient, setIsClient] = useState(false);
+  const [queueNumber, setQueueNumber] = useState(null);
 
   // Ensure portals only render on client side to prevent hydration mismatch
   useEffect(() => {
@@ -36,12 +37,30 @@ const UnitTestModals = ({ isOpen, onClose }) => {
     return `UT-${timestamp}-${random}`.toUpperCase();
   };
 
+  // Generate a random queue number (simulating queue position)
+  const generateQueueNumber = () => {
+    // More realistic queue simulation based on time of day
+    const hour = new Date().getHours();
+    let baseRange = 5;
+    
+    // Peak hours have more people in queue
+    if (hour >= 9 && hour <= 17) {
+      baseRange = 15; // Business hours
+    } else if (hour >= 18 && hour <= 22) {
+      baseRange = 10; // Evening
+    }
+    
+    // Generate a random number between 1 and baseRange
+    return Math.floor(Math.random() * baseRange) + 1;
+  };
+
   // Reset queue state when modal closes
   const handleCloseModal = () => {
     setIsUnitTestOpen(false);
     setIsInQueue(false);
     setCurrentToken(null);
     setMessage('');
+    setQueueNumber(null);
   };
 
   // Handle closing all modals and notifying parent
@@ -54,6 +73,7 @@ const UnitTestModals = ({ isOpen, onClose }) => {
     setCurrentToken(null);
     setMessage('');
     setQueueToken('');
+    setQueueNumber(null);
     onClose();
   };
 
@@ -79,12 +99,14 @@ const UnitTestModals = ({ isOpen, onClose }) => {
     if (!message.trim()) return;
     
     const token = generateToken();
+    const queuePos = generateQueueNumber();
     setCurrentToken(token);
+    setQueueNumber(queuePos);
     setIsInQueue(true);
     
     // Here you would typically send the message to your backend
     // For now, we'll just simulate queuing
-    // console.log(`Message queued with token: ${token}`, { message, token });
+    // console.log(`Message queued with token: ${token}, queue position: ${queuePos}`, { message, token, queueNumber: queuePos });
     
     // Clear the message
     setMessage('');
@@ -260,31 +282,17 @@ const UnitTestModals = ({ isOpen, onClose }) => {
             <div className="queue-system">
               <div className="queue-info">
                 <h4>Your request has been queued!</h4>
+                <div className="queue-position-badge">
+                  <span className="queue-position-label">Queue Position</span>
+                  <span className="queue-position-number">#{queueNumber}</span>
+                </div>
                 <p><strong>Token:</strong> {currentToken}</p>
                 <p>Use this token to check your results later.</p>
                 <p>The model runs on CPU, so responses may take time.</p>
               </div>
-              <div className="waiting-person">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="80"
-                  height="80"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="person-icon"
-                >
-                  <circle cx="12" cy="8" r="3" />
-                  <path d="M12 14v7" />
-                  <path d="M9 17h6" />
-                  <path d="M9 21h6" />
-                </svg>
-              </div>
               <div className="queue-status">
-                <p>Processing your request...</p>
+                <p>Processing queue position #{queueNumber}...</p>
+                <p className="queue-estimate">Estimated wait time: {queueNumber * 2 - 3 > 0 ? queueNumber * 2 - 3 : 1}-{queueNumber * 2} minutes</p>
                 <div className="loading-dots">
                   <span></span>
                   <span></span>

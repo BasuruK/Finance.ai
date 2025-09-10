@@ -232,24 +232,44 @@
   color: #4caf50;
 }
 
-.waiting-person {
-  margin: 20px 0;
+/* Queue Position Badge Styling */
+.queue-position-badge {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(255, 193, 7, 0.15));
+  border: 2px solid #ff9800;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin: 15px 0 20px 0;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
 }
 
-.person-icon {
-  color: rgba(255, 255, 255, 0.7);
-  animation: waitingAnimation 2s ease-in-out infinite;
+.queue-position-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-@keyframes waitingAnimation {
+.queue-position-number {
+  color: #ff9800;
+  font-size: 32px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
   0%, 100% {
-    transform: translateY(0px);
+    text-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+    transform: scale(1);
   }
   50% {
-    transform: translateY(-10px);
+    text-shadow: 0 0 20px rgba(255, 152, 0, 0.8);
+    transform: scale(1.05);
   }
 }
 
@@ -261,6 +281,13 @@
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 15px;
   font-size: 16px;
+}
+
+.queue-estimate {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 14px !important;
+  font-style: italic;
+  margin-bottom: 20px !important;
 }
 
 .loading-dots {
