@@ -1,14 +1,19 @@
 {
   "routes": [
     {
-      "route": "/*",
-      "serve": "/index.html",
-      "statusCode": 200
+      "route": "/_next/static/*",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "route": "/api/*",
+      "allowedRoles": ["anonymous"]
     }
   ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/api/*", "*.{css,scss,sass,js,ts,tsx,jsx,json,png,gif,jpg,jpeg,svg,ico,webp,woff,woff2,ttf,eot}"]
+    "exclude": ["/_next/*", "/api/*", "*.{css,scss,sass,js,ts,tsx,jsx,json,png,gif,jpg,jpeg,svg,ico,webp,woff,woff2,ttf,eot}"]
   },
   "mimeTypes": {
     ".js": "text/javascript",
@@ -34,5 +39,8 @@
       "rewrite": "/index.html",
       "statusCode": 200
     }
+  },
+  "platform": {
+    "apiRuntime": "node:18"
   }
 }
