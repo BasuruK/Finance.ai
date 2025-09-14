@@ -8,6 +8,11 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
+  env: {
+    // Make build-time environment variables available
+    NEXT_PUBLIC_BUILD_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_BUILD_TIME: new Date().toISOString(),
+  },
   headers: async () => {
     return [
       {
