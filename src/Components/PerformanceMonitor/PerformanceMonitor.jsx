@@ -8,6 +8,21 @@ const PerformanceMonitor = () => {
   const [fps, setFps] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Check if performance monitor should be disabled
+  const isProductionEnvironment = () => {
+    // Check if NEXT_PUBLIC_APP_IN_PRODUCTION is set to true in Azure
+    if (process.env.NEXT_PUBLIC_APP_IN_PRODUCTION === 'true') {
+      return true;
+    }
+    
+    return false;
+  };
+
+  // Early return if performance monitor should be disabled
+  if (isProductionEnvironment()) {
+    return null;
+  }
+
   useEffect(() => {
     // Get device capabilities and optimal settings
     const capabilities = getDeviceCapabilities();
