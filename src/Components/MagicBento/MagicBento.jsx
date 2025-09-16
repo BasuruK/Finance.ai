@@ -48,7 +48,7 @@ const cardData = [
     color: '#060010',
     title: 'Unit Test Generation',
     description: 'Generate PLSQL Unit Tests',
-    label: 'Unit Test',
+    label: 'Unit Test (Coming Soon!)',
     href: '/unit-tests',
     external: false,
     icon: (
@@ -76,8 +76,8 @@ const cardData = [
     title: 'Background Tracer',
     description: 'Tracing Application to PLSQL',
     label: 'Background Tracer',
-    href: '/settings',
-    external: false,
+    href: 'https://ifs-my.sharepoint.com/my?id=%2Fpersonal%2Fbasuru%5Fbalasuriya%5Fifs%5Fcom%2FDocuments%2FDevelopments%2FTool%20Dev%2Ffinancial%2Dservices%2Fbgtrcr%2Frelease%2Fbeta%2Fbeta%5Frelease%5Farchive&ga=1',
+    external: true,
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8"/>
@@ -87,10 +87,10 @@ const cardData = [
   },
   {
     color: '#060010',
-    title: 'Support',
-    description: 'Get help and contact support',
-    label: 'Support',
-    href: 'mailto:support@finance-ai.com',
+    title: 'Report Comparison Tool',
+    description: 'Compare reports easily between new and old versions',
+    label: 'Report Comparison',
+    href: 'https://compare-pdf-01.vercel.app/',
     external: true,
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
