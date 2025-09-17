@@ -1,0 +1,497 @@
+IFS Developer Studio provides a set of tests for PL/SQL code. Among them PL/SQL Unit Test 
+
+provides the ability to test PL/SQL functions and procedures to ensure those units perform as expected. 
+
+Unit test is an essential part of Test-Driven Development (TDD), which helps to identify bugs early in the development and enhance code quality. 
+
+Ignore unit test annotation
+Ignore unit test is an annotation (@IgnoreUnitTest) that can be used with PL/SQL Functions/Procedures if developer found any obstacles to implement unit test for those units. 
+
+Applicable annotation comments¶
+DMLOperation
+
+BLOBDataType
+
+MethodOverriding
+
+PipelinedFunction
+
+NoOutParams
+
+PLSQLInSQL
+
+DynamicStatement
+
+TrivialFunction
+
+DMLOperation
+@IgnoreUnitTest DMLOperation¶
+Unit tests are supposed to be lightweight and test only the logic written in a particular method and will use mocking to avoid executing any other logic written outside the method being unit tested. Therefore, the PLSQL unit test framework will not support testing DML operations. Use integration tests (TAR) for testing broader scopes.
+
+Sample method (ACCRUL/CompanyStructureItem.plsql)
+
+
+
+@IgnoreUnitTest DMLOperation
+PROCEDURE New_Top_Node__(
+   structure_id_  IN VARCHAR2,
+   name_value_    IN VARCHAR2,
+   description_   IN VARCHAR2,
+   level_no_      IN NUMBER )
+IS
+BEGIN   
+   IF (level_no_ != 1) THEN
+      Error_SYS.Record_General(lu_name_, 'CANTCHANGETOPNODE: You cannot create a new top node if the selected node''s level is not 1.');
+   END IF;
+   UPDATE company_structure_item_tab
+   SET    level_no = level_no + 1
+   WHERE  structure_id = structure_id_;
+   UPDATE company_structure_item_tab
+   SET    item_above = name_value_
+   WHERE  structure_id = structure_id_
+   AND    item_above IS NULL;
+   New_Node__(structure_id_, name_value_, description_, NULL, 0);
+END New_Top_Node__;
+ 
+
+Usage of @IgnoreUnitTest DMLOperation in the application code base is very huge. According to the analysis on 02/12/2024, usage count is 3880. So, as a dev tools team we have done some analysis on couple of implementations to understand the obstacle of writing unit test for those methods. During that analysis we were able to implement unit test for those implementations. 
+
+Example 1
+File: (ACCRUL/CompanyStructure.plsql)
+
+Method: Copy__
+
+This method modifies the attr and add new record and call Copy__ method of other APIs
+
+
+
+PROCEDURE Copy__ (
+   source_structure_id_    IN  VARCHAR2,
+   new_structure_id_       IN  VARCHAR2,
+   new_description_        IN  VARCHAR2,
+   include_company_values_ IN  VARCHAR2 )
+IS
+   info_            VARCHAR2(2000);
+   attr_            VARCHAR2(32000);
+   objid_           company_structure.objid%TYPE;
+   objversion_      company_structure.objversion%TYPE;
+BEGIN
+   Client_SYS.Add_To_Attr('STRUCTURE_ID',   new_structure_id_, attr_);
+   Client_SYS.Add_To_Attr('DESCRIPTION',    new_description_,  attr_);
+   Client_SYS.Add_To_Attr('COPY_STRUCTURE', 'TRUE',            attr_);
+   New__(info_, objid_, objversion_, attr_, 'DO'); 
+   Company_Structure_Level_API.Copy__(source_structure_id_, new_structure_id_);
+   Company_Structure_Item_API.Copy__(source_structure_id_, new_structure_id_, include_company_values_);
+END Copy__;
+In this method it adds given values to attr variable and create new record. Then call Copy__ methods of other APIs. Here all lines are method calls, without mocking we can only check and assert the attr string contains the given values with specified names. 
+
+Unit Test for Copy___ method
+
+
+
+UNITTEST "Copy__ should modify attr and save record" FOR
+   PROCEDURE Copy__ (
+      source_structure_id_    IN     VARCHAR2,
+      new_structure_id_       IN     VARCHAR2,
+      new_description_        IN     VARCHAR2,
+      include_company_values_ IN     VARCHAR2 );
+USING
+   --Insert your mock directives and mock return variables here
+   selected_attr_ VARCHAR2(2000);
+   com_str_lvl_api BOOLEAN := FALSE;
+   com_str_itm_api BOOLEAN := FALSE;
+   @MockPackage Company_Structure_Level_API
+   PROCEDURE Copy__ (
+      source_structure_id_ IN     VARCHAR2,
+      new_structure_id_    IN     VARCHAR2 )
+   IS
+   BEGIN
+      com_str_lvl_api := TRUE;
+   END Copy__;
+   @MockPackage Company_Structure_Item_API
+   PROCEDURE Copy__ (
+      source_structure_id_    IN     VARCHAR2,
+      new_structure_id_       IN     VARCHAR2,
+      include_company_values_ IN     VARCHAR2 )
+   IS
+   BEGIN
+      com_str_itm_api := TRUE;
+   END Copy__;
+   @Mock
+   PROCEDURE New__(
+      info_          OUT VARCHAR2,
+      objid_         OUT VARCHAR2,
+      objversion_    OUT VARCHAR2,
+      attr_       IN OUT NOCOPY VARCHAR2,
+      action_     IN     VARCHAR2
+      )
+   IS
+   BEGIN
+      selected_attr_    := attr_;
+   END New__;
+IS
+   --Insert your test variables here
+   expected_ VARCHAR2(2000);
+BEGIN
+   FOR
+      | source_structure_id_ | new_structure_id_ | new_description_ | include_company_values_ | expected_                                                                                                                                    |
+      | 'str1'               | 'new_str1'        | 'new_Description'| 'new_value'             | 'STRUCTURE_ID'||chr(31)||'new_str1'||chr(30)||'DESCRIPTION'||chr(31)||'new_Description'||chr(30)||'COPY_STRUCTURE'||chr(31)||'TRUE'||chr(30) |
+   LOOP
+      --Insert your test code here
+      Copy__(source_structure_id_, new_structure_id_, new_description_, include_company_values_);
+      --Insert your assertions here
+      ASSERT selected_attr_ LIKE expected_ MESSAGE 'Expected attr ' || expected_ || ' but received ' || selected_attr_;
+      ASSERT com_str_lvl_api = TRUE MESSAGE 'Expected to call Company_Structure_Level_API.Copy__ but it have not call';
+      ASSERT com_str_itm_api = TRUE MESSAGE 'Expected to call Company_Structure_Item_API.Copy__ but it have not call';
+   END LOOP;
+END UNITTEST;
+As you can see here, we have mocked all the methods except Client_SYS.Add_To_Attrand primary assertion is attr value. We can say it also not a responsibility of this unit, it needs to be unit test on Client_SYS.Add_To_Attrmethod. Then there are no any logic to be unit test in this method. In that point we can use @IgnoreUnitTest TrivialFunction ignore this type of methods. We can use Script-A-Rest(SAR) test script to write integration test on this method and validate the expected behavior using other APIs as well.  
+
+Example 2
+File: (ACCRUL/CurrencyRateUpdateUtil.plsql)
+
+Method: Update_Single_Currency___
+
+In this example we are going to look at a method which contains multiple conditions, nested conditions and calculations. 
+
+
+
+PROCEDURE Update_Single_Currency___(
+   row_inserted_           OUT BOOLEAN,
+   source_currency_rec_    IN  source_currency_rec_type,
+   target_company_         IN  VARCHAR2,
+   target_currency_type_   IN  VARCHAR2)
+IS   
+   target_curr_rate_rec_      currency_rate_tab%ROWTYPE;
+   target_ref_curr_inverted_  currency_code_tab.inverted%TYPE;
+BEGIN
+   row_inserted_ := FALSE;
+   -- Check currency rate already exist in the target.
+   IF (NOT Currency_Rate_API.Exists(target_company_, target_currency_type_, source_currency_rec_.currency_rate_rec.currency_code, source_currency_rec_.currency_rate_rec.valid_from)) THEN
+      Set_Target_Curr_Rate_Basics___(target_curr_rate_rec_, target_company_, target_currency_type_, source_currency_rec_.currency_rate_rec.currency_code, source_currency_rec_.currency_rate_rec.valid_from);
+      -- No need to insert currency rate for the target company reference currency.
+      IF target_curr_rate_rec_.ref_currency_code = source_currency_rec_.currency_rate_rec.currency_code THEN
+         -- current currency = ref currency. skip this reccord.
+         RETURN;
+      END IF;
+      target_ref_curr_inverted_ := Currency_Code_API.Get_Inverted(target_company_, target_curr_rate_rec_.ref_currency_code);
+      -- If source ref currency is not equal to the target ref currency. Triangulation should be done.
+      IF source_currency_rec_.ref_currency_code != target_curr_rate_rec_.ref_currency_code THEN
+         Do_Triangulation___(target_curr_rate_rec_, source_currency_rec_, target_ref_curr_inverted_);
+         -- Triangulation failed. skip record.
+         IF target_curr_rate_rec_.currency_rate IS NULL THEN
+            RETURN;
+         END IF;
+      ELSE
+         IF source_currency_rec_.ref_currency_inverted = target_ref_curr_inverted_ THEN
+            target_curr_rate_rec_.currency_rate := source_currency_rec_.currency_rate_rec.currency_rate/source_currency_rec_.currency_rate_rec.conv_factor;
+         ELSE
+            -- If source and target inverted flags are diffrent.
+            IF NVL(source_currency_rec_.currency_rate_rec.currency_rate,0) != 0 THEN
+               -- Consider inverse value when source company = target company, but inverted flags are diffrent.
+               target_curr_rate_rec_.currency_rate := 1/(source_currency_rec_.currency_rate_rec.currency_rate/source_currency_rec_.currency_rate_rec.conv_factor);
+            ELSE
+               -- Inverse failed. skip record.
+               RETURN;
+            END IF;
+         END IF;
+      END IF;
+      -- Apply target conversion factor.
+      Apply_Conv_Factor___(target_curr_rate_rec_, source_currency_rec_);
+      IF NVL(target_curr_rate_rec_.currency_rate, 0) != 0 THEN
+         IF ((target_curr_rate_rec_.currency_rate > 1) OR
+            (ROUND(target_curr_rate_rec_.currency_rate, Currency_Code_API.Get_No_Of_Decimals_In_Rate(target_curr_rate_rec_.company, target_curr_rate_rec_.currency_code)) != 0)) THEN
+            -- Insert new currency rate record.
+            Currency_Rate_API.New_Record(target_curr_rate_rec_);
+            row_inserted_ := TRUE;
+         END IF;
+      END IF;
+   ELSE
+      RETURN;
+   END IF;
+END Update_Single_Currency___;
+Unit Test for Update_Single_Currency___
+
+
+
+UNITTEST "Update_Single_Currency___ should insert row" FOR
+   PROCEDURE Update_Single_Currency___(
+      row_inserted_            OUT BOOLEAN,
+      source_currency_rec_  IN     source_currency_rec_type,
+      target_company_       IN     VARCHAR2,
+      target_currency_type_ IN     VARCHAR2);
+USING
+   --Here we define couple of variables to assign mock values
+   currency_rate_exists_ VARCHAR2(10);
+   conv_factor_ NUMBER;
+   ref_currency_code_ VARCHAR2(10);
+   get_inverted_ VARCHAR2(10);
+   decimal_in_rate_ NUMBER;
+   currency_rate_ NUMBER := 0;
+   triangula_currency_rate_ NUMBER;
+   @MockPackage Currency_Rate_API
+   FUNCTION Exists (
+      company_       IN     VARCHAR2,
+      currency_type_ IN     VARCHAR2,
+      currency_code_ IN     VARCHAR2,
+      valid_from_    IN     DATE )  RETURN  BOOLEAN
+   IS
+   BEGIN
+      IF currency_rate_exists_ = 'TRUE' THEN
+         RETURN TRUE;
+      ELSE
+         RETURN FALSE;
+      END IF;
+   END Exists;
+   @Mock
+   PROCEDURE Set_Target_Curr_Rate_Basics___ (
+      target_curr_rate_rec_    OUT currency_rate_tab%ROWTYPE,
+      target_company_       IN     VARCHAR2,
+      target_currency_type_ IN     VARCHAR2,
+      currency_code_        IN     VARCHAR2,
+      valid_from_           IN     DATE )
+   IS
+   BEGIN
+      target_curr_rate_rec_.company           := target_company_;
+      target_curr_rate_rec_.currency_type     := target_currency_type_;
+      target_curr_rate_rec_.currency_code     := currency_code_;
+      target_curr_rate_rec_.valid_from        := valid_from_;
+      target_curr_rate_rec_.conv_factor       := conv_factor_;
+      target_curr_rate_rec_.ref_currency_code := ref_currency_code_;
+   END Set_Target_Curr_Rate_Basics___;
+   @MockPackage Currency_Code_API
+   FUNCTION Get_Inverted (
+      company_       IN     VARCHAR2,
+      currency_code_ IN     VARCHAR2 )  RETURN  VARCHAR2
+   IS
+   BEGIN
+      RETURN get_inverted_;
+   END Get_Inverted;
+   @Mock
+   PROCEDURE Apply_Conv_Factor___ (
+      target_curr_rate_rec_ IN OUT currency_rate_tab%ROWTYPE,
+      source_currency_rec_  IN     source_currency_rec_type) IS
+   BEGIN
+      -- Apply conversion factor.
+      target_curr_rate_rec_.currency_rate := target_curr_rate_rec_.currency_rate;
+   END Apply_Conv_Factor___;
+   @MockPackage Currency_Code_API
+   FUNCTION Get_No_Of_Decimals_In_Rate (
+      company_       IN     VARCHAR2,
+      currency_code_ IN     VARCHAR2 )  RETURN  NUMBER
+   IS
+   BEGIN
+      RETURN decimal_in_rate_;
+   END Get_No_Of_Decimals_In_Rate;
+   @Mock
+   PROCEDURE Do_Triangulation___ (
+      target_curr_rate_rec_     IN OUT currency_rate_tab%ROWTYPE,
+      source_currency_rec_      IN     source_currency_rec_type,
+      target_ref_curr_inverted_ IN     VARCHAR2)
+   IS
+   BEGIN
+      target_curr_rate_rec_.currency_rate := triangula_currency_rate_;
+   END Do_Triangulation___;
+   @MockPackage Currency_Rate_API
+   PROCEDURE New_Record (
+      newrec_ IN OUT CURRENCY_RATE_TAB%ROWTYPE )
+   IS
+   BEGIN
+      currency_rate_ := newrec_.currency_rate;
+   END New_Record;
+IS
+   --Other variables that helps to pass the values
+   row_inserted_expected_  BOOLEAN;
+   row_inserted_expected_txt_ VARCHAR2(10);
+   row_inserted_txt_ VARCHAR2(10);
+   expected_ NUMBER;
+BEGIN
+   -- Assign values for variables which will pass to method calls and mock variables 
+   FOR
+      | row_inserted_ | row_inserted_expected_ | row_inserted_expected_txt_ | expected_ | source_currency_rec_.currency_rate_rec.company | source_currency_rec_.currency_rate_rec.currency_rate | source_currency_rec_.currency_rate_rec.currency_code | source_currency_rec_.currency_rate_rec.conv_factor | source_currency_rec_.currency_rate_rec.valid_from | source_currency_rec_.ref_currency_inverted | source_currency_rec_.ref_currency_code | target_company_ | target_currency_type_ | currency_rate_exists_ | conv_factor_ | get_inverted_ | ref_currency_code_ | decimal_in_rate_ | triangula_currency_rate_ |
+      | FALSE         | FALSE                  | 'FALSE'                    | 0         | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'TRUE'                | 100          | 'FALSE'       | ''                 | 1                | 100                      |
+      | FALSE         | FALSE                  | 'FALSE'                    | 0         | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'FALSE'       | 'CAD'              | 1                | 100                      |
+      | FALSE         | FALSE                  | 'FALSE'                    | 0         | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'FALSE'       | 'USD'              | 1                | NULL                     |
+      | FALSE         | FALSE                  | 'FALSE'                    | 0         | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'FALSE'       | 'USD'              | 1                | 0                        |
+      | FALSE         | FALSE                  | 'FALSE'                    | 0         | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'FALSE'       | 'USD'              | 2                | 0.001                    |
+      | FALSE         | TRUE                   | 'TRUE'                     | 100       | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'FALSE'       | 'USD'              | 2                | 100                      |
+      | FALSE         | TRUE                   | 'TRUE'                     | 5         | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'FALSE'       | 'EUR'              | 2                | 100                      |
+      | FALSE         | FALSE                  | 'FALSE'                    | 5         | 'COMPANY_A'                                    | 0                                                    |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'TRUE'        | 'EUR'              | 2                | 0                        |
+      | FALSE         | TRUE                   | 'TRUE'                     | 0.2       | 'COMPANY_A'                                    | 10                                                   |'CAD'                                                 | 2                                                  | sysdate                                           | 'FALSE'                                    | 'EUR'                                  | 'COMPANY_A'     | '1'                   | 'FALSE'               | 100          | 'TRUE'        | 'EUR'              | 2                | 0                        |
+   LOOP
+      --Insert your test code here
+      -- get_inverted_ := get_inverted_txt_;
+      Update_Single_Currency___(row_inserted_, source_currency_rec_, target_company_, target_currency_type_);
+      --Insert your assertions here
+      IF row_inserted_  THEN
+         row_inserted_txt_ := 'TRUE';
+      ELSE
+         row_inserted_txt_ := 'FALSE';
+      END IF;
+      -- Asset the out parameter of API
+      ASSERT row_inserted_expected_ = row_inserted_ MESSAGE 'Expected '||row_inserted_expected_txt_||' but returned '||row_inserted_txt_;
+      -- Assert currency rate which calculated with given values
+      ASSERT currency_rate_ = expected_ MESSAGE 'Expected '||expected_||' but returned '||currency_rate_;
+   END LOOP;
+END UNITTEST;
+In this example also we have to mock methods and API methods which call from this unit, but we use variables to assign values for mock methods in each test scenarios. In the for-loop section each line covers one of condition and expected return behavior of them. Here PLSQL method logic assign true or false to row_inserted variable after call Currency_Rate_API.New_Record() metod, so we use that value to assertion and currency_rate_ after calculation also used to assert the calculation values. 
+
+Example 3
+File: ORDER/ConnectCustomerOrder.plsql
+
+Method: Create_Pkg_Comp_Lines___
+
+
+
+PROCEDURE Create_Pkg_Comp_Lines___(
+   order_no_       IN VARCHAR2,
+   line_no_        IN VARCHAR2,
+   rel_no_         IN VARCHAR2, 
+   po_order_no_    IN VARCHAR2,
+   po_line_no_     IN VARCHAR2,
+   po_release_no_  IN VARCHAR2)
+IS
+   component_cancelled_  VARCHAR2(5) := 'FALSE';
+   CURSOR get_component_lines IS
+      SELECT line_item_no, revised_qty_due, buy_qty_due, purchase_part_no, configuration_id, vendor_no, contract, rowstate
+      FROM customer_order_line_tab
+      WHERE order_no = order_no_
+      AND   line_no = line_no_
+      AND   rel_no = rel_no_
+      AND   line_item_no > 0
+      ORDER BY line_item_no;  
+BEGIN
+   $IF Component_Purch_SYS.INSTALLED $THEN
+      FOR line_ IN get_component_lines LOOP
+         IF line_.rowstate = 'Cancelled' THEN
+            component_cancelled_ := 'TRUE';
+         ELSE
+            component_cancelled_ := 'FALSE';
+         END IF;
+         -- Handled null in revised_qty_due since the component part can be a non inventory sales part.
+         Purch_Order_Line_Pkg_Comp_API.Create_Package_Comp_Line(po_order_no_, po_line_no_, po_release_no_, line_.purchase_part_no, NVL(line_.revised_qty_due, line_.buy_qty_due), 
+         order_no_, line_no_, rel_no_, line_.line_item_no, line_.configuration_id, component_cancelled_, line_.vendor_no, line_.contract);
+      END LOOP;
+   $ELSE
+      NULL;
+   $END
+END Create_Pkg_Comp_Lines___;
+Unit Test for Create_Pkg_Comp_Lines___ 
+
+
+
+UNITTEST "Create_Pkg_Comp_Lines___ should ... when Component_Purch_SYS is INSTALLED" FOR
+   PROCEDURE Create_Pkg_Comp_Lines___(
+      order_no_      IN     VARCHAR2,
+      line_no_       IN     VARCHAR2,
+      rel_no_        IN     VARCHAR2,
+      po_order_no_   IN     VARCHAR2,
+      po_line_no_    IN     VARCHAR2,
+      po_release_no_ IN     VARCHAR2);
+USING
+   Purch BOOLEAN;
+   purch_order_line_pkg_com BOOLEAN;
+   return_component_cancelled_  VARCHAR2(5);
+   @MockPackage Purch_Order_Line_Pkg_Comp_API
+   PROCEDURE Create_Package_Comp_Line (
+      order_no_            IN     VARCHAR2,
+      line_no_             IN     VARCHAR2,
+      release_no_          IN     VARCHAR2,
+      purchase_part_no_    IN     VARCHAR2,
+      revised_qty_due_     IN     NUMBER,
+      cust_order_no_       IN     VARCHAR2,
+      cust_line_no_        IN     VARCHAR2,
+      cust_rel_no_         IN     VARCHAR2,
+      cust_line_item_no_   IN     VARCHAR2,
+      configuration_id_    IN     VARCHAR2,
+      component_cancelled_ IN     VARCHAR2,
+      vendor_no_           IN     VARCHAR2,
+      contract_            IN     VARCHAR2 )
+   IS
+   BEGIN
+      return_component_cancelled_ := component_cancelled_;
+      purch_order_line_pkg_com := TRUE;
+   END Create_Package_Comp_Line;
+   @MockTable customer_order_line_tab
+   VALUES
+      | line_item_no | revised_qty_due | buy_qty_due | purchase_part_no | configuration_id | vendor_no | contract  | rowstate   | order_no   | line_no   | rel_no   |
+      | 2            | 600             | 600         | 'BP10'           | 'C10'            | 'V1'      | 'C1'      | 'Cancelled'| 'O1'       | 'L1'      | 'R1'     |
+      | 3            | 300             | 500         | 'BP20'           | 'C20'            | 'V2'      | 'C2'      | 'Invoiced' | 'O2'       | 'L2'      | 'R2'     |
+   END VALUES;
+IS
+   expected_component_cancelled_ VARCHAR2(5);
+   purch_txt_ VARCHAR2(5);
+BEGIN
+   FOR
+      | Purch | purch_txt_ | purch_order_line_pkg_com | order_no_ | line_no_ | rel_no_ | po_order_no_ | po_line_no_ | po_release_no_ |expected_component_cancelled_ |
+      | TRUE  | 'TRUE'     | FALSE                    |'O1'       | 'L1'     | 'R1'    | 'PO1'        | 'PL1'       | 'PR1'          |'TRUE'                        |
+      | TRUE  | 'TRUE'     | FALSE                    |'O2'       | 'L2'     | 'R2'    | 'PO2'        | 'PL2'       | 'PR3'          |'FALSE'                       |
+      | FALSE | 'FALSE'    | FALSE                    |'O1'       | 'L1'     | 'R1'    | 'PO1'        | 'PL1'       | 'PR1'          |'FALSE'                       |
+      | FALSE | 'FALSE'    | FALSE                    |'O2'       | 'L2'     | 'R2'    | 'PO2'        | 'PL2'       | 'PR3'          |'FALSE'                       |
+      LOOP
+      Create_Pkg_Comp_Lines___(order_no_, line_no_, rel_no_, po_order_no_, po_line_no_, po_release_no_);
+      ASSERT purch_order_line_pkg_com = Purch MESSAGE 'Is Purch_Order_Line_Pkg_Comp_API.Create_Package_Comp_Line method call should be '|| purch_txt_ ||'  but it is not the expected value.';
+      ASSERT return_component_cancelled_ = expected_component_cancelled_ MESSAGE 'Expected '||expected_component_cancelled_||' but returned '||return_component_cancelled_;
+   END LOOP;
+END UNITTEST;
+Clarification on Global Mock Feature
+The PL/SQL unit test framework utilizes a mocking approach as a foundational principle. During the development of unit tests for methods excluded due to DML operations, the need for a more comprehensive and reusable mocking mechanism was identified. In scenarios where the same sub call methods are invoked across multiple unit tests, identical logic often needs to be mocked repeatedly, resulting in redundancy and inefficiency. To address this, the usage of a global mock feature becomes essential. This feature enables the definition and reuse of common mock implementations across unit tests, ensuring consistency and minimizing duplication. By centralizing mock logic, the global mock feature simplifies the testing process and enhances maintainability throughout the framework.
+
+Example
+
+
+
+FUNCTION Get_Text___ (
+   text_ VARCHAR2)RETURN VARCHAR2
+IS
+   txt_ VARCHAR2(200);
+BEGIN
+   txt_ := Get_Subcall_Text___(text_);
+   RETURN text_ || ' Main Call AND ' || txt_;
+END Get_Text___;
+
+
+FUNCTION Get_Subcall_Text___ (
+   text_ VARCHAR2) RETURN VARCHAR2
+IS
+BEGIN
+   RETURN text_ || ' Sub Call ';
+END Get_Subcall_Text___;
+Unit Test Example Utilizing Global Mocks
+
+
+
+-------------------- GLOBAL MOCKINGS -------------------------------------------
+@Mock
+FUNCTION Get_Subcall_Text___ (
+   text_ VARCHAR2) RETURN VARCHAR2
+IS
+BEGIN
+   RETURN text_ || ' Global Mock ';
+END Get_Subcall_Text___;
+
+
+UNITTEST "Get_Text___ should ... when ..." FOR
+   FUNCTION Get_Text___ (
+      text_ VARCHAR2)RETURN VARCHAR2;
+USING
+IS
+   return_   VARCHAR2(2000);
+   expected_ VARCHAR2(2000);
+BEGIN
+   FOR
+      | expected_                                           | text_         |
+      | 'Coming From Main Call AND Coming From Global Mock '| 'Coming From' |
+   LOOP
+      return_ := Get_Text___(text_);
+      ASSERT return_ = expected_ MESSAGE 'Expected '||expected_||' but returned '||return_;
+   END LOOP;
+END UNITTEST;
+It is possible to implement both internal and global mocks for the same method, each with different logic. In such cases, the internal mock will take precedence over the global mock.
+
+Clarification on @OptionalMocks
+The framework requires developers to include a mock mechanism within unit tests for internal methods. By default, a NULL body is generated for the required methods in the TST package. However, with the @OptionalMocks annotation, the framework is instructed to generate method implementations containing the original business logic from the PL/SQL code instead of a NULL body. To use this feature, simply include the @OptionalMocks annotation at the top of your unit test file. It is important to note that even when @OptionalMocks is specified at the file level, developers can still define individual method mocks. When @OptionalMocks is used at the file level, if @Mock is present for a function, the mock implementation is executed; if @Mock is not present, the original method logic is invoked.
+
+ 
+
+For more detailed information and a demonstration of this approach, please refer to the below demo about PL/SQL UNIT TESTS: Making internal method mocks (@Mock) optional.
