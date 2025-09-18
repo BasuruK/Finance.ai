@@ -121,7 +121,7 @@ export default async function handler(req, res) {
       }
 
       // Add the main prompt with the code to test
-      prompt_messages.push({"role": "user", "content": `Generate a comprehensive PLSQL unit test suite for the following code:\n\n\`\`\`sql\n${code}\n\`\`\`\n\nThe tests should cover different scenarios, including edge cases and error handling, based on the provided knowledge and examples and dont forget to use the table structure when generating the test scenarios.`});
+      prompt_messages.push({"role": "user", "content": `Generate a comprehensive PLSQL unit test suite for the following code:\n\n\`\`\`sql\n${code}\n\`\`\`\n\nThe tests should cover different scenarios, including edge cases and error handling, based on the provided knowledge and examples and dont forget to use the table structure when generating the test scenarios and give exact one unit test block.`});
 
       // Call standard OpenAI API
       const standardResponse = await openai.chat.completions.create({
