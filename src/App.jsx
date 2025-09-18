@@ -9,6 +9,7 @@ import {
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import DarkVeil from './Backgrounds/DarkVeil/DarkVeil';
 import PerformanceMonitor from './Components/PerformanceMonitor/PerformanceMonitor';
+import PLSQLTestModal from './Components/PLSQLTestModal/PLSQLTestModal';
 
 // Lazy-load the heavy MagicBento component
 const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
@@ -45,7 +46,7 @@ const BentoSkeleton = memo(() => (
 ));
 
 // MagicBento component that loads seamlessly on page load
-const LazyMagicBento = memo(({ toolsRef }) => {
+const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
   const [bentoLoaded, setBentoLoaded] = useState(false);
 
   // Start loading MagicBento after page loads
@@ -77,6 +78,7 @@ const LazyMagicBento = memo(({ toolsRef }) => {
             spotlightRadius={300}
             particleCount={5}
             glowColor="132, 0, 255"
+            onNavigateToPLSQL={onNavigateToPLSQL}
           />
         </div>
       </Suspense>
@@ -86,6 +88,7 @@ const LazyMagicBento = memo(({ toolsRef }) => {
 
 export default function App() {
   const toolsRef = useRef(null);
+  const [showPLSQLPage, setShowPLSQLPage] = useState(false);
 
   // Always start at the top on reload/initial load
   useEffect(() => {
@@ -113,18 +116,22 @@ export default function App() {
 
   return (
     <main className="app">
-      {/* DarkVeil Background - Full Coverage */}
-      <div className="background-darkveil">
-        <DarkVeil 
-          hueShift={0}
-          noiseIntensity={0.03}
-          scanlineIntensity={0}
-          speed={0.8}
-          scanlineFrequency={0}
-          warpAmount={2}
-          resolutionScale={1.7}
-        />
-      </div>
+      {showPLSQLPage ? (
+        <PLSQLTestModal onClose={() => setShowPLSQLPage(false)} />
+      ) : (
+        <>
+          {/* DarkVeil Background - Full Coverage */}
+          <div className="background-darkveil">
+            <DarkVeil 
+              hueShift={0}
+              noiseIntensity={0.03}
+              scanlineIntensity={0}
+              speed={0.8}
+              scanlineFrequency={0}
+              warpAmount={2}
+              resolutionScale={1.7}
+            />
+          </div>
 
       {/* Header with logo and pill menu */}
       <header className="site-header" role="banner">
@@ -176,10 +183,12 @@ export default function App() {
         </div>
 
         {/* Magic Bento section */}
-        <LazyMagicBento toolsRef={toolsRef} />
+        <LazyMagicBento toolsRef={toolsRef} onNavigateToPLSQL={() => setShowPLSQLPage(true)} />
       </section>
       {/* Performance Monitor - floating corner component */}
       <PerformanceMonitor />
+        </>
+      )}
     </main>
   );
 }
