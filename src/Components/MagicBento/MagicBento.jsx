@@ -48,7 +48,7 @@ const cardData = [
     color: '#060010',
     title: 'Unit Test Generation',
     description: 'Generate PLSQL Unit Tests',
-    label: 'Unit Test (Coming Soon!)',
+    label: 'Unit Test Generation (AI) NEW!',
     href: '/unit-tests',
     external: false,
     icon: (

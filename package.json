@@ -27,6 +27,8 @@
     "three": "^0.167.1"
   },
   "devDependencies": {
+    "eslint": "^9.35.0",
+    "eslint-plugin-react": "^7.37.5",
     "terser": "^5.43.1"
   },
   "overrides": {
