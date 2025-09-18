@@ -48,11 +48,11 @@ export default async function handler(req, res) {
       });
     }
 
-    // Validate API key
-    const apiKey = process.env.OPENAI_API_KEY;
+    // Validate API key - support both Azure (OpenAI_Key) and local (.env) naming
+    const apiKey = process.env.OpenAI_Key || process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ 
-        error: 'OpenAI API key not configured on server',
+        error: 'OpenAI API key not configured on server. Please set OpenAI_Key or OPENAI_API_KEY environment variable.',
         success: false 
       });
     }
