@@ -1,8 +1,18 @@
 // Next.js API route for PL/SQL test generation
-// This endpoint handles the server-side OpenAI API calls
+// This endpoint handles the server-side OpenAI API calls with support for pretrained models
 
 import fs from 'fs';
 import path from 'path';
+import { OpenAI } from 'openai';
+
+// Configuration for pretrained model
+const PRETRAINED_PROMPT_ID = "pmpt_689049a4f79c81969c9a616f70629b43039cb2b0b7fae1a4";
+const PRETRAINED_PROMPT_VERSION = "1";
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // Helper function to read file content
 function readFileContent(filePath) {
@@ -34,10 +44,7 @@ export default async function handler(req, res) {
   try {
     const { 
       code, 
-      framework = 'utPLSQL', 
-      includeSetup = true, 
-      includeErrorHandling = true, 
-      testComplexity = 'comprehensive'
+      usePretrainedModel = true  // New parameter to toggle pretrained model
     } = req.body;
 
     // Validate input
@@ -57,37 +64,67 @@ export default async function handler(req, res) {
       });
     }
 
-    // Read knowledge base and examples from actual files
-    const resourcesPath = path.join(process.cwd(), 'resources');
-    const knowledgeBase = readFileContent(path.join(resourcesPath, 'knowledge_base.txt'));
-    const examples = readFileContent(path.join(resourcesPath, 'examples.sql'));
+    let generatedTests;
+    let modelUsed = 'gpt-4o-mini';
+    let usage = null;
 
-    // Construct the prompt for the AI (following Python structure exactly)
-    const prompt_messages = [
-      {"role": "system", "content": "You are an AI assistant specialized in generating PLSQL unit tests."}
-    ];
+    try {
+      if (usePretrainedModel) {
+        // Try using the pretrained model first
+        console.log('Using pretrained model with prompt ID:', PRETRAINED_PROMPT_ID);
+        
+        const response = await openai.responses.create({
+          prompt: {
+            id: PRETRAINED_PROMPT_ID,
+            version: PRETRAINED_PROMPT_VERSION
+          },
+          input: [code], // Pass the PL/SQL code as input
+          text: {
+            format: {
+              type: "text"
+            }
+          },
+          reasoning: {},
+          max_output_tokens: 2048,
+          store: false
+        });
 
-    // Add knowledge base if it exists
-    if (knowledgeBase) {
-      prompt_messages.push({"role": "user", "content": `Here is some relevant knowledge about PLSQL standards and practices:\n\n${knowledgeBase}`});
-    }
+        generatedTests = response.choices[0].message.content;
+        modelUsed = 'pretrained-model';
+        usage = response.usage;
 
-    // Add examples if they exist  
-    if (examples) {
-      prompt_messages.push({"role": "user", "content": `Here are some examples of PLSQL unit tests:\n\n${examples}`});
-    }
+      } else {
+        throw new Error('Using standard model as requested');
+      }
+    } catch (pretrainedError) {
+      console.log('Pretrained model failed, falling back to standard model:', pretrainedError.message);
+      
+      // Fallback to standard model
+      // Read knowledge base and examples from actual files
+      const resourcesPath = path.join(process.cwd(), 'resources');
+      const knowledgeBase = readFileContent(path.join(resourcesPath, 'knowledge_base.txt'));
+      const examples = readFileContent(path.join(resourcesPath, 'examples.sql'));
 
-    // Add the main prompt with the code to test
-    prompt_messages.push({"role": "user", "content": `Generate a comprehensive PLSQL unit test suite for the following code:\n\n\`\`\`sql\n${code}\n\`\`\`\n\nThe tests should cover different scenarios, including edge cases and error handling, based on the provided knowledge and examples.`});
+      // Construct the prompt for the AI (following Python structure exactly)
+      const prompt_messages = [
+        {"role": "system", "content": "You are an AI assistant specialized in generating PLSQL unit tests."}
+      ];
 
-    // Call OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
+      // Add knowledge base if it exists
+      if (knowledgeBase) {
+        prompt_messages.push({"role": "user", "content": `Here is some relevant knowledge about PLSQL standards and practices:\n\n${knowledgeBase}`});
+      }
+
+      // Add examples if they exist  
+      if (examples) {
+        prompt_messages.push({"role": "user", "content": `Here are some examples of PLSQL unit tests:\n\n${examples}`});
+      }
+
+      // Add the main prompt with the code to test
+      prompt_messages.push({"role": "user", "content": `Generate a comprehensive PLSQL unit test suite for the following code:\n\n\`\`\`sql\n${code}\n\`\`\`\n\nThe tests should cover different scenarios, including edge cases and error handling, based on the provided knowledge and examples and dont forget to use the table structure when generating the test scenarios and give exact one unit test block.`});
+
+      // Call standard OpenAI API
+      const standardResponse = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: prompt_messages,
         max_tokens: 4000,
@@ -95,29 +132,12 @@ export default async function handler(req, res) {
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      console.error('OpenAI API Error:', response.status, errorData);
-      
-      return res.status(response.status).json({ 
-        error: `OpenAI API Error: ${response.status} - ${errorData?.error?.message || 'Unknown error'}`,
-        success: false 
       });
-    }
 
-    const data = await response.json();
-    
-    if (!data.choices || data.choices.length === 0) {
-      return res.status(500).json({ 
-        error: 'No response generated from OpenAI API',
-        success: false 
-      });
+      generatedTests = standardResponse.choices[0].message.content;
+      modelUsed = 'gpt-4o-mini';
+      usage = standardResponse.usage;
     }
-
-    const generatedTests = data.choices[0].message.content;
 
     // Generate a unique token for tracking
     const timestamp = Date.now();
@@ -128,18 +148,15 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       tests: generatedTests,
-      framework: framework,
-      model: 'gpt-4o-mini',
+      framework: 'PLSQL',
+      model: modelUsed,
       token: token,
-      usage: data.usage,
+      usage: usage,
       metadata: {
           timestamp: new Date().toISOString(),
           codeLength: code.length,
           options: {
-            framework,
-            includeSetup,
-            includeErrorHandling,
-            testComplexity
+            usePretrainedModel
           }
         }
     });

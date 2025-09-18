@@ -10,10 +10,7 @@ class PLSQLTestGenerator {
   // Generate unit tests using Next.js API
   async generateTests(plsqlCode, options = {}) {
     const {
-      framework = 'PLSQL',
-      includeSetup = true,
-      includeErrorHandling = true,
-      testComplexity = 'comprehensive'
+      usePretrainedModel = true  // Option to use pretrained model
     } = options;
 
     if (!plsqlCode || plsqlCode.trim() === '') {
@@ -22,10 +19,7 @@ class PLSQLTestGenerator {
 
     const payload = {
       code: plsqlCode,
-      framework,
-      includeSetup,
-      includeErrorHandling,
-      testComplexity
+      usePretrainedModel
     };
 
     try {
