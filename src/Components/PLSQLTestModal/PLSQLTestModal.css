@@ -1,0 +1,2765 @@
+/**
+ * PL/SQL Unit Test Generator Component Styles
+ * 
+ * Comprehensive CSS for the PL/SQL test generator modal featuring:
+ * - Multi-theme support (dark, light, system preference)
+ * - IFS brand colors and design system
+ * - Responsive design for mobile and desktop
+ * - Toast notification system with stacking
+ * - Rainbow easter egg animations
+ * - Accessibility-focused design
+ * - Smooth transitions and modern UI patterns
+ * 
+ * @version 1.0.0
+ * @author IFS Finance.ai Team
+ */
+
+/* IFS Theme Variables - Purple Neon Style */
+:root {
+  /* Purple Neon Brand Colors */
+  --ifs-primary: #8B5CF6;
+  --ifs-primary-dark: #7C3AED;
+  --ifs-primary-light: #A78BFA;
+  --ifs-secondary: #D946EF;
+  --ifs-accent: #F59E0B;
+  --ifs-success: #10B981;
+  --ifs-warning: #F59E0B;
+  --ifs-error: #EF4444;
+  
+  /* Purple Neon Colors */
+  --neon-purple: #6c28d9bd;
+  --neon-purple-bright: #8B5CF6;
+  --neon-purple-dark: #5B21B6;
+  --neon-pink: #C026D3;
+  --neon-blue: #2563EB;
+  
+  /* Darker Theme Colors */
+  --color-white: #FFFFFF;
+  --color-gray-50: #0C0C0C;
+  --color-gray-100: #050505;
+  --color-gray-200: #1A1A1A;
+  --color-gray-300: #2D2D2D;
+  --color-gray-400: #404040;
+  --color-gray-500: #737373;
+  --color-gray-600: #A3A3A3;
+  --color-gray-700: #D4D4D4;
+  --color-gray-800: #E5E5E5;
+  --color-gray-900: #000000;
+  
+  /* Darker Background Colors */
+  --bg-primary: #000000;
+  --bg-secondary: #0A0A0A;
+  --bg-tertiary: #111111;
+}
+
+/* Light Theme Variables - Python Project Style */
+:root[data-theme="light"] {
+  /* IFS Professional Light Theme */
+  --ifs-primary: #0066CC;
+  --ifs-primary-dark: #004499;
+  --ifs-primary-light: #3385D6;
+  --ifs-secondary: #00B4D8;
+  --ifs-accent: #FF6B35;
+  --ifs-success: #28A745;
+  --ifs-warning: #FFC107;
+  --ifs-error: #DC3545;
+  
+  /* Light Background Colors */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8F9FA;
+  --bg-tertiary: #F1F3F4;
+  
+  /* Light Theme Text Colors */
+  --color-white: #FFFFFF;
+  --color-gray-50: #F8F9FA;
+  --color-gray-100: #F1F3F4;
+  --color-gray-200: #E3E6EA;
+  --color-gray-300: #DEE2E6;
+  --color-gray-400: #CED4DA;
+  --color-gray-500: #6C757D;
+  --color-gray-600: #495057;
+  --color-gray-700: #343A40;
+  --color-gray-800: #212529;
+  --color-gray-900: #1A1D20;
+  
+  /* Light theme text colors */
+  --text-primary: #343A40;
+  --text-secondary: #6C757D;
+  --text-tertiary: #495057;
+  
+  /* Light theme borders and accents */
+  --border-color: #DEE2E6;
+  --border-hover: var(--ifs-primary);
+  
+  /* Light theme shadows */
+  --shadow-light: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-large: 0 10px 15px rgba(0, 0, 0, 0.1);
+  
+  /* Purple colors adapted for light theme */
+  --purple-primary: var(--ifs-primary);
+  --purple-secondary: var(--ifs-primary-light);
+  --purple-glow: var(--ifs-primary);
+  --purple-glow-hover: var(--ifs-primary-dark);
+}
+
+/* System preference detection - Python Project Style */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    /* IFS Professional Light Theme */
+    --ifs-primary: #0066CC;
+    --ifs-primary-dark: #004499;
+    --ifs-primary-light: #3385D6;
+    --ifs-secondary: #00B4D8;
+    --ifs-accent: #FF6B35;
+    --ifs-success: #28A745;
+    --ifs-warning: #FFC107;
+    --ifs-error: #DC3545;
+    
+    /* Light Background Colors */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8F9FA;
+    --bg-tertiary: #F1F3F4;
+    
+    /* Light Theme Text Colors */
+    --color-white: #FFFFFF;
+    --color-gray-50: #F8F9FA;
+    --color-gray-100: #F1F3F4;
+    --color-gray-200: #E3E6EA;
+    --color-gray-300: #DEE2E6;
+    --color-gray-400: #CED4DA;
+    --color-gray-500: #6C757D;
+    --color-gray-600: #495057;
+    --color-gray-700: #343A40;
+    --color-gray-800: #212529;
+    --color-gray-900: #1A1D20;
+    
+    /* Light theme text colors */
+    --text-primary: #343A40;
+    --text-secondary: #6C757D;
+    --text-tertiary: #495057;
+    
+    /* Light theme borders and accents */
+    --border-color: #DEE2E6;
+    --border-hover: var(--ifs-primary);
+    
+    /* Light theme shadows */
+    --shadow-light: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-large: 0 10px 15px rgba(0, 0, 0, 0.1);
+    
+    /* Purple colors adapted for light theme */
+    --purple-primary: var(--ifs-primary);
+    --purple-secondary: var(--ifs-primary-light);
+    --purple-glow: var(--ifs-primary);
+    --purple-glow-hover: var(--ifs-primary-dark);
+  }
+}
+
+/* Continue with existing variables... */
+:root {
+  --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Cascadia Code', 'Consolas', monospace;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 3rem;
+  
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  
+  /* Transitions */
+  --transition: all 0.2s ease-in-out;
+  --transition-slow: all 0.3s ease-in-out;
+}
+
+/* App Container - Theme Aware */
+.plsql-app-container {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-family);
+  color: var(--color-white);
+  line-height: 1.6;
+  transition: background 0.3s ease, color 0.3s ease;
+  /* Prevent layout shifts from scrollbar changes */
+  scrollbar-gutter: stable;
+}
+
+/* Light theme text colors */
+:root[data-theme="light"] .plsql-app-container {
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-app-container {
+    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+  }
+}
+
+/* Header - Theme Aware */
+.plsql-app-header {
+  background: linear-gradient(135deg, #1a043d 0%, #2d1b69 50%, #1a043d 100%);
+  color: var(--color-white);
+  padding: var(--spacing-lg) 0;
+  box-shadow: 0 8px 32px rgba(26, 4, 61, 0.6);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid var(--neon-purple);
+  transition: all 0.3s ease;
+}
+
+/* Light theme header */
+:root[data-theme="light"] .plsql-app-header {
+  background: linear-gradient(135deg, var(--ifs-primary) 0%, var(--ifs-primary-dark) 100%);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+  border-bottom: none;
+  color: var(--color-white);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-app-header {
+    background: linear-gradient(135deg, var(--ifs-primary) 0%, var(--ifs-primary-dark) 100%);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+    border-bottom: none;
+    color: var(--color-white);
+  }
+}
+
+.plsql-app-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  opacity: 0.3;
+}
+
+/* Light theme header pattern */
+:root[data-theme="light"] .plsql-app-header::before {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  opacity: 0.3;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-app-header::before {
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+  }
+}
+
+.plsql-app-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.plsql-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.plsql-logo-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.plsql-ifs-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.plsql-app-title h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.plsql-app-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin: 0;
+  font-weight: 400;
+}
+
+.plsql-header-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.plsql-theme-btn {
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-secondary));
+  border: 1px solid var(--purple-glow);
+  color: var(--text-color);
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+.plsql-settings-btn {
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-secondary));
+  border: 1px solid var(--purple-glow);
+  color: var(--text-color);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+.plsql-theme-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px var(--purple-glow-hover);
+  border-color: var(--purple-glow-hover);
+}
+
+.plsql-settings-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px var(--purple-glow-hover);
+  border-color: var(--purple-glow-hover);
+}
+
+/* Light theme buttons */
+:root[data-theme="light"] .plsql-theme-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--color-white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .plsql-settings-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--color-white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .plsql-theme-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+:root[data-theme="light"] .plsql-settings-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-theme-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--color-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  :root:not([data-theme]) .plsql-settings-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--color-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  :root:not([data-theme]) .plsql-theme-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  :root:not([data-theme]) .plsql-settings-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Main Content */
+.plsql-main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-xl) 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  /* Ensure no layout shifts from sidebar */
+  position: relative;
+  will-change: auto; /* Optimize for potential changes */
+}
+
+.plsql-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  width: 100%;
+  box-sizing: border-box;
+  /* Prevent any potential layout shifts */
+  position: relative;
+  z-index: 1;
+}
+
+/* Section Headers */
+.plsql-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.plsql-section-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin: 0;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+  transition: color 0.3s ease;
+}
+
+/* Light theme section headers */
+:root[data-theme="light"] .plsql-section-header h2 {
+  color: var(--text-primary);
+  text-shadow: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-section-header h2 {
+    color: var(--text-primary);
+    text-shadow: none;
+  }
+}
+
+.plsql-section-header h2 i {
+  color: var(--neon-purple-bright);
+  text-shadow: 0 0 8px rgba(139, 92, 246, 0.8);
+}
+
+/* Light theme section header icons */
+:root[data-theme="light"] .plsql-section-header h2 i {
+  color: var(--ifs-primary);
+  text-shadow: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-section-header h2 i {
+    color: var(--ifs-primary);
+    text-shadow: none;
+  }
+}
+
+/* Configuration Section */
+.plsql-config-section {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-gray-200);
+}
+
+.plsql-config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.plsql-config-item label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+  color: var(--color-gray-700);
+  font-size: 0.9rem;
+}
+
+.plsql-select {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-gray-800);
+  font-size: 1rem;
+  transition: var(--transition);
+  font-family: var(--font-family);
+}
+
+.plsql-select:focus {
+  outline: none;
+  border-color: var(--ifs-primary);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.plsql-checkbox-label {
+  display: flex !important;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500 !important;
+}
+
+.plsql-checkbox-label input {
+  margin-right: var(--spacing-sm);
+  margin-bottom: 0 !important;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ifs-primary);
+}
+
+/* Input Section - Theme Aware */
+.plsql-input-section {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--neon-purple);
+  border: 1px solid var(--neon-purple);
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* Light theme input section */
+:root[data-theme="light"] .plsql-input-section {
+  background: var(--color-white);
+  box-shadow: var(--shadow-large);
+  border: 1px solid #E5E7EB;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-input-section {
+    background: var(--color-white);
+    box-shadow: var(--shadow-large);
+    border: 1px solid #E5E7EB;
+  }
+}
+
+.plsql-input-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.plsql-input-container {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.plsql-textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--neon-purple);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.9);
+  color: var(--color-white);
+  font-family: var(--font-family-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.3s ease;
+  box-shadow: 
+    inset 0 0 20px rgba(91, 33, 182, 0.1),
+    0 0 0 0 rgba(91, 33, 182, 0.3);
+}
+
+/* Light theme textarea */
+:root[data-theme="light"] .plsql-textarea {
+  background: var(--color-white);
+  color: var(--text-primary);
+  border: 1px solid #E5E7EB;
+  box-shadow: var(--shadow-light);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-textarea {
+    background: var(--color-white);
+    color: var(--text-primary);
+    border: 1px solid #E5E7EB;
+    box-shadow: var(--shadow-light);
+  }
+}
+
+.plsql-textarea:focus {
+  outline: none;
+  border-color: var(--neon-purple-bright);
+  background: rgba(0, 0, 0, 0.95);
+  box-shadow: 
+    inset 0 0 20px rgba(91, 33, 182, 0.2),
+    0 0 20px rgba(91, 33, 182, 0.4);
+  color: var(--color-white);
+}
+
+/* Light theme focus */
+:root[data-theme="light"] .plsql-textarea:focus {
+  border-color: #D1D5DB;
+  background: var(--color-white);
+  box-shadow: 
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    var(--shadow-medium);
+  color: var(--text-primary);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-textarea:focus {
+    border-color: #D1D5DB;
+    background: var(--color-white);
+    box-shadow: 
+      0 0 0 3px rgba(59, 130, 246, 0.1),
+      var(--shadow-medium);
+    color: var(--text-primary);
+  }
+}
+
+.plsql-textarea::placeholder {
+  color: var(--color-gray-400);
+  opacity: 0.8;
+}
+
+/* Light theme placeholder */
+:root[data-theme="light"] .plsql-textarea::placeholder {
+  color: var(--text-tertiary);
+  opacity: 0.7;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-textarea::placeholder {
+    color: var(--text-tertiary);
+    opacity: 0.7;
+  }
+}
+
+.plsql-input-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(91, 33, 182, 0.15);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  font-size: 0.8rem;
+  color: var(--color-white);
+  border: 1px solid var(--neon-purple);
+  border-top: none;
+  text-shadow: 0 0 5px rgba(91, 33, 182, 0.6);
+}
+
+/* Light theme input stats */
+:root[data-theme="light"] .plsql-input-stats {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-top: none;
+  color: var(--text-secondary);
+  text-shadow: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-input-stats {
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-top: none;
+    color: var(--text-secondary);
+    text-shadow: none;
+  }
+}
+
+/* Buttons - Purple Neon Style */
+.plsql-btn-primary {
+  background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-purple-dark) 100%);
+  color: var(--color-white);
+  border: 1px solid var(--neon-purple-bright);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  box-shadow: 
+    0 0 20px rgba(139, 92, 246, 0.4),
+    0 4px 15px rgba(139, 92, 246, 0.3);
+  text-transform: none;
+  font-family: var(--font-family);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.plsql-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.plsql-btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 0 30px rgba(139, 92, 246, 0.6),
+    0 8px 25px rgba(139, 92, 246, 0.4);
+  border-color: var(--neon-purple);
+  text-shadow: 0 0 15px rgba(139, 92, 246, 1);
+}
+
+.plsql-btn-primary:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.plsql-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.plsql-btn-secondary {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--neon-purple-bright);
+  border: 1px solid var(--neon-purple);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-family);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+  text-shadow: 0 0 5px rgba(139, 92, 246, 0.6);
+}
+
+.plsql-btn-secondary:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--neon-purple-bright);
+  color: var(--color-white);
+  box-shadow: 
+    0 0 20px rgba(139, 92, 246, 0.4),
+    0 2px 10px rgba(139, 92, 246, 0.3);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+  transform: translateY(-1px);
+}
+
+.plsql-generate-btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 56px;
+}
+
+/* Light theme button styles */
+:root[data-theme="light"] .plsql-btn-primary {
+  background: linear-gradient(135deg, var(--ifs-primary) 0%, var(--ifs-primary-dark) 100%);
+  color: var(--color-white);
+  border: 1px solid var(--ifs-primary);
+  box-shadow: var(--shadow-medium);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .plsql-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--ifs-primary-dark) 0%, #003366 100%);
+  box-shadow: var(--shadow-large);
+  transform: translateY(-2px);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .plsql-btn-secondary {
+  background: var(--color-white);
+  color: var(--ifs-primary);
+  border: 1px solid var(--ifs-primary);
+  box-shadow: var(--shadow-light);
+}
+
+:root[data-theme="light"] .plsql-btn-secondary:hover:not(:disabled) {
+  background: var(--ifs-primary);
+  color: var(--color-white);
+  box-shadow: var(--shadow-medium);
+  text-shadow: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-btn-primary {
+    background: linear-gradient(135deg, var(--ifs-primary) 0%, var(--ifs-primary-dark) 100%);
+    color: var(--color-white);
+    border: 1px solid var(--ifs-primary);
+    box-shadow: var(--shadow-medium);
+    text-shadow: none;
+  }
+
+  :root:not([data-theme]) .plsql-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--ifs-primary-dark) 0%, #003366 100%);
+    box-shadow: var(--shadow-large);
+    transform: translateY(-2px);
+    text-shadow: none;
+  }
+
+  :root:not([data-theme]) .plsql-btn-secondary {
+    background: var(--color-white);
+    color: var(--ifs-primary);
+    border: 1px solid var(--ifs-primary);
+    box-shadow: var(--shadow-light);
+  }
+
+  :root:not([data-theme]) .plsql-btn-secondary:hover:not(:disabled) {
+    background: var(--ifs-primary);
+    color: var(--color-white);
+    box-shadow: var(--shadow-medium);
+    text-shadow: none;
+  }
+}
+
+/* Messages */
+.plsql-message {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  font-size: 1rem;
+  border-left: 4px solid;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.plsql-error {
+  background: rgba(220, 53, 69, 0.1);
+  border-left-color: var(--ifs-error);
+  color: var(--ifs-error);
+}
+
+.plsql-success {
+  background: rgba(40, 167, 69, 0.1);
+  border-left-color: var(--ifs-success);
+  color: var(--ifs-success);
+}
+
+/* Results Section - Much Darker Theme */
+.plsql-results-section {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--neon-purple);
+  border: 1px solid var(--neon-purple);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Light theme results section */
+:root[data-theme="light"] .plsql-results-section {
+  background: var(--color-white);
+  border: 1px solid #E5E7EB;
+  box-shadow: var(--shadow-large);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-results-section {
+    background: var(--color-white);
+    border: 1px solid #E5E7EB;
+    box-shadow: var(--shadow-large);
+  }
+}
+
+.plsql-result-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.plsql-result-container {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--neon-purple);
+  border-radius: var(--radius-md);
+  min-height: 200px;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(91, 33, 182, 0.1);
+}
+
+/* Light theme result container */
+:root[data-theme="light"] .plsql-result-container {
+  background: var(--color-gray-50);
+  border: 1px solid #E5E7EB;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-result-container {
+    background: var(--color-gray-50);
+    border: 1px solid #E5E7EB;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
+  }
+}
+
+.plsql-result-code {
+  padding: var(--spacing-lg);
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Markdown Result Styling - Better Readability */
+.plsql-result-markdown {
+  padding: var(--spacing-lg);
+  background: rgba(0, 0, 0, 0.8);
+  max-height: 500px;
+  overflow-y: auto;
+  font-family: var(--font-family);
+  line-height: 1.7;
+  color: var(--color-white);
+}
+
+.plsql-md-h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 var(--spacing-lg) 0;
+  color: var(--neon-purple-bright);
+  border-bottom: 2px solid var(--neon-purple);
+  padding-bottom: var(--spacing-md);
+  text-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
+}
+
+.plsql-md-h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: var(--spacing-xl) 0 var(--spacing-md) 0;
+  color: var(--text-primary);
+  text-shadow: 0 0 5px rgba(139, 92, 246, 0.4);
+}
+
+.plsql-md-h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+  color: var(--text-primary);
+}
+
+.plsql-md-p {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--text-primary);
+}
+
+.plsql-md-ul, .plsql-md-ol {
+  margin: 0 0 var(--spacing-md) 0;
+  padding-left: var(--spacing-xl);
+}
+
+.plsql-md-li {
+  margin: var(--spacing-sm) 0;
+  color: var(--text-primary);
+}
+
+.plsql-md-blockquote {
+  border-left: 4px solid var(--neon-purple);
+  padding-left: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+  background: rgba(139, 92, 246, 0.1);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-style: italic;
+  color: var(--color-white);
+}
+
+/* Code Block Components */
+.plsql-code-block-container {
+  margin: var(--spacing-md) 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-gray-700);
+  background: var(--color-gray-900);
+}
+
+.plsql-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-gray-800);
+  border-bottom: 1px solid var(--color-gray-700);
+}
+
+.plsql-code-language {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-gray-300);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.plsql-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--ifs-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.plsql-copy-btn:hover {
+  background: var(--ifs-primary-dark);
+  transform: translateY(-1px);
+}
+
+.plsql-copy-btn.copied {
+  background: var(--color-green-600);
+}
+
+.plsql-copy-btn.copied:hover {
+  background: var(--color-green-700);
+}
+
+.plsql-copy-btn i {
+  font-size: 0.7rem;
+}
+
+/* Enhanced code block styling */
+.plsql-code-block {
+  background: var(--color-gray-900);
+  color: var(--color-gray-100);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--spacing-md) 0;
+  font-family: var(--font-family-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  border: 1px solid var(--color-gray-700);
+}
+
+.plsql-inline-code {
+  background: var(--color-gray-100);
+  color: var(--ifs-primary-dark);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+  border: 1px solid var(--color-gray-300);
+}
+
+.plsql-md-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-lg) 0;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.plsql-md-thead {
+  background: var(--ifs-primary);
+  color: var(--color-white);
+}
+
+.plsql-md-th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.plsql-md-th:last-child {
+  border-right: none;
+}
+
+.plsql-md-tbody tr:nth-child(even) {
+  background: var(--color-gray-50);
+}
+
+.plsql-md-td {
+  padding: var(--spacing-md);
+  border-right: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.plsql-md-td:last-child {
+  border-right: none;
+}
+
+.plsql-md-tbody tr:last-child .plsql-md-td {
+  border-bottom: none;
+}
+
+/* Light theme markdown overrides */
+:root[data-theme="light"] .plsql-result-markdown {
+  background: var(--color-white);
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .plsql-md-h1 {
+  color: var(--ifs-primary);
+  border-bottom-color: var(--ifs-primary);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .plsql-md-h2,
+:root[data-theme="light"] .plsql-md-h3,
+:root[data-theme="light"] .plsql-md-p {
+  color: var(--text-primary);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .plsql-md-li {
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .plsql-md-blockquote {
+  border-left-color: var(--ifs-primary);
+  background: rgba(0, 102, 204, 0.05);
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .plsql-code-block-container {
+  background: var(--color-gray-50);
+  border-color: #E5E7EB;
+}
+
+:root[data-theme="light"] .plsql-code-header {
+  background: var(--color-gray-100);
+  border-bottom-color: #E5E7EB;
+}
+
+:root[data-theme="light"] .plsql-code-language {
+  color: var(--text-secondary);
+}
+
+:root[data-theme="light"] .plsql-code-block {
+  background: var(--color-gray-50);
+  color: var(--text-primary);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-result-markdown {
+    background: var(--color-white);
+    color: var(--text-primary);
+  }
+
+  :root:not([data-theme]) .plsql-md-h1 {
+    color: var(--ifs-primary);
+    border-bottom-color: var(--ifs-primary);
+    text-shadow: none;
+  }
+
+  :root:not([data-theme]) .plsql-md-h2,
+  :root:not([data-theme]) .plsql-md-h3,
+  :root:not([data-theme]) .plsql-md-p {
+    color: var(--text-primary);
+    text-shadow: none;
+  }
+
+  :root:not([data-theme]) .plsql-md-h2,
+  :root:not([data-theme]) .plsql-md-h3,
+  :root:not([data-theme]) .plsql-md-p {
+    color: var(--text-primary);
+    text-shadow: none;
+  }
+
+  :root:not([data-theme]) .plsql-md-li {
+    color: var(--text-primary);
+  }
+
+  :root:not([data-theme]) .plsql-md-blockquote {
+    border-left-color: var(--ifs-primary);
+    background: rgba(0, 102, 204, 0.05);
+    color: var(--text-primary);
+  }
+
+  :root:not([data-theme]) .plsql-code-block-container {
+    background: var(--color-gray-50);
+    border-color: #E5E7EB;
+  }
+
+  :root:not([data-theme]) .plsql-code-header {
+    background: var(--color-gray-100);
+    border-bottom-color: #E5E7EB;
+  }
+
+  :root:not([data-theme]) .plsql-code-language {
+    color: var(--text-secondary);
+  }
+
+  :root:not([data-theme]) .plsql-code-block {
+    background: var(--color-gray-50);
+    color: var(--text-primary);
+  }
+}
+
+.plsql-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xxl);
+  text-align: center;
+  color: var(--color-white);
+}
+
+.plsql-empty-state i {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--neon-purple-bright);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+}
+
+.plsql-empty-state h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-white);
+}
+
+.plsql-empty-state p {
+  font-size: 1rem;
+  margin: 0;
+  max-width: 400px;
+  color: var(--color-white);
+  opacity: 0.8;
+}
+
+/* Light theme empty state */
+:root[data-theme="light"] .plsql-empty-state {
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .plsql-empty-state i {
+  color: var(--ifs-primary);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .plsql-empty-state h3,
+:root[data-theme="light"] .plsql-empty-state p {
+  color: var(--text-primary);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-empty-state {
+    color: var(--text-primary);
+  }
+
+  :root:not([data-theme]) .plsql-empty-state i {
+    color: var(--ifs-primary);
+    text-shadow: none;
+  }
+
+  :root:not([data-theme]) .plsql-empty-state h3,
+  :root:not([data-theme]) .plsql-empty-state p {
+    color: var(--text-primary);
+  }
+}
+
+/* Token Info */
+.plsql-token-info {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(0, 102, 204, 0.05);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--ifs-primary);
+}
+
+.plsql-token-info small {
+  color: var(--color-gray-600);
+  font-family: var(--font-family-mono);
+  font-size: 0.85rem;
+}
+
+/* Screen Reader Only */
+.plsql-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .plsql-app-container {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .plsql-header-content {
+    padding: 0 var(--spacing-md);
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+  }
+  
+  .plsql-app-title h1 {
+    font-size: 2rem;
+  }
+  
+  .plsql-container {
+    padding: 0 var(--spacing-md);
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .plsql-config-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .plsql-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .plsql-input-actions,
+  .plsql-result-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .plsql-app-title h1 {
+    font-size: 1.5rem;
+  }
+  
+  .plsql-textarea {
+    min-height: 200px;
+    font-size: 0.8rem;
+  }
+  
+  .plsql-result-code {
+    font-size: 0.75rem;
+    padding: var(--spacing-md);
+  }
+}
+
+/* History Sidebar Styles */
+.plsql-history-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  transition: opacity 0.3s ease;
+}
+
+.plsql-history-sidebar {
+  position: fixed;
+  left: 20px;
+  top: 200px; /* Start lower from the top */
+  height: 60vh; /* Make it 60% of viewport height instead of full height */
+  max-height: 500px; /* Maximum height limit */
+  width: 350px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 15px; /* Rounded corners all around */
+  transform: translateX(-100%); /* Completely hide when closed */
+  transition: transform 0.3s ease;
+  z-index: 1000; /* Higher z-index to overlay over content */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.15);
+  /* Ensure it's completely out of document flow */
+  pointer-events: auto;
+}
+
+.plsql-history-sidebar.open {
+  transform: translateX(0);
+}
+
+.plsql-history-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 15px 15px 0 0; /* Round top corners to match sidebar */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-primary);
+}
+
+.plsql-history-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.plsql-history-header i {
+  color: var(--color-purple);
+}
+
+.plsql-history-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.plsql-history-search {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.plsql-history-info-banner {
+  padding: 8px var(--spacing-md);
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.plsql-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.plsql-search-box i {
+  position: absolute;
+  left: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.plsql-search-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.plsql-search-input:focus {
+  border-color: var(--color-purple);
+}
+
+.plsql-search-clear {
+  position: absolute;
+  right: var(--spacing-sm);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.plsql-search-clear:hover {
+  background: var(--color-gray-200);
+  color: var(--text-primary);
+}
+
+.plsql-history-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.plsql-history-controls {
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.plsql-history-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.plsql-btn-danger-small {
+  background: none;
+  border: 1px solid var(--color-red);
+  color: var(--color-red);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.plsql-btn-danger-small:hover {
+  background: var(--color-red);
+  color: var(--color-white);
+}
+
+.plsql-history-list {
+  flex: 1;
+  padding: var(--spacing-md);
+}
+
+.plsql-history-item {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.plsql-history-item:hover {
+  border-color: var(--color-purple);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+}
+
+.plsql-history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-sm);
+}
+
+.plsql-history-item-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.plsql-history-item-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-left: var(--spacing-sm);
+}
+
+.plsql-btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+}
+
+.plsql-btn-icon:hover {
+  background: var(--color-gray-100);
+  color: var(--text-primary);
+}
+
+.plsql-btn-icon.plsql-btn-copy {
+  color: var(--color-blue);
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid var(--color-blue);
+}
+
+.plsql-btn-icon.plsql-btn-copy:hover {
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+/* Light theme copy button */
+:root[data-theme="light"] .plsql-btn-icon.plsql-btn-copy {
+  color: var(--color-blue);
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid var(--color-blue);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-btn-icon.plsql-btn-copy {
+    color: var(--color-blue);
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid var(--color-blue);
+  }
+}
+
+/* Light theme danger button */
+:root[data-theme="light"] .plsql-btn-icon.plsql-btn-danger {
+  color: var(--color-red);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--color-red);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-btn-icon.plsql-btn-danger {
+    color: var(--color-red);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--color-red);
+  }
+}
+
+.plsql-btn-icon.plsql-btn-danger {
+  color: var(--color-red);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--color-red);
+}
+
+.plsql-btn-icon.plsql-btn-danger:hover {
+  background: var(--color-red);
+  color: var(--color-white);
+}
+
+.plsql-history-item-preview {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-family-mono);
+}
+
+.plsql-history-item-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.plsql-history-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--spacing-xl);
+  font-style: italic;
+}
+
+/* Floating History Toggle Button - Only visible when sidebar is closed */
+.plsql-floating-history-btn {
+  position: fixed;
+  left: 35px;
+  top: calc(50% + 40px); /* Center it better with the shorter sidebar */
+  transform: translateY(-50%);
+  background: var(--color-purple);
+  color: var(--color-white);
+  border: none;
+  border-radius: 25px; /* Full rounded corners */
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1001; /* Above sidebar */
+  box-shadow: 2px 4px 15px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 1;
+}
+
+.plsql-floating-history-btn:hover {
+  background: var(--color-purple-light);
+  box-shadow: 4px 4px 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-50%) translateX(5px);
+}
+
+/* Hide the floating button when sidebar is open */
+.plsql-floating-history-btn.open {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(-20px);
+}
+
+.plsql-floating-btn-text {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.plsql-floating-history-btn i {
+  font-size: 1.1rem;
+}
+
+/* Floating Feedback Button */
+.plsql-floating-feedback-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 60px;
+  background: var(--ifs-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 25px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.plsql-floating-feedback-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+  background: var(--ifs-primary-dark);
+}
+
+/* History sidebar open state */
+.plsql-history-sidebar.open {
+  transform: translateX(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .plsql-history-backdrop {
+    top: 0;
+  }
+  
+  .plsql-history-sidebar {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+    top: 150px; /* Position it lower on mobile */
+    height: 50vh; /* Shorter on mobile too */
+    max-height: 400px;
+    transform: translateY(-100%); /* Hide by sliding up on mobile */
+    border-radius: 15px; /* Full rounded corners on mobile */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .plsql-history-sidebar.open {
+    transform: translateY(0);
+  }
+  
+  .plsql-floating-history-btn {
+    left: 35px;
+    top: calc(50% + 60px); /* Adjust for mobile */
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.8rem;
+    border-radius: 20px; /* Smaller rounded corners on mobile */
+  }
+  
+  .plsql-floating-history-btn.open {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) translateX(-20px);
+  }
+  
+  .plsql-floating-btn-text {
+    font-size: 0.75rem;
+  }
+
+  .plsql-floating-feedback-btn {
+    right: 20px;
+    bottom: 50px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.8rem;
+    border-radius: 20px;
+  }
+}
+
+/* Light theme overrides for history sidebar */
+[data-theme="light"] .plsql-history-backdrop {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .plsql-history-sidebar,
+[data-theme="light"] .plsql-history-header,
+[data-theme="light"] .plsql-history-controls,
+[data-theme="light"] .plsql-history-item {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .plsql-history-item:hover {
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.15);
+  border-color: #0066CC;
+}
+
+[data-theme="light"] .plsql-search-input:focus {
+  border-color: #0066CC;
+}
+
+[data-theme="light"] .plsql-floating-history-btn {
+  background: #0066CC;
+  box-shadow: 2px 4px 15px rgba(0, 102, 204, 0.3);
+}
+
+[data-theme="light"] .plsql-floating-history-btn:hover {
+  background: #0052A3;
+  box-shadow: 4px 4px 20px rgba(0, 102, 204, 0.4);
+}
+
+[data-theme="light"] .plsql-floating-history-btn.open {
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-theme="light"] .plsql-floating-feedback-btn {
+  background: #0066CC;
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+}
+
+[data-theme="light"] .plsql-floating-feedback-btn:hover {
+  background: #0052A3;
+  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+}
+
+/* System preference light theme */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .plsql-history-backdrop {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  :root:not([data-theme]) .plsql-history-sidebar,
+  :root:not([data-theme]) .plsql-history-header,
+  :root:not([data-theme]) .plsql-history-controls,
+  :root:not([data-theme]) .plsql-history-item {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  :root:not([data-theme]) .plsql-history-item:hover {
+    box-shadow: 0 4px 15px rgba(0, 102, 204, 0.15);
+    border-color: #0066CC;
+  }
+
+  :root:not([data-theme]) .plsql-search-input:focus {
+    border-color: #0066CC;
+  }
+
+  :root:not([data-theme]) .plsql-floating-history-btn {
+    background: #0066CC;
+    box-shadow: 2px 4px 15px rgba(0, 102, 204, 0.3);
+  }
+
+  :root:not([data-theme]) .plsql-floating-history-btn:hover {
+    background: #0052A3;
+    box-shadow: 4px 4px 20px rgba(0, 102, 204, 0.4);
+  }
+
+  :root:not([data-theme]) .plsql-floating-history-btn.open {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  :root:not([data-theme]) .plsql-floating-feedback-btn {
+    background: #0066CC;
+    box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+  }
+
+  :root:not([data-theme]) .plsql-floating-feedback-btn:hover {
+    background: #0052A3;
+    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+  }
+}
+
+/* 🌈 EASTER EGG: Rainbow Mode 🌈 */
+@keyframes rainbow {
+  0% { 
+    background: linear-gradient(45deg, #ff0000, #ff7f00);
+    border-color: #ff0000;
+    color: #ffffff;
+  }
+  14% { 
+    background: linear-gradient(45deg, #ff7f00, #ffff00);
+    border-color: #ff7f00;
+    color: #000000;
+  }
+  28% { 
+    background: linear-gradient(45deg, #ffff00, #00ff00);
+    border-color: #ffff00;
+    color: #000000;
+  }
+  42% { 
+    background: linear-gradient(45deg, #00ff00, #0000ff);
+    border-color: #00ff00;
+    color: #ffffff;
+  }
+  57% { 
+    background: linear-gradient(45deg, #0000ff, #4b0082);
+    border-color: #0000ff;
+    color: #ffffff;
+  }
+  71% { 
+    background: linear-gradient(45deg, #4b0082, #9400d3);
+    border-color: #4b0082;
+    color: #ffffff;
+  }
+  85% { 
+    background: linear-gradient(45deg, #9400d3, #ff00ff);
+    border-color: #9400d3;
+    color: #ffffff;
+  }
+  100% { 
+    background: linear-gradient(45deg, #ff00ff, #ff0000);
+    border-color: #ff00ff;
+    color: #ffffff;
+  }
+}
+
+@keyframes rainbow-text {
+  0% { color: #ff0000; }
+  14% { color: #ff7f00; }
+  28% { color: #ffff00; }
+  42% { color: #00ff00; }
+  57% { color: #0000ff; }
+  71% { color: #4b0082; }
+  85% { color: #9400d3; }
+  100% { color: #ff0000; }
+}
+
+@keyframes rainbow-glow {
+  0% { 
+    box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000;
+  }
+  14% { 
+    box-shadow: 0 0 20px #ff7f00, 0 0 40px #ff7f00, 0 0 60px #ff7f00;
+  }
+  28% { 
+    box-shadow: 0 0 20px #ffff00, 0 0 40px #ffff00, 0 0 60px #ffff00;
+  }
+  42% { 
+    box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 60px #00ff00;
+  }
+  57% { 
+    box-shadow: 0 0 20px #0000ff, 0 0 40px #0000ff, 0 0 60px #0000ff;
+  }
+  71% { 
+    box-shadow: 0 0 20px #4b0082, 0 0 40px #4b0082, 0 0 60px #4b0082;
+  }
+  85% { 
+    box-shadow: 0 0 20px #9400d3, 0 0 40px #9400d3, 0 0 60px #9400d3;
+  }
+  100% { 
+    box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000;
+  }
+}
+
+@keyframes rainbow-border {
+  0% { border-color: #ff0000; }
+  14% { border-color: #ff7f00; }
+  28% { border-color: #ffff00; }
+  42% { border-color: #00ff00; }
+  57% { border-color: #0000ff; }
+  71% { border-color: #4b0082; }
+  85% { border-color: #9400d3; }
+  100% { border-color: #ff0000; }
+}
+
+/* Rainbow mode styles */
+.rainbow-mode .plsql-header {
+  animation: rainbow 2s linear infinite !important;
+}
+
+.rainbow-mode .plsql-theme-btn,
+.rainbow-mode .plsql-settings-btn,
+.rainbow-mode .plsql-btn-primary,
+.rainbow-mode .plsql-btn-secondary,
+.rainbow-mode .plsql-btn,
+.rainbow-mode .plsql-floating-feedback-btn,
+.rainbow-mode .plsql-floating-history-btn {
+  animation: rainbow 2s linear infinite !important;
+}
+
+.rainbow-mode .plsql-section-header h2,
+.rainbow-mode #plsql-app-title,
+.rainbow-mode .plsql-app-subtitle {
+  animation: rainbow-text 2s linear infinite !important;
+  font-weight: bold !important;
+}
+
+.rainbow-mode .plsql-history-sidebar {
+  animation: rainbow-glow 2s linear infinite !important;
+}
+
+.rainbow-mode .plsql-input-container,
+.rainbow-mode .plsql-output-container {
+  animation: rainbow-glow 3s linear infinite !important;
+}
+
+.rainbow-mode .plsql-input-section,
+.rainbow-mode .plsql-results-section,
+.rainbow-mode .plsql-textarea,
+.rainbow-mode .plsql-result-container,
+.rainbow-mode .plsql-app-container {
+  animation: rainbow-border 2.5s linear infinite !important;
+}
+
+/* Party confetti animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes confetti-sway {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(100px);
+  }
+}
+
+/* Confetti particles */
+.rainbow-mode::before {
+  content: '';
+  position: fixed;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: 
+    /* Multiple confetti pieces with different colors and positions */
+    radial-gradient(circle, #ff0000 2px, transparent 2px),
+    radial-gradient(circle, #ff7f00 2px, transparent 2px),
+    radial-gradient(circle, #ffff00 2px, transparent 2px),
+    radial-gradient(circle, #00ff00 2px, transparent 2px),
+    radial-gradient(circle, #0000ff 2px, transparent 2px),
+    radial-gradient(circle, #9400d3 2px, transparent 2px);
+  background-position: 
+    10% 0%, 20% 0%, 30% 0%, 40% 0%, 50% 0%, 60% 0%;
+  background-size: 
+    100px 100px, 120px 120px, 140px 140px, 160px 160px, 180px 180px, 200px 200px;
+  background-repeat: repeat;
+  animation: confetti-fall 3s linear infinite;
+}
+
+.rainbow-mode::after {
+  content: '';
+  position: fixed;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  pointer-events: none;
+  z-index: 9998;
+  background-image: 
+    /* Second layer with different timing */
+    radial-gradient(circle, #ff00ff 3px, transparent 3px),
+    radial-gradient(circle, #00ffff 3px, transparent 3px),
+    radial-gradient(circle, #ff4500 3px, transparent 3px),
+    radial-gradient(circle, #32cd32 3px, transparent 3px);
+  background-position: 
+    70% 0%, 80% 0%, 90% 0%, 15% 0%;
+  background-size: 
+    80px 80px, 110px 110px, 130px 130px, 150px 150px;
+  background-repeat: repeat;
+  animation: confetti-fall 4s linear infinite 0.5s;
+}
+
+/* Alternative confetti using CSS shapes */
+.rainbow-mode .confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #ff0000;
+  z-index: 9997;
+  pointer-events: none;
+}
+
+/* Create multiple confetti pieces with different animations */
+.rainbow-mode .confetti:nth-child(1) {
+  left: 10%;
+  animation: confetti-fall 2s linear infinite;
+  background: linear-gradient(45deg, #ff0000, #ff7f00);
+}
+
+.rainbow-mode .confetti:nth-child(2) {
+  left: 20%;
+  animation: confetti-fall 2.5s linear infinite 0.2s;
+  background: linear-gradient(45deg, #ff7f00, #ffff00);
+}
+
+.rainbow-mode .confetti:nth-child(3) {
+  left: 30%;
+  animation: confetti-fall 3s linear infinite 0.4s;
+  background: linear-gradient(45deg, #ffff00, #00ff00);
+}
+
+.rainbow-mode .confetti:nth-child(4) {
+  left: 40%;
+  animation: confetti-fall 2.2s linear infinite 0.6s;
+  background: linear-gradient(45deg, #00ff00, #0000ff);
+}
+
+.rainbow-mode .confetti:nth-child(5) {
+  left: 50%;
+  animation: confetti-fall 2.8s linear infinite 0.8s;
+  background: linear-gradient(45deg, #0000ff, #4b0082);
+}
+
+.rainbow-mode .confetti:nth-child(6) {
+  left: 60%;
+  animation: confetti-fall 3.2s linear infinite 1s;
+  background: linear-gradient(45deg, #4b0082, #9400d3);
+}
+
+.rainbow-mode .confetti:nth-child(7) {
+  left: 70%;
+  animation: confetti-fall 2.6s linear infinite 1.2s;
+  background: linear-gradient(45deg, #9400d3, #ff00ff);
+}
+
+.rainbow-mode .confetti:nth-child(8) {
+  left: 80%;
+  animation: confetti-fall 2.4s linear infinite 1.4s;
+  background: linear-gradient(45deg, #ff00ff, #ff0000);
+}
+
+.rainbow-mode .confetti:nth-child(9) {
+  left: 90%;
+  animation: confetti-fall 3.5s linear infinite 1.6s;
+  background: linear-gradient(45deg, #00ffff, #ff4500);
+}
+
+.rainbow-mode .confetti:nth-child(10) {
+  left: 15%;
+  animation: confetti-fall 2.7s linear infinite 1.8s;
+  background: linear-gradient(45deg, #32cd32, #ff1493);
+}
+
+/* AI Disclaimer Footer */
+.plsql-disclaimer-footer {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  max-width: 300px;
+  text-align: center;
+}
+
+.plsql-disclaimer-footer p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Light theme styles for disclaimer */
+:root[data-theme="light"] .plsql-disclaimer-footer {
+  background: var(--bg-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* System theme styles for disclaimer */
+:root[data-theme="system"] .plsql-disclaimer-footer {
+  background: var(--bg-tertiary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Rainbow mode for disclaimer */
+.rainbow-mode .plsql-disclaimer-footer {
+  animation: rainbow-border 2.5s linear infinite !important;
+  border-width: 2px;
+}
+
+/* Mobile responsiveness for disclaimer */
+@media (max-width: 768px) {
+  .plsql-disclaimer-footer {
+    bottom: 50px;
+    font-size: 11px;
+    padding: 6px 12px;
+    max-width: 250px;
+  }
+}
+
+/* R&D Finance Footer */
+.plsql-rnd-footer {
+  margin-top: calc(var(--spacing-xl) * 2);
+  padding: var(--spacing-md) 0;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  font-size: 11px;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.plsql-rnd-footer:hover {
+  opacity: 1;
+}
+
+.plsql-rnd-footer p {
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Light theme styles for R&D footer */
+:root[data-theme="light"] .plsql-rnd-footer {
+  color: var(--color-gray-500);
+  background: var(--bg-primary);
+  border-top-color: var(--color-gray-200);
+}
+
+/* System theme styles for R&D footer */
+:root[data-theme="system"] .plsql-rnd-footer {
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+}
+
+/* Rainbow mode for R&D footer */
+.rainbow-mode .plsql-rnd-footer {
+  animation: rainbow-text 3s linear infinite !important;
+  border-top: 2px solid;
+  animation: rainbow-border 2.5s linear infinite, rainbow-text 3s linear infinite !important;
+}
+
+@keyframes rainbow-text {
+  0% { color: #ff0000; }
+  14% { color: #ff7f00; }
+  28% { color: #ffff00; }
+  42% { color: #00ff00; }
+  57% { color: #0000ff; }
+  71% { color: #4b0082; }
+  85% { color: #9400d3; }
+  100% { color: #ff0000; }
+}
+
+/* Mobile responsiveness for R&D footer */
+@media (max-width: 768px) {
+  .plsql-rnd-footer {
+    font-size: 10px;
+    padding: var(--spacing-sm) 0;
+    margin-top: calc(var(--spacing-xl) * 1.5);
+  }
+}
+
+/* Progress Loader Styles */
+.plsql-progress-container {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.plsql-progress-container.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.plsql-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.plsql-progress-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.plsql-progress-percentage {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ifs-primary);
+}
+
+.plsql-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--color-gray-200);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.plsql-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ifs-primary), var(--ifs-primary-light));
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  position: relative;
+}
+
+.plsql-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  animation: progress-shimmer 1.5s infinite;
+}
+
+@keyframes progress-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.plsql-progress-steps {
+  margin-top: var(--spacing-sm);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.plsql-progress-step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: 4px;
+}
+
+.plsql-progress-step-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-gray-300);
+  transition: background 0.3s ease;
+}
+
+.plsql-progress-step.active .plsql-progress-step-icon {
+  background: var(--ifs-primary);
+}
+
+.plsql-progress-step.completed .plsql-progress-step-icon {
+  background: var(--ifs-success);
+}
+
+/* Light theme styles for progress */
+:root[data-theme="light"] .plsql-progress-container {
+  background: var(--bg-primary);
+}
+
+:root[data-theme="light"] .plsql-progress-bar {
+  background: var(--color-gray-100);
+}
+
+/* System theme styles for progress */
+:root[data-theme="system"] .plsql-progress-container {
+  background: var(--bg-secondary);
+}
+
+/* Rainbow mode for progress */
+.rainbow-mode .plsql-progress-fill {
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+  animation: rainbow-progress 2s linear infinite, progress-shimmer 1.5s infinite;
+}
+
+@keyframes rainbow-progress {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Mobile responsiveness for progress */
+@media (max-width: 768px) {
+  .plsql-progress-container {
+    padding: var(--spacing-sm);
+  }
+  
+  .plsql-progress-label,
+  .plsql-progress-percentage {
+    font-size: 0.8rem;
+  }
+  
+  .plsql-progress-steps {
+    font-size: 0.75rem;
+  }
+}
+
+/* Test Token at bottom of generated tests */
+.plsql-test-token {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  text-align: left;
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+  position: relative;
+  border-left: 3px solid var(--color-gray-300);
+  background-color: var(--color-gray-50);
+  margin-left: 0;
+  margin-right: auto;
+  width: fit-content;
+  border-radius: 0 4px 4px 0;
+}
+
+.plsql-test-token:hover {
+  opacity: 0.6;
+}
+
+.plsql-test-token span {
+  font-size: 0.65rem;
+  color: var(--color-gray-400);
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  user-select: all;
+  cursor: text;
+  line-height: 1.2;
+}
+
+/* Light theme styles for test token */
+:root[data-theme="light"] .plsql-test-token {
+  border-left-color: var(--color-gray-250);
+  background-color: var(--color-gray-25);
+}
+
+:root[data-theme="light"] .plsql-test-token span {
+  color: var(--color-gray-350);
+}
+
+/* System theme styles for test token */
+:root[data-theme="system"] .plsql-test-token {
+  border-left-color: var(--color-gray-250);
+  background-color: var(--color-gray-25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .plsql-test-token {
+    border-left-color: var(--color-gray-300);
+    background-color: var(--color-gray-50);
+  }
+}
+
+/* Rainbow mode for test token */
+.rainbow-mode .plsql-test-token span {
+  animation: rainbow-text 3s linear infinite !important;
+}
+
+@keyframes rainbow-text {
+  0% { color: #ff0000; }
+  14% { color: #ff7f00; }
+  28% { color: #ffff00; }
+  42% { color: #00ff00; }
+  57% { color: #0000ff; }
+  71% { color: #4b0082; }
+  85% { color: #9400d3; }
+  100% { color: #ff0000; }
+}
+
+/* Mobile responsiveness for test token */
+@media (max-width: 768px) {
+  .plsql-test-token {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-xs);
+    border-left-width: 2px;
+  }
+  
+  .plsql-test-token span {
+    font-size: 0.6rem;
+  }
+}
+
+/* Toast Notification Styles */
+.plsql-toast-container {
+  position: fixed;
+  bottom: 125px; /* Position above the feedback button */
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column-reverse; /* Newest at bottom, oldest at top */
+  gap: var(--spacing-sm);
+  pointer-events: none; /* Allow clicks to pass through container */
+}
+
+.plsql-toast {
+  pointer-events: auto; /* Re-enable clicks on individual toasts */
+  animation: toast-slide-up 0.4s ease-out;
+  transition: all 0.3s ease;
+}
+
+.plsql-toast-content {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.plsql-toast-message {
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.plsql-toast-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: 4px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plsql-toast-close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes toast-slide-up {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Toast type-specific styles */
+.plsql-toast-success .plsql-toast-content {
+  background: var(--ifs-success);
+  color: white;
+}
+
+.plsql-toast-success .plsql-toast-close {
+  color: white;
+}
+
+.plsql-toast-error .plsql-toast-content {
+  background: var(--ifs-error);
+  color: white;
+}
+
+.plsql-toast-error .plsql-toast-close {
+  color: white;
+}
+
+.plsql-toast-feedback .plsql-toast-content {
+  background: var(--color-gray-900);
+  color: var(--color-white);
+  border: 1px solid transparent;
+}
+
+.plsql-toast-feedback .plsql-toast-close {
+  color: var(--color-white);
+}
+
+/* Light theme toast styles */
+:root[data-theme="light"] .plsql-toast-success .plsql-toast-content {
+  background: var(--ifs-success);
+  color: white;
+}
+
+:root[data-theme="light"] .plsql-toast-error .plsql-toast-content {
+  background: var(--ifs-error);
+  color: white;
+}
+
+:root[data-theme="light"] .plsql-toast-feedback .plsql-toast-content {
+  background: var(--color-white);
+  color: var(--color-gray-900);
+  border: 1px solid var(--color-gray-300);
+}
+
+:root[data-theme="light"] .plsql-toast-success .plsql-toast-close,
+:root[data-theme="light"] .plsql-toast-error .plsql-toast-close {
+  color: white;
+}
+
+:root[data-theme="light"] .plsql-toast-feedback .plsql-toast-close {
+  color: var(--color-gray-900);
+}
+
+/* System theme toast styles */
+:root[data-theme="system"] .plsql-toast-success .plsql-toast-content {
+  background: var(--ifs-success);
+  color: white;
+}
+
+:root[data-theme="system"] .plsql-toast-error .plsql-toast-content {
+  background: var(--ifs-error);
+  color: white;
+}
+
+:root[data-theme="system"] .plsql-toast-feedback .plsql-toast-content {
+  background: var(--color-white);
+  color: var(--color-gray-900);
+  border: 1px solid var(--color-gray-300);
+}
+
+:root[data-theme="system"] .plsql-toast-success .plsql-toast-close,
+:root[data-theme="system"] .plsql-toast-error .plsql-toast-close {
+  color: white;
+}
+
+:root[data-theme="system"] .plsql-toast-feedback .plsql-toast-close {
+  color: var(--color-gray-900);
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme="system"] .plsql-toast-success .plsql-toast-content {
+    background: var(--ifs-success);
+    color: white;
+  }
+  
+  :root[data-theme="system"] .plsql-toast-error .plsql-toast-content {
+    background: var(--ifs-error);
+    color: white;
+  }
+  
+  :root[data-theme="system"] .plsql-toast-feedback .plsql-toast-content {
+    background: var(--color-white);
+    color: var(--color-gray-900);
+    border: 1px solid var(--color-gray-300);
+  }
+  
+  :root[data-theme="system"] .plsql-toast-success .plsql-toast-close,
+  :root[data-theme="system"] .plsql-toast-error .plsql-toast-close {
+    color: white;
+  }
+  
+  :root[data-theme="system"] .plsql-toast-feedback .plsql-toast-close {
+    color: var(--color-gray-900);
+  }
+  
+  :root[data-theme="system"] .plsql-toast-close {
+    color: black;
+  }
+  
+  :root[data-theme="system"] .plsql-toast-error .plsql-toast-close {
+    color: white;
+  }
+}
+
+/* Mobile responsiveness for toast */
+@media (max-width: 768px) {
+  .plsql-toast-container {
+    bottom: 115px; /* Adjust for mobile feedback button position */
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+  }
+  
+  .plsql-toast-content {
+    min-width: unset;
+    width: 100%;
+  }
+  
+  .plsql-toast-message {
+    font-size: 0.85rem;
+  }
+}

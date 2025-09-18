@@ -619,6 +619,7 @@ const MagicBento = ({
   glowColor = DEFAULT_GLOW_COLOR,
   clickEffect = true,
   enableMagnetism = true,
+  onNavigateToPLSQL,
 }) => {
   const gridRef = useRef(null);
   const isMobile = useMobileDetection();
@@ -863,6 +864,7 @@ const MagicBento = ({
       <UnitTestModals 
         isOpen={isUnitTestModalOpen} 
         onClose={handleCloseUnitTestModal} 
+        onNavigateToPLSQL={onNavigateToPLSQL}
       />
     </>
   );
