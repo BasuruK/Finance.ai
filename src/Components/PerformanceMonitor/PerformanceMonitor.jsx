@@ -47,6 +47,7 @@ const PerformanceMonitor = () => {
 
     return () => {
       clearInterval(memoryInterval);
+      performanceMonitor.stop(); // ensure rAF loop is cancelled
     };
   }, []);
 

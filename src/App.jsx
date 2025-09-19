@@ -5,6 +5,7 @@ import {
   lazy,
   Suspense,
   memo,
+  useMemo,
 } from 'react';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import DarkVeil from './Backgrounds/DarkVeil/DarkVeil';
@@ -14,36 +15,52 @@ import PLSQLTestModal from './Components/PLSQLTestModal/PLSQLTestModal';
 // Lazy-load the heavy MagicBento component
 const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
 
-// Simple loading skeleton
-const BentoSkeleton = memo(() => (
-  <div
-    style={{
-      minHeight: 500,
-      width: '100%',
-      maxWidth: '54em',
-      display: 'grid',
-      gap: '0.5em',
-      padding: '0.75em',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-      opacity: 0.2,
-    }}
-  >
-    {Array.from({ length: 6 }).map((_, i) => (
-      <div
-        key={i}
-        style={{
-          aspectRatio: '4/3',
-          minHeight: 200,
-          borderRadius: '20px',
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.05)',
-          gridColumn: i === 2 ? 'span 2' : 'span 1',
-          gridRow: i === 2 ? 'span 2' : 'span 1',
-        }}
-      />
-    ))}
-  </div>
-));
+// Extracted style constants (static objects reused across renders)
+const SKELETON_CONTAINER_STYLE = Object.freeze({
+  minHeight: 500,
+  width: '100%',
+  maxWidth: '54em',
+  display: 'grid',
+  gap: '0.5em',
+  padding: '0.75em',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  opacity: 0.2,
+});
+
+const SKELETON_ITEM_BASE_STYLE = Object.freeze({
+  aspectRatio: '4/3',
+  minHeight: 200,
+  borderRadius: '20px',
+  background: 'rgba(255,255,255,0.03)',
+  border: '1px solid rgba(255,255,255,0.05)',
+});
+
+const TAGLINE_STYLE = Object.freeze({
+  textAlign: 'center',
+  marginTop: '2rem',
+  maxWidth: '600px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+});
+
+// Simple loading skeleton (memoized)
+const BentoSkeleton = memo(() => {
+  return (
+    <div style={SKELETON_CONTAINER_STYLE}>
+      {Array.from({ length: 6 }).map((_, i) => {
+        const dynamicStyle = i === 2
+          ? { gridColumn: 'span 2', gridRow: 'span 2' }
+          : { gridColumn: 'span 1', gridRow: 'span 1' };
+        return (
+          <div
+            key={i}
+            style={{ ...SKELETON_ITEM_BASE_STYLE, ...dynamicStyle }}
+          />
+        );
+      })}
+    </div>
+  );
+});
 
 // MagicBento component that loads seamlessly on page load
 const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
@@ -60,13 +77,11 @@ const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
   return (
     <section className="magic-bento" role="region" id="tools" ref={toolsRef}>
       <Suspense fallback={<BentoSkeleton />}>
-        <div
-          style={{
-            opacity: bentoLoaded ? 1 : 0,
-            transform: bentoLoaded ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
-          }}
-        >
+        <div style={useMemo(() => ({
+          opacity: bentoLoaded ? 1 : 0,
+          transform: bentoLoaded ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
+        }), [bentoLoaded])}>
           <MagicBento
             textAutoHide={true}
             enableStars={true}
@@ -168,13 +183,7 @@ export default function App() {
               </div>
               
               {/* Centered tagline */}
-              <p className="tag" style={{ 
-                textAlign: 'center', 
-                marginTop: '2rem', 
-                maxWidth: '600px', 
-                marginLeft: 'auto', 
-                marginRight: 'auto' 
-              }}>
+              <p className="tag" style={TAGLINE_STYLE}>
                 Modern AI enabled services to make your Development Journey
                 smoother.
               </p>

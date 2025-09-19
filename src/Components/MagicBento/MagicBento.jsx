@@ -412,6 +412,16 @@ const ParticleCard = ({
       element.removeEventListener('mousemove', handleMouseMove);
       element.removeEventListener('click', handleClick);
       clearAllParticles();
+      // Kill any lingering GSAP tweens associated with this card & its particles
+      if (cardRef.current) {
+        try {
+          gsap.killTweensOf(cardRef.current);
+          particlesRef.current.forEach(p => gsap.killTweensOf(p));
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.debug('GSAP cleanup skipped', e);
+        }
+      }
     };
   }, [
     animateParticles,
