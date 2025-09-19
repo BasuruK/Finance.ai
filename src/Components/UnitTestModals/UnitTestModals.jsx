@@ -223,7 +223,7 @@ const UnitTestModals = ({ isOpen, onClose, onNavigateToPLSQL }) => {
               }}
             >
               <div className="model-option-content">
-                <h4>Use Inhouse Finetuned Qwen3 Model</h4>
+                <h4>Use Inhouse Finetuned Qwen3 Model (Coming Soon!)</h4>
                 <p>Slow but thinking model</p>
                 <div className="eco-indicator">
                   <svg
