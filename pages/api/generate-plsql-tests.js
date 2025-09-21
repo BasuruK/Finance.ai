@@ -25,15 +25,32 @@ function readFileContent(filePath) {
 }
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  // Restricted CORS handling
+  const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || '';
+  const allowedOrigins = allowedOriginsEnv
+    .split(',')
+    .map(o => o.trim())
+    .filter(Boolean);
 
-  // Handle preflight OPTIONS request
+  const requestOrigin = req.headers.origin;
+  // If no origins configured, default to same-origin only (do not set wildcard)
+  if (requestOrigin && allowedOrigins.length > 0 && allowedOrigins.includes(requestOrigin)) {
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+  } else if (allowedOrigins.length === 0) {
+    // Default to same-origin only when not configured
+    // Do not set Access-Control-Allow-Origin header
+  }  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Max-Age', '600');
+
+  // Handle preflight OPTIONS request early
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    // If origin not allowed, respond without permissive headers
+    if (requestOrigin && allowedOrigins.length > 0 && !allowedOrigins.includes(requestOrigin)) {
+      return res.status(403).end();
+    }
+    return res.status(204).end();
   }
 
   // Only allow POST requests
@@ -59,7 +76,7 @@ export default async function handler(req, res) {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ 
-        error: 'OpenAI API key not configured on server',
+        error: 'Server configuration error',
         success: false 
       });
     }

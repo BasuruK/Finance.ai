@@ -20,8 +20,12 @@ export const metadata = {
 };
 
 import '../src/styles.css';
+import { headers } from 'next/headers';
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const hdrs = await headers();
+  const nonce = hdrs.get('x-nonce') || undefined;
+
   return (
     <html lang="en">
       <head>
@@ -35,6 +39,8 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rubik:wght@300;400;500;700&display=swap"
           rel="stylesheet"
         />
+        {/* Inline scripts should include nonce={nonce}. Example:
+            <script nonce={nonce} dangerouslySetInnerHTML={{ __html: "console.log('boot');" }} /> */}
       </head>
       <body>
         {children}
