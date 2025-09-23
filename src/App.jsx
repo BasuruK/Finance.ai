@@ -101,6 +101,23 @@ const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
   );
 });
 
+/**
+ * Root application component for the Finance.ai page.
+ *
+ * Renders the full page UI (background veil, header, hero with title/tagline,
+ * the lazily loaded MagicBento section, and a performance monitor). Manages
+ * an internal flag to show the PLSQL test modal when requested.
+ *
+ * Side effects:
+ * - Attempts to set history.scrollRestoration = 'manual' (safely ignored on error).
+ * - Forces the window to scroll to the top on mount using two short timers and
+ *   clears those timers on unmount.
+ *
+ * The component holds a ref for the tools section passed into LazyMagicBento and
+ * provides an onNavigateToPLSQL callback that toggles the PLSQL modal.
+ *
+ * @returns {JSX.Element} The app's main React element tree.
+ */
 export default function App() {
   const toolsRef = useRef(null);
   const [showPLSQLPage, setShowPLSQLPage] = useState(false);
