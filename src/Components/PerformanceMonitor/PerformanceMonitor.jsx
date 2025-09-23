@@ -11,7 +11,7 @@ const PerformanceMonitor = () => {
   // Check if performance monitor should be disabled
   const isProductionEnvironment = () => {
     // Check if NEXT_PUBLIC_APP_IN_PRODUCTION is set to true in Azure
-    if (process.env.NEXT_PUBLIC_APP_IN_PRODUCTION === 'true') {
+    if (process.env.APP_IN_PRODUCTION === 'true') {
       return true;
     }
     
@@ -47,6 +47,7 @@ const PerformanceMonitor = () => {
 
     return () => {
       clearInterval(memoryInterval);
+      performanceMonitor.stop(); // ensure rAF loop is cancelled
     };
   }, []);
 
