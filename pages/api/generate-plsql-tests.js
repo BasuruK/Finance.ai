@@ -14,7 +14,13 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Helper function to read file content
+/**
+ * Read a text file synchronously and return its UTF-8 contents.
+ *
+ * Returns the file content as a string, or null if the file could not be read (e.g., missing file or permission error).
+ * @param {string} filePath - Path to the file to read.
+ * @return {string|null} The file contents, or null on read failure.
+ */
 function readFileContent(filePath) {
   try {
     return fs.readFileSync(filePath, 'utf8');
@@ -24,16 +30,66 @@ function readFileContent(filePath) {
   }
 }
 
+/**
+ * Next.js API route handler that generates PL/SQL unit tests from provided PL/SQL code.
+ *
+ * Processes POST requests with a JSON body:
+ *  - code (string, required): the PL/SQL source to generate tests for.
+ *  - usePretrainedModel (boolean, optional, default true): whether to attempt a pretrained prompt first.
+ *
+ * Behavior:
+ *  - Applies restricted CORS based on ALLOWED_ORIGINS environment variable (no wildcard when not configured).
+ *  - Responds to preflight OPTIONS requests (204 when origin allowed; 403 if origin is explicitly disallowed).
+ *  - Validates input and server OpenAI API key.
+ *  - Attempts to generate tests using a pretrained prompt (PRETRAINED_PROMPT_ID / PRETRAINED_PROMPT_VERSION); on failure falls back to a chat-based model (gpt-4o-mini) that may incorporate resources/knowledge_base.txt and resources/examples.sql if present.
+ *  - Returns JSON with keys: success, tests, framework ('PLSQL'), model, token, usage, and metadata (timestamp, codeLength, options).
+ *
+ * HTTP status codes produced (examples):
+ *  - 200: success with generated tests.
+ *  - 204: successful preflight validation.
+ *  - 400: invalid or missing `code`.
+ *  - 403: preflight origin not allowed.
+ *  - 405: method not allowed (only POST accepted).
+ *  - 500: server configuration error (missing API key) or other internal errors.
+ */
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  // Restricted CORS handling
+  const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || '';
+  const allowedOrigins = allowedOriginsEnv
+    .split(',')
+    .map(o => o.trim())
+    .filter(Boolean);
 
-  // Handle preflight OPTIONS request
+  const requestOrigin = req.headers.origin;
+  // If no origins configured, default to same-origin only (do not set wildcard)
+  if (requestOrigin && allowedOrigins.length > 0 && allowedOrigins.includes(requestOrigin)) {
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+  } else if (allowedOrigins.length === 0) {
+    // Default to same-origin only when not configured
+    // Do not set Access-Control-Allow-Origin header
+  }
+
+  // Handle dynamic Access-Control-Request-Headers
+  const requestHeaders = req.headers['access-control-request-headers'];
+  const allowedHeaders = requestHeaders || 'Content-Type, Authorization';
+  
+  res.setHeader('Vary', 'Origin, Access-Control-Request-Headers');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', allowedHeaders);
+  res.setHeader('Access-Control-Max-Age', '600');
+
+  // Conditionally set credentials based on environment flag
+  if (process.env.ALLOW_CREDENTIALS === 'true') {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
+  // Handle preflight OPTIONS request early
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    // If origin not allowed, respond without permissive headers
+    if (requestOrigin && allowedOrigins.length > 0 && !allowedOrigins.includes(requestOrigin)) {
+      return res.status(403).end();
+    }
+    return res.status(204).end();
   }
 
   // Only allow POST requests

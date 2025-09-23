@@ -6,6 +6,7 @@ import {
   Suspense,
   memo,
 } from 'react';
+import styles from './App.module.css';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import DarkVeil from './Backgrounds/DarkVeil/DarkVeil';
 import PerformanceMonitor from './Components/PerformanceMonitor/PerformanceMonitor';
@@ -14,36 +15,24 @@ import PLSQLTestModal from './Components/PLSQLTestModal/PLSQLTestModal';
 // Lazy-load the heavy MagicBento component
 const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
 
-// Simple loading skeleton
-const BentoSkeleton = memo(() => (
-  <div
-    style={{
-      minHeight: 500,
-      width: '100%',
-      maxWidth: '54em',
-      display: 'grid',
-      gap: '0.5em',
-      padding: '0.75em',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-      opacity: 0.2,
-    }}
-  >
-    {Array.from({ length: 6 }).map((_, i) => (
-      <div
-        key={i}
-        style={{
-          aspectRatio: '4/3',
-          minHeight: 200,
-          borderRadius: '20px',
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.05)',
-          gridColumn: i === 2 ? 'span 2' : 'span 1',
-          gridRow: i === 2 ? 'span 2' : 'span 1',
-        }}
-      />
-    ))}
-  </div>
-));
+// Simple loading skeleton (memoized)
+const BentoSkeleton = memo(() => {
+  return (
+    <div className={styles.skeletonContainer}>
+      {Array.from({ length: 6 }).map((_, i) => {
+        const itemClassName = i === 2 
+          ? `${styles.skeletonItem} ${styles.skeletonItemSpan2}`
+          : styles.skeletonItem;
+        return (
+          <div
+            key={i}
+            className={itemClassName}
+          />
+        );
+      })}
+    </div>
+  );
+});
 
 // MagicBento component that loads seamlessly on page load
 const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
@@ -58,15 +47,9 @@ const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
   }, []);
 
   return (
-    <section className="magic-bento" role="region" id="tools" ref={toolsRef}>
+    <section className="magic-bento" role="region" id="tools" aria-label="Interactive financial tools" ref={toolsRef}>
       <Suspense fallback={<BentoSkeleton />}>
-        <div
-          style={{
-            opacity: bentoLoaded ? 1 : 0,
-            transform: bentoLoaded ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
-          }}
-        >
+        <div className={bentoLoaded ? styles.bentoLoaded : styles.bentoHidden}>
           <MagicBento
             textAutoHide={true}
             enableStars={true}
@@ -86,6 +69,23 @@ const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
   );
 });
 
+/**
+ * Root application component for the Finance.ai page.
+ *
+ * Renders the full page UI (background veil, header, hero with title/tagline,
+ * the lazily loaded MagicBento section, and a performance monitor). Manages
+ * an internal flag to show the PLSQL test modal when requested.
+ *
+ * Side effects:
+ * - Attempts to set history.scrollRestoration = 'manual' (safely ignored on error).
+ * - Forces the window to scroll to the top on mount using two short timers and
+ *   clears those timers on unmount.
+ *
+ * The component holds a ref for the tools section passed into LazyMagicBento and
+ * provides an onNavigateToPLSQL callback that toggles the PLSQL modal.
+ *
+ * @returns {JSX.Element} The app's main React element tree.
+ */
 export default function App() {
   const toolsRef = useRef(null);
   const [showPLSQLPage, setShowPLSQLPage] = useState(false);
@@ -155,7 +155,7 @@ export default function App() {
         {/* Title and tagline centered */}
         <div className="hero-inner">
           <div className="hero-copy hero-centered">
-            <div className="title-wrap" style={{ textAlign: 'center' }}>
+            <div className={`title-wrap ${styles.titleWrap}`}>
               <div className="title-area">
                 <div className="title-foreground">
                   <ShinyText
@@ -168,13 +168,7 @@ export default function App() {
               </div>
               
               {/* Centered tagline */}
-              <p className="tag" style={{ 
-                textAlign: 'center', 
-                marginTop: '2rem', 
-                maxWidth: '600px', 
-                marginLeft: 'auto', 
-                marginRight: 'auto' 
-              }}>
+              <p className={`tag ${styles.tagline}`}>
                 Modern AI enabled services to make your Development Journey
                 smoother.
               </p>
