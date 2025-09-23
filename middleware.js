@@ -13,10 +13,20 @@ function generateNonce(bytes = 16) {
 
 // Middleware to inject a per-request nonce and CSP header.
 export function middleware(req) {
-  const res = NextResponse.next();
   const nonce = generateNonce();
 
-  // Store nonce in a response header so server components / layout can read it if needed
+  // Clone the incoming request headers and add the nonce
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-nonce', nonce);
+
+  // Create response with modified request headers
+  const res = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+
+  // Also set nonce in response header for consistency
   res.headers.set('x-nonce', nonce);
 
   const isDev = process.env.NODE_ENV !== 'production';
@@ -31,11 +41,18 @@ export function middleware(req) {
     isDev
       ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
       : `script-src 'self' 'nonce-${nonce}'`,
-    "connect-src 'self' https://api.openai.com",
+    // Development: allow WebSocket and localhost for HMR/SSE, Production: restrict to HTTPS API
+    isDev
+      ? "connect-src 'self' https://api.openai.com ws: wss: http://localhost:* ws://localhost:* wss://localhost:* http://127.0.0.1:* ws://127.0.0.1:* wss://127.0.0.1:*"
+      : "connect-src 'self' https://api.openai.com",
     "font-src 'self' https://fonts.gstatic.com data:",
-    "frame-ancestors 'none'",
-    'upgrade-insecure-requests'
+    "frame-ancestors 'none'"
   ];
+
+  // Only add upgrade-insecure-requests in production
+  if (!isDev) {
+    directives.push('upgrade-insecure-requests');
+  }
 
   const csp = directives.join('; ');
   res.headers.set('Content-Security-Policy', csp);
