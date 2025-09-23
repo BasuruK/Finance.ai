@@ -5,7 +5,6 @@ import {
   lazy,
   Suspense,
   memo,
-  useMemo,
 } from 'react';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import DarkVeil from './Backgrounds/DarkVeil/DarkVeil';
@@ -15,46 +14,18 @@ import PLSQLTestModal from './Components/PLSQLTestModal/PLSQLTestModal';
 // Lazy-load the heavy MagicBento component
 const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
 
-// Extracted style constants (static objects reused across renders)
-const SKELETON_CONTAINER_STYLE = Object.freeze({
-  minHeight: 500,
-  width: '100%',
-  maxWidth: '54em',
-  display: 'grid',
-  gap: '0.5em',
-  padding: '0.75em',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-  opacity: 0.2,
-});
-
-const SKELETON_ITEM_BASE_STYLE = Object.freeze({
-  aspectRatio: '4/3',
-  minHeight: 200,
-  borderRadius: '20px',
-  background: 'rgba(255,255,255,0.03)',
-  border: '1px solid rgba(255,255,255,0.05)',
-});
-
-const TAGLINE_STYLE = Object.freeze({
-  textAlign: 'center',
-  marginTop: '2rem',
-  maxWidth: '600px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-});
-
 // Simple loading skeleton (memoized)
 const BentoSkeleton = memo(() => {
   return (
-    <div style={SKELETON_CONTAINER_STYLE}>
+    <div className="bento-skeleton">
       {Array.from({ length: 6 }).map((_, i) => {
-        const dynamicStyle = i === 2
-          ? { gridColumn: 'span 2', gridRow: 'span 2' }
-          : { gridColumn: 'span 1', gridRow: 'span 1' };
+        const itemClassName = i === 2 
+          ? 'bento-skeleton__item bento-skeleton__item--large'
+          : 'bento-skeleton__item';
         return (
           <div
             key={i}
-            style={{ ...SKELETON_ITEM_BASE_STYLE, ...dynamicStyle }}
+            className={itemClassName}
           />
         );
       })}
@@ -75,13 +46,9 @@ const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
   }, []);
 
   return (
-    <section className="magic-bento" role="region" id="tools" ref={toolsRef}>
+    <section className="magic-bento" role="region" id="tools" aria-label="Interactive financial tools" ref={toolsRef}>
       <Suspense fallback={<BentoSkeleton />}>
-        <div style={useMemo(() => ({
-          opacity: bentoLoaded ? 1 : 0,
-          transform: bentoLoaded ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
-        }), [bentoLoaded])}>
+        <div className={bentoLoaded ? 'bento-visible' : 'bento-hidden'}>
           <MagicBento
             textAutoHide={true}
             enableStars={true}
@@ -200,7 +167,7 @@ export default function App() {
               </div>
               
               {/* Centered tagline */}
-              <p className="tag" style={TAGLINE_STYLE}>
+              <p className="tag tagline">
                 Modern AI enabled services to make your Development Journey
                 smoother.
               </p>

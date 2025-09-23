@@ -12,10 +12,10 @@ function generateNonce(bytes = 16) {
   const arr = new Uint8Array(bytes);
   // globalThis.crypto is available in Next middleware (edge runtime)
   globalThis.crypto.getRandomValues(arr);
-  // Convert to base64
+  // Convert to base64 using Web API btoa (Edge runtime compatible)
   let binary = '';
   for (let i = 0; i < arr.length; i++) binary += String.fromCharCode(arr[i]);
-  return Buffer.from(binary, 'binary').toString('base64');
+  return btoa(binary);
 }
 
 /**

@@ -67,10 +67,21 @@ export default async function handler(req, res) {
   } else if (allowedOrigins.length === 0) {
     // Default to same-origin only when not configured
     // Do not set Access-Control-Allow-Origin header
-  }  res.setHeader('Vary', 'Origin');
+  }
+
+  // Handle dynamic Access-Control-Request-Headers
+  const requestHeaders = req.headers['access-control-request-headers'];
+  const allowedHeaders = requestHeaders || 'Content-Type, Authorization';
+  
+  res.setHeader('Vary', 'Origin, Access-Control-Request-Headers');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', allowedHeaders);
   res.setHeader('Access-Control-Max-Age', '600');
+
+  // Conditionally set credentials based on environment flag
+  if (process.env.ALLOW_CREDENTIALS === 'true') {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
 
   // Handle preflight OPTIONS request early
   if (req.method === 'OPTIONS') {
