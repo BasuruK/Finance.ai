@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server';
 
-// Use Web Crypto (Edge/runtime compatible) instead of Node 'crypto' module
+/**
+ * Generate a cryptographically secure random nonce encoded as a base64 string.
+ *
+ * Uses the Web Crypto API (globalThis.crypto.getRandomValues) so it is compatible with Edge/runtime environments.
+ *
+ * @param {number} [bytes=16] - Number of random bytes to generate.
+ * @returns {string} A base64-encoded string containing `bytes` cryptographically random bytes.
+ */
 function generateNonce(bytes = 16) {
   const arr = new Uint8Array(bytes);
   // globalThis.crypto is available in Next middleware (edge runtime)
@@ -11,7 +18,17 @@ function generateNonce(bytes = 16) {
   return Buffer.from(binary, 'binary').toString('base64');
 }
 
-// Middleware to inject a per-request nonce and CSP header.
+/**
+ * Next.js middleware that injects a per-request nonce and standard security headers (including a Content-Security-Policy).
+ *
+ * Generates a random nonce, stores it as the `x-nonce` response header, and builds a Content-Security-Policy where
+ * `script-src` uses the nonce in production and allows `'unsafe-inline'`/`'unsafe-eval'` in development. Also sets
+ * common security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy,
+ * Strict-Transport-Security, X-DNS-Prefetch-Control).
+ *
+ * @param {import('next/server').NextRequest} req - Incoming Next.js request.
+ * @returns {import('next/server').NextResponse} Response with CSP and security headers applied.
+ */
 export function middleware(req) {
   const res = NextResponse.next();
   const nonce = generateNonce();

@@ -14,7 +14,13 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Helper function to read file content
+/**
+ * Read a text file synchronously and return its UTF-8 contents.
+ *
+ * Returns the file content as a string, or null if the file could not be read (e.g., missing file or permission error).
+ * @param {string} filePath - Path to the file to read.
+ * @return {string|null} The file contents, or null on read failure.
+ */
 function readFileContent(filePath) {
   try {
     return fs.readFileSync(filePath, 'utf8');
@@ -24,6 +30,28 @@ function readFileContent(filePath) {
   }
 }
 
+/**
+ * Next.js API route handler that generates PL/SQL unit tests from provided PL/SQL code.
+ *
+ * Processes POST requests with a JSON body:
+ *  - code (string, required): the PL/SQL source to generate tests for.
+ *  - usePretrainedModel (boolean, optional, default true): whether to attempt a pretrained prompt first.
+ *
+ * Behavior:
+ *  - Applies restricted CORS based on ALLOWED_ORIGINS environment variable (no wildcard when not configured).
+ *  - Responds to preflight OPTIONS requests (204 when origin allowed; 403 if origin is explicitly disallowed).
+ *  - Validates input and server OpenAI API key.
+ *  - Attempts to generate tests using a pretrained prompt (PRETRAINED_PROMPT_ID / PRETRAINED_PROMPT_VERSION); on failure falls back to a chat-based model (gpt-4o-mini) that may incorporate resources/knowledge_base.txt and resources/examples.sql if present.
+ *  - Returns JSON with keys: success, tests, framework ('PLSQL'), model, token, usage, and metadata (timestamp, codeLength, options).
+ *
+ * HTTP status codes produced (examples):
+ *  - 200: success with generated tests.
+ *  - 204: successful preflight validation.
+ *  - 400: invalid or missing `code`.
+ *  - 403: preflight origin not allowed.
+ *  - 405: method not allowed (only POST accepted).
+ *  - 500: server configuration error (missing API key) or other internal errors.
+ */
 export default async function handler(req, res) {
   // Restricted CORS handling
   const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || '';
