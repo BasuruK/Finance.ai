@@ -6,6 +6,7 @@ import {
   Suspense,
   memo,
 } from 'react';
+import styles from './App.module.css';
 import ShinyText from './TextAnimations/ShinyText/ShinyText';
 import DarkVeil from './Backgrounds/DarkVeil/DarkVeil';
 import PerformanceMonitor from './Components/PerformanceMonitor/PerformanceMonitor';
@@ -17,11 +18,11 @@ const MagicBento = lazy(() => import('./Components/MagicBento/MagicBento'));
 // Simple loading skeleton (memoized)
 const BentoSkeleton = memo(() => {
   return (
-    <div className="bento-skeleton">
+    <div className={styles.skeletonContainer}>
       {Array.from({ length: 6 }).map((_, i) => {
         const itemClassName = i === 2 
-          ? 'bento-skeleton__item bento-skeleton__item--large'
-          : 'bento-skeleton__item';
+          ? `${styles.skeletonItem} ${styles.skeletonItemSpan2}`
+          : styles.skeletonItem;
         return (
           <div
             key={i}
@@ -48,7 +49,7 @@ const LazyMagicBento = memo(({ toolsRef, onNavigateToPLSQL }) => {
   return (
     <section className="magic-bento" role="region" id="tools" aria-label="Interactive financial tools" ref={toolsRef}>
       <Suspense fallback={<BentoSkeleton />}>
-        <div className={bentoLoaded ? 'bento-visible' : 'bento-hidden'}>
+        <div className={bentoLoaded ? styles.bentoLoaded : styles.bentoHidden}>
           <MagicBento
             textAutoHide={true}
             enableStars={true}
@@ -154,7 +155,7 @@ export default function App() {
         {/* Title and tagline centered */}
         <div className="hero-inner">
           <div className="hero-copy hero-centered">
-            <div className="title-wrap" style={{ textAlign: 'center' }}>
+            <div className={`title-wrap ${styles.titleWrap}`}>
               <div className="title-area">
                 <div className="title-foreground">
                   <ShinyText
@@ -167,7 +168,7 @@ export default function App() {
               </div>
               
               {/* Centered tagline */}
-              <p className="tag tagline">
+              <p className={`tag ${styles.tagline}`}>
                 Modern AI enabled services to make your Development Journey
                 smoother.
               </p>

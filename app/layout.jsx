@@ -53,7 +53,7 @@ export default async function RootLayout({ children }) {
         {/* Inline scripts should include nonce={nonce}. Example:
             <script nonce={nonce} dangerouslySetInnerHTML={{ __html: "console.log('boot');" }} /> */}
       </head>
-      <body>
+      <body suppressHydrationWarning={true}>
         {children}
       </body>
     </html>
