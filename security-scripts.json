@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "security:audit": "npm audit",
+    "security:fix": "npm audit fix",
+    "security:check": "npm audit --audit-level=high",
+    "security:outdated": "npm outdated",
+    "security:full-scan": "npm audit && npm outdated && echo 'Security scan complete'"
+  }
+}
