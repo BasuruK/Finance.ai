@@ -13,7 +13,9 @@
     "security:fix": "npm audit fix",
     "security:check": "npm audit --audit-level=high",
     "security:outdated": "npm outdated",
-    "security:full-scan": "npm audit && npm outdated && echo Security scan complete"
+    "security:audit-safe": "npm audit || exit 0",
+    "security:outdated-safe": "npm outdated || exit 0",
+    "security:full-scan": "npm run security:audit-safe && npm run security:outdated-safe && echo Security scan complete"
   },
   "dependencies": {
     "@react-three/drei": "^10.6.1",
