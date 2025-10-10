@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "security:audit": "npm audit",
-    "security:fix": "npm audit fix",
-    "security:check": "npm audit --audit-level=high",
-    "security:outdated": "npm outdated",
-    "security:full-scan": "node -e \"const { execSync } = require('child_process'); let auditExit = 0; try { execSync('npm audit', { stdio: 'inherit' }); } catch (e) { auditExit = e.status || 1; } try { execSync('npm outdated', { stdio: 'inherit' }); } catch (e) { /* ignore outdated exit code */ } console.log('Security scan complete'); process.exit(auditExit);\""
-  }
-}
