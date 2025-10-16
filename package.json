@@ -8,7 +8,12 @@
     "build": "next build",
     "start": "next start",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "security:audit": "npm audit",
+    "security:fix": "npm audit fix",
+    "security:check": "npm audit --audit-level=high",
+    "security:outdated": "npm outdated",
+    "security:full-scan": "node scripts/security-scan.js"
   },
   "dependencies": {
     "@react-three/drei": "^10.6.1",
@@ -18,29 +23,20 @@
     "motion": "^12.23.12",
     "next": "^15.5.2",
     "ogl": "^1.0.11",
+    "openai": "^5.21.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^15.6.6",
+    "remark-gfm": "^4.0.1",
     "three": "^0.167.1"
   },
   "devDependencies": {
+    "eslint": "^9.35.0",
+    "eslint-plugin-react": "^7.37.5",
     "terser": "^5.43.1"
   },
   "overrides": {
-    "color-convert": "2.0.1",
-    "color-name": "1.1.4",
-    "debug": "4.3.4",
-    "is-arrayish": "0.3.2",
-    "color": "4.2.3",
-    "color-string": "1.9.1",
-    "simple-swizzle": "0.2.2"
-  },
-  "resolutions": {
-    "color-convert": "2.0.1",
-    "color-name": "1.1.4",
-    "debug": "4.3.4",
-    "is-arrayish": "0.3.2",
-    "color": "4.2.3",
-    "color-string": "1.9.1",
-    "simple-swizzle": "0.2.2"
+    "prismjs": "^1.30.0"
   }
 }

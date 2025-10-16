@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import './UnitTestModals.css';
 
-const UnitTestModals = ({ isOpen, onClose }) => {
+const UnitTestModals = ({ isOpen, onClose, onNavigateToPLSQL }) => {
   const modalRef = useRef(null);
   const closeBtnRef = useRef(null);
   
@@ -84,6 +84,14 @@ const UnitTestModals = ({ isOpen, onClose }) => {
 
   const handleCloseQueueCheckModal = () => {
     setIsQueueCheckModalOpen(false);
+  };
+
+  const handleOpenPLSQLModal = () => {
+    setIsModelSelectorOpen(false);
+    onClose(); // Close the modal system
+    if (onNavigateToPLSQL) {
+      onNavigateToPLSQL(); // Navigate to PL/SQL page
+    }
   };
 
   // Watch for all modals being closed and notify parent
@@ -198,10 +206,7 @@ const UnitTestModals = ({ isOpen, onClose }) => {
           <div className="model-option-wrapper">
             <button
               className="model-option openai-option"
-              onClick={() => {
-                setIsModelSelectorOpen(false);
-                window.location.href = '/openai-model'; // Placeholder link
-              }}
+              onClick={handleOpenPLSQLModal}
             >
               <div className="model-option-content">
                 <h4>Use OpenAI Finetuned Model</h4>
@@ -218,7 +223,7 @@ const UnitTestModals = ({ isOpen, onClose }) => {
               }}
             >
               <div className="model-option-content">
-                <h4>Use Inhouse Finetuned Qwen3 Model</h4>
+                <h4>Use Inhouse Finetuned Qwen3 Model (Coming Soon!)</h4>
                 <p>Slow but thinking model</p>
                 <div className="eco-indicator">
                   <svg
