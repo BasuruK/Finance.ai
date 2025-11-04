@@ -90,7 +90,7 @@ const cardData = [
     title: 'Background Tracer',
     description: 'Tracing Application to PLSQL',
     label: 'Background Tracer',
-    href: 'https://ifs-my.sharepoint.com/my?id=%2Fpersonal%2Fbasuru%5Fbalasuriya%5Fifs%5Fcom%2FDocuments%2FDevelopments%2FTool%20Dev%2Ffinancial%2Dservices%2Fbgtrcr%2Frelease%2Fbeta%2Fbeta%5Frelease%5Farchive&ga=1',
+    href: 'https://ifs-my.sharepoint.com/:f:/p/basuru_balasuriya/EpP5iPJkQn9Pl2oz0vgHEnkBv0mc6ldmcJMPUoSr_YIyvg?e=uqFYr5',
     external: true,
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
