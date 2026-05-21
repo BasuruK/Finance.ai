@@ -18,7 +18,7 @@ const cardData = [
     title: 'ATW Logs Monitor',
     description: 'Track ATW logs',
     label: 'Logs',
-    href: 'http://10.17.98.235:8501/',
+    href: 'http://10.17.96.101:8501/',
     external: true,
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -73,10 +73,24 @@ const cardData = [
   },
   {
     color: '#060010',
+    title: 'Unit Test Analyzer Tool',
+    description: 'Web-Based analysis of status of unit test coverage',
+    label: 'Unit Test Analyzer',
+    href: 'http://10.17.97.36:8100',
+    external: true,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    ),
+  },
+  {
+    color: '#060010',
     title: 'Background Tracer',
     description: 'Tracing Application to PLSQL',
     label: 'Background Tracer',
-    href: 'https://ifs-my.sharepoint.com/my?id=%2Fpersonal%2Fbasuru%5Fbalasuriya%5Fifs%5Fcom%2FDocuments%2FDevelopments%2FTool%20Dev%2Ffinancial%2Dservices%2Fbgtrcr%2Frelease%2Fbeta%2Fbeta%5Frelease%5Farchive&ga=1',
+    href: 'https://ifs-my.sharepoint.com/:f:/p/basuru_balasuriya/EpP5iPJkQn9Pl2oz0vgHEnkBv0mc6ldmcJMPUoSr_YIyvg?e=uqFYr5',
     external: true,
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -109,8 +123,8 @@ const isUnitTestCard = (card) => {
   const label = (card.label || '').toLowerCase();
   const href = (card.href || '').toLowerCase();
   return (
-    title.includes('unit test') ||
-    label.includes('unit test') ||
+    title.includes('unit test generation') ||
+    label.includes('unit test generation') ||
     href === '/unit-tests'
   );
 };

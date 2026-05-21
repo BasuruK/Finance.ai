@@ -3,7 +3,10 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
   images: {
-    domains: ['localhost'],
+    remotePatterns: [
+      { protocol: 'http', hostname: 'localhost' },
+      { protocol: 'https', hostname: 'localhost' },
+    ],
     unoptimized: true
   },
   compiler: {
