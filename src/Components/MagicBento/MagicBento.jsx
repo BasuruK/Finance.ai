@@ -114,6 +114,20 @@ const cardData = [
       </svg>
     ),
   },
+  {
+    color: '#060010',
+    title: 'Finance AI BootCamp',
+    description: 'Access the Finance AI BootCamp portal',
+    label: 'BootCamp',
+    href: 'http://10.17.96.115:8503/fin_ai_bootcamp.html',
+    external: true,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3z"/>
+        <path d="M5 13.18V17l7 4 7-4v-3.82"/>
+      </svg>
+    ),
+  },
 ];
 
 // Helper to detect the Unit Test card (so we can open a modal instead of navigating)
